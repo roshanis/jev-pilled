@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jev Decision Model — 100 Practical Use Cases</title>
+<style>
+  :root {
+    --bg: #f8f9fb;
+    --card: #ffffff;
+    --border: #e2e8f0;
+    --accent: #2563eb;
+    --accent-soft: #eff6ff;
+    --noul: #7c3aed;
+    --score: #059669;
+    --choice: #d97706;
+    --text: #1e293b;
+    --muted: #64748b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    margin: 0;
+    line-height: 1.55;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px 16px 80px; }
+  h1 { font-size: 1.85rem; margin: 0 0 8px; }
+  .subtitle { color: var(--muted); margin-bottom: 20px; }
+  .overview {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .overview h2 { margin-top: 0; font-size: 1.25rem; }
+  .filters {
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+    margin-bottom: 16px;
+  }
+  input[type="search"] {
+    flex: 1; min-width: 220px;
+    padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px;
+    font-size: 15px;
+  }
+  .type-btn, .reset-btn {
+    padding: 8px 14px; border-radius: 20px; border: 1px solid var(--border);
+    background: white; cursor: pointer; font-size: 14px;
+  }
+  .type-btn.active { color: white; border-color: transparent; }
+  .type-btn[data-type="Noul"].active { background: var(--noul); }
+  .type-btn[data-type="Score"].active { background: var(--score); }
+  .type-btn[data-type="Choice"].active { background: var(--choice); }
+  .reset-btn { background: #f1f5f9; }
+  .stats { font-size: 14px; color: var(--muted); margin-bottom: 12px; }
+  .industry-bar {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;
+  }
+  .industry-chip {
+    padding: 6px 12px; border-radius: 16px; background: white;
+    border: 1px solid var(--border); font-size: 13px; cursor: pointer;
+  }
+  .industry-chip.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  .controls { display: flex; gap: 12px; margin-bottom: 16px; font-size: 14px; }
+  .controls button { background: none; border: none; color: var(--accent); cursor: pointer; text-decoration: underline; }
+  .industry-section { margin-bottom: 28px; }
+  .industry-section h2 {
+    font-size: 1.15rem; margin: 0 0 12px; display: flex; align-items: center; gap: 8px;
+  }
+  .count { background: #e2e8f0; color: #475569; font-size: 12px; padding: 2px 8px; border-radius: 10px; }
+  .usecase {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .usecase-header {
+    padding: 14px 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+  }
+  .usecase-header:hover { background: #f8fafc; }
+  .title-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .num { color: var(--muted); font-size: 13px; min-width: 28px; }
+  .title { font-weight: 600; }
+  .badge {
+    font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 6px; color: white;
+  }
+  .badge.Noul { background: var(--noul); }
+  .badge.Score { background: var(--score); }
+  .badge.Choice { background: var(--choice); }
+  .short { color: var(--muted); font-size: 14px; margin-top: 4px; }
+  .arrow { color: var(--muted); transition: transform 0.2s; }
+  .usecase.open .arrow { transform: rotate(180deg); }
+  .usecase-body { padding: 0 16px 16px; display: none; border-top: 1px solid var(--border); }
+  .usecase.open .usecase-body { display: block; }
+  .practice { margin: 12px 0; font-size: 14.5px; }
+  .example {
+    background: #f8fafc; border-radius: 8px; padding: 14px; margin-top: 10px; font-size: 14px;
+  }
+  .example h4 { margin: 0 0 8px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.4px; color: var(--muted); }
+  .example p { margin: 6px 0; }
+  .label { font-weight: 600; color: #334155; }
+  .result { background: #ecfdf5; padding: 10px; border-radius: 6px; margin: 8px 0; }
+  @media (max-width: 600px) {
+    .usecase-header { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- jev-pilled navigation (added; the rest of this page is unchanged) -->
+<script>if(window.top!==window.self)document.documentElement.classList.add('jp-embed');</script>
+<style>
+.jp-bar{position:relative;z-index:60;display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;padding:9px 16px;background:#1b1b19;color:#f0efec;font:13px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.jp-bar a{color:#f0efec;text-decoration:none;opacity:.78}
+.jp-bar a:hover,.jp-bar a:focus-visible{opacity:1;text-decoration:underline}
+.jp-bar a[aria-current]{opacity:1;font-weight:700}
+.jp-bar .jp-home{opacity:1;font-weight:700}
+.jp-bar .jp-links{display:flex;gap:14px;margin-left:auto}
+html.jp-embed .jp-bar{display:none}
+@media print{.jp-bar{display:none}}
+</style>
+<nav class="jp-bar" aria-label="Jev-pilled versions"><a class="jp-home" href="/">&larr; Jev-pilled: compare all three</a><span class="jp-links"><a href="/claude-fable/">Claude Fable</a><a href="/codex-astra/">Codex Astra</a><a href="/grok/" aria-current="page">Grok</a></span></nav>
+<div class="container">
+  <h1>A practical use-case library</h1>
+  <p class="subtitle">100 places a Jev decision model fits · 100 practical explanations, with an example for every use case</p>
+
+  <div class="overview">
+    <h2>100 use cases · 20 industries · 100 worked examples</h2>
+    <p>Small, specific questions. Structured answers. Jev, from TypeSafe AI, evaluates supplied context and returns a predefined choice, a rubric score, or a yes/no probability. Its role in these examples is to classify, route, score, or check evidence.</p>
+    <p>These are potential applications, not verified deployments. Each example assumes text or structured records as input; images and audio need to be processed upstream.</p>
+    <p><strong>How to read the examples.</strong> Every scenario and result is fictional. They illustrate the question, the type of answer, and the next workflow step. Numeric probabilities are invented examples, not measured confidence or evidence of model accuracy.</p>
+    <p><strong>Noul</strong> — A 0–1 probability that a yes/no statement is true. Use for one specific evidence or policy check.<br>
+       <strong>Score</strong> — A level on a defined, ordered rubric. Use for relevance, completeness, or severity.<br>
+       <strong>Choice</strong> — One option from a list you define. Use for categories, routing, or candidate selection.</p>
+  </div>
+
+  <div class="filters">
+    <input type="search" id="search" placeholder="Search industries or keywords…">
+    <button class="type-btn" data-type="Noul">Noul</button>
+    <button class="type-btn" data-type="Score">Score</button>
+    <button class="type-btn" data-type="Choice">Choice</button>
+    <button class="reset-btn" id="reset">Reset</button>
+  </div>
+  <div class="stats" id="stats">100 of 100</div>
+  <div class="industry-bar" id="industry-bar"></div>
+  <div class="controls">
+    <button id="expand-all">Expand examples</button>
+    <button id="collapse-all">Collapse examples</button>
+  </div>
+  <div id="content"></div>
+</div>
+
+<script>
+const useCases = [
+  // Banking (1-5)
+  {id:1, industry:"Banking", title:"Customer support", type:"Choice", short:"Route messages to account access, cards, payments, or lending teams.",
+   practice:"A bank can send each incoming support message to the team best equipped to handle it. This keeps account access, card, payment, and lending queues separate while giving staff a consistent first classification for follow-up.",
+   input:"Fictional message: ‘My debit card purchase is still pending, but the amount is reserved.’ Context lists account access, cards, payments, and lending queues.",
+   ask:"Which support queue best matches this message? Apply the rule that pending card-payment issues go to payments. Choose one: account access, cards, payments, lending, other/unclear.",
+   result:"Choice: payments (illustrative)",
+   next:"Place the message in the selected queue and let the assigned team verify account details and resolve the customer’s stated issue."},
+  {id:2, industry:"Banking", title:"Payment disputes", type:"Choice", short:"Classify disputes as duplicate charges, unauthorized transactions, or goods not received.",
+   practice:"A disputes team can classify a customer’s explanation before collecting the documents needed for review. The category separates duplicate charges, unauthorized transactions, and goods not received, making the next checklist easier to select.",
+   input:"Fictional dispute note: ‘The same online order appears twice on my statement, with identical merchant name and amount.’ Evidence includes the statement excerpt and order confirmation.",
+   ask:"Which dispute type is described? Choose one: duplicate charge, unauthorized transaction, goods not received, other/unclear.",
+   result:"Choice: duplicate charge (illustrative)",
+   next:"Open the duplicate-charge review checklist, then have a disputes specialist confirm the statement and merchant records before responding."},
+  {id:3, industry:"Banking", title:"Loan operations", type:"Noul", short:"Flag whether submitted explanations address a specific missing-document request.",
+   practice:"Loan operations can check whether an applicant’s explanation answers one specific missing-document request. The result helps staff identify responses that appear to address the request while leaving approval and document verification to reviewers.",
+   input:"Fictional applicant reply: ‘I have attached the pay stubs from the last three months as requested in the email dated March 12.’ Context includes the original missing-document list.",
+   ask:"Does this explanation specifically address the request for recent pay stubs? Return a 0–1 probability.",
+   result:"Noul: 0.92 (illustrative)",
+   next:"Mark the document request as likely addressed and route the file to a loan officer for final verification of the attachments."},
+  {id:4, industry:"Banking", title:"KYC completeness", type:"Score", short:"Score how completely an application answers required identity and source-of-funds questions.",
+   practice:"Onboarding teams can prioritize applications that appear more complete before manual review, reducing back-and-forth on obvious gaps.",
+   input:"Fictional application notes: Name, DOB, and address provided; source of funds listed as ‘salary’ with employer name but no supporting statement attached.",
+   ask:"On a 1–5 rubric of KYC completeness (1=major gaps, 5=ready for final review), score this application.",
+   result:"Score: 3 (illustrative)",
+   next:"Queue for a specialist to request the missing supporting statement while proceeding with other checks."},
+  {id:5, industry:"Banking", title:"Suspicious transaction", type:"Noul", short:"Check whether a transaction description matches a known high-risk pattern.",
+   practice:"Operations can flag specific transactions for enhanced review when the description aligns with a predefined risk indicator.",
+   input:"Fictional transaction: Multiple rapid transfers to a newly added beneficiary in a high-risk jurisdiction, described as ‘family support’.",
+   ask:"Does this transaction match the ‘rapid new-beneficiary high-risk jurisdiction’ pattern? Return a 0–1 probability.",
+   result:"Noul: 0.87 (illustrative)",
+   next:"Place in the enhanced due-diligence queue for a specialist to review supporting documentation."},
+
+  // Insurance (6-10)
+  {id:6, industry:"Insurance", title:"Claim intake", type:"Choice", short:"Route new claims to auto, property, liability, or health teams.",
+   practice:"Intake can classify the claim type from the initial description so the correct specialist and checklist are assigned immediately.",
+   input:"Fictional claim note: ‘Water damage from a burst pipe in the basement affecting drywall and flooring.’",
+   ask:"Which claim category best matches? Choose one: auto, property, liability, health, other/unclear.",
+   result:"Choice: property (illustrative)",
+   next:"Open the property water-damage checklist and assign to a property claims adjuster."},
+  {id:7, industry:"Insurance", title:"Potential fraud", type:"Noul", short:"Flag whether a claim narrative contains indicators of a specific fraud pattern.",
+   practice:"Special investigations can prioritize claims that appear to match known fraud indicators for deeper review.",
+   input:"Fictional narrative: Claim filed three days after policy inception for a total loss with no prior inspection photos.",
+   ask:"Does this match the ‘early total-loss after inception’ indicator? Return a 0–1 probability.",
+   result:"Noul: 0.78 (illustrative)",
+   next:"Refer to special investigations while continuing standard claim processing."},
+  {id:8, industry:"Insurance", title:"Damage severity", type:"Score", short:"Score described damage on a severity rubric to prioritize adjuster assignment.",
+   practice:"High-severity descriptions can be routed to senior adjusters faster.",
+   input:"Fictional description: ‘Roof partially collapsed, significant structural damage, family temporarily relocated.’",
+   ask:"On a 1–5 severity rubric (1=minor, 5=catastrophic), score the described damage.",
+   result:"Score: 5 (illustrative)",
+   next:"Assign to a senior property adjuster and flag for potential large-loss team involvement."},
+  {id:9, industry:"Insurance", title:"Policy eligibility", type:"Choice", short:"Classify an inquiry as likely eligible, needs underwriting review, or ineligible based on stated criteria.",
+   practice:"Pre-qualification can give a consistent first pass before full underwriting.",
+   input:"Fictional inquiry: Applicant states no prior claims, home built after 2000, and requests standard HO-3 coverage.",
+   ask:"Based on the stated facts and standard eligibility rules, classify as: likely eligible, needs review, ineligible, other/unclear.",
+   result:"Choice: likely eligible (illustrative)",
+   next:"Proceed to full application and underwriting review."},
+  {id:10, industry:"Insurance", title:"Customer inquiry routing", type:"Choice", short:"Route inquiries to claims, billing, underwriting, or customer service.",
+   practice:"Support can separate billing questions from new claim reports for faster resolution.",
+   input:"Fictional message: ‘I need to update the payment method on my policy.’",
+   ask:"Which queue? Choose one: claims, billing, underwriting, customer service, other/unclear.",
+   result:"Choice: billing (illustrative)",
+   next:"Place in the billing queue for a specialist to update the payment method."},
+
+  // Healthcare (11-15)
+  {id:11, industry:"Healthcare", title:"Symptom triage", type:"Choice", short:"Route patient messages to urgent care, primary care, or nurse line based on description.",
+   practice:"Triage can give a consistent first classification while clinical staff make final decisions.",
+   input:"Fictional message: ‘Sudden severe chest pain radiating to the arm, started 30 minutes ago.’",
+   ask:"Which routing is most appropriate based on the description? Choose one: emergency, urgent care, primary care, nurse line, other/unclear.",
+   result:"Choice: emergency (illustrative)",
+   next:"Direct the patient to emergency services and alert the on-call team."},
+  {id:12, industry:"Healthcare", title:"Prior authorization", type:"Noul", short:"Check whether clinical notes address a specific medical-necessity criterion.",
+   practice:"Prior-auth teams can identify notes that appear to cover a required criterion before full clinical review.",
+   input:"Fictional note excerpt: ‘Patient has failed two prior oral medications over six months with documented side effects.’",
+   ask:"Does this note address the ‘failure of two prior therapies’ criterion? Return a 0–1 probability.",
+   result:"Noul: 0.94 (illustrative)",
+   next:"Mark the criterion as likely met and continue with remaining checklist items."},
+  {id:13, industry:"Healthcare", title:"Patient message routing", type:"Choice", short:"Route portal messages to nursing, provider, scheduling, or billing.",
+   practice:"Inbox management can separate clinical questions from administrative ones.",
+   input:"Fictional portal message: ‘I need to reschedule my appointment next Tuesday.’",
+   ask:"Which team? Choose one: nursing, provider, scheduling, billing, other/unclear.",
+   result:"Choice: scheduling (illustrative)",
+   next:"Forward to the scheduling team to offer alternative times."},
+  {id:14, industry:"Healthcare", title:"Discharge summary completeness", type:"Score", short:"Score how completely a discharge summary covers required elements.",
+   practice:"Quality teams can prioritize incomplete summaries for revision before finalization.",
+   input:"Fictional summary: Lists diagnosis and medications but omits follow-up appointments and patient education points.",
+   ask:"On a 1–5 completeness rubric for discharge summaries, score this document.",
+   result:"Score: 2 (illustrative)",
+   next:"Return to the discharging provider for addition of missing elements."},
+  {id:15, industry:"Healthcare", title:"Adverse event relatedness", type:"Noul", short:"Check whether a reported event description is consistent with a known treatment-related pattern.",
+   practice:"Pharmacovigilance can flag reports that appear related for deeper causality assessment.",
+   input:"Fictional report: Rash appearing within 48 hours of starting a new antibiotic, resolving after discontinuation.",
+   ask:"Is this description consistent with a known drug-related reaction pattern for the antibiotic? Return a 0–1 probability.",
+   result:"Noul: 0.81 (illustrative)",
+   next:"Include in the related-event review queue for a safety specialist."},
+
+  // Pharmaceuticals (16-20)
+  {id:16, industry:"Pharmaceuticals", title:"Adverse reaction classification", type:"Choice", short:"Classify reported events as expected, unexpected, or serious based on description.",
+   practice:"Safety teams can route reports to the appropriate review path.",
+   input:"Fictional report: ‘Severe anaphylaxis requiring hospitalization after first dose.’",
+   ask:"Classify the event. Choose one: expected non-serious, unexpected, serious, other/unclear.",
+   result:"Choice: serious (illustrative)",
+   next:"Escalate to the serious adverse event review team immediately."},
+  {id:17, industry:"Pharmaceuticals", title:"Trial eligibility", type:"Noul", short:"Check whether a patient note meets one specific inclusion criterion.",
+   practice:"Screening teams can quickly identify notes that appear to satisfy a criterion before full eligibility review.",
+   input:"Fictional screening note: ‘Diagnosed with condition X more than 12 months ago, confirmed by biopsy.’",
+   ask:"Does this meet the ‘diagnosis confirmed ≥12 months prior’ criterion? Return a 0–1 probability.",
+   result:"Noul: 0.96 (illustrative)",
+   next:"Mark criterion as likely met and continue screening remaining criteria."},
+  {id:18, industry:"Pharmaceuticals", title:"Literature relevance", type:"Score", short:"Score how relevant an abstract is to a specific research question.",
+   practice:"Medical affairs can prioritize highly relevant papers for full-text review.",
+   input:"Fictional abstract summary: Discusses efficacy of drug class in the exact indication and population of interest.",
+   ask:"On a 1–5 relevance rubric to the research question, score this abstract.",
+   result:"Score: 5 (illustrative)",
+   next:"Flag for immediate full-text retrieval and review."},
+  {id:19, industry:"Pharmaceuticals", title:"Regulatory document section", type:"Choice", short:"Classify content for the correct module in a submission.",
+   practice:"Regulatory teams can route draft text to the appropriate section owners.",
+   input:"Fictional text: Detailed description of manufacturing process controls and validation data.",
+   ask:"Which module best fits? Choose one: quality, nonclinical, clinical, labeling, other/unclear.",
+   result:"Choice: quality (illustrative)",
+   next:"Assign to the CMC section owner for further drafting."},
+  {id:20, industry:"Pharmaceuticals", title:"Medical inquiry routing", type:"Choice", short:"Route inquiries to medical information, pharmacovigilance, or commercial teams.",
+   practice:"Support can separate scientific questions from adverse event reports.",
+   input:"Fictional inquiry: ‘What is the recommended dosing for patients with renal impairment?’",
+   ask:"Which team? Choose one: medical information, pharmacovigilance, commercial, other/unclear.",
+   result:"Choice: medical information (illustrative)",
+   next:"Forward to the medical information team with standard response templates."},
+
+  // Retail & e-commerce (21-25)
+  {id:21, industry:"Retail & e-commerce", title:"Customer support routing", type:"Choice", short:"Route messages to orders, returns, product, or technical support.",
+   practice:"Support can separate order status questions from product advice.",
+   input:"Fictional message: ‘My order says delivered but I never received it.’",
+   ask:"Which queue? Choose one: orders, returns, product questions, technical, other/unclear.",
+   result:"Choice: orders (illustrative)",
+   next:"Assign to the orders team to investigate delivery status."},
+  {id:22, industry:"Retail & e-commerce", title:"Return reason", type:"Choice", short:"Classify return requests as defective, wrong item, size/fit, or changed mind.",
+   practice:"Returns processing can apply the correct refund or exchange workflow.",
+   input:"Fictional request: ‘The shirt arrived with a stain that wasn’t mentioned.’",
+   ask:"Which return reason? Choose one: defective, wrong item, size/fit, changed mind, other/unclear.",
+   result:"Choice: defective (illustrative)",
+   next:"Approve full refund and generate a return label under the defective policy."},
+  {id:23, industry:"Retail & e-commerce", title:"Product review relevance", type:"Score", short:"Score how relevant a review is to a specific product feature.",
+   practice:"Merchandising can prioritize reviews that discuss key features for display.",
+   input:"Fictional review: Discusses battery life and charging speed in detail for a portable speaker.",
+   ask:"On a 1–5 relevance rubric to battery performance, score this review.",
+   result:"Score: 4 (illustrative)",
+   next:"Flag for possible highlighting in the product page battery section."},
+  {id:24, industry:"Retail & e-commerce", title:"Fraudulent order", type:"Noul", short:"Check whether an order description matches a known fraud pattern.",
+   practice:"Risk teams can flag orders that appear high-risk for manual review before fulfillment.",
+   input:"Fictional order: High-value electronics to a new address, different from billing, with expedited shipping.",
+   ask:"Does this match the ‘high-value new-address mismatch’ pattern? Return a 0–1 probability.",
+   result:"Noul: 0.85 (illustrative)",
+   next:"Hold for manual review by the fraud team before shipping."},
+  {id:25, industry:"Retail & e-commerce", title:"Inventory inquiry", type:"Choice", short:"Classify stock questions as availability, restock date, or alternative product.",
+   practice:"Support can route to the correct inventory or merchandising response.",
+   input:"Fictional message: ‘When will the blue version of this jacket be back in stock?’",
+   ask:"Which type? Choose one: current availability, restock timing, alternative suggestion, other/unclear.",
+   result:"Choice: restock timing (illustrative)",
+   next:"Provide the latest restock estimate or offer to notify when available."},
+
+  // Manufacturing (26-30)
+  {id:26, industry:"Manufacturing", title:"Quality incident", type:"Choice", short:"Classify quality issues as material, process, equipment, or human factors.",
+   practice:"Quality teams can route incidents to the correct root-cause investigation path.",
+   input:"Fictional report: ‘Dimensional out-of-spec on multiple parts after tool changeover.’",
+   ask:"Which category? Choose one: material, process, equipment, human factors, other/unclear.",
+   result:"Choice: process (illustrative)",
+   next:"Assign to the process engineering team for investigation."},
+  {id:27, industry:"Manufacturing", title:"Maintenance priority", type:"Score", short:"Score equipment issue descriptions on a priority rubric.",
+   practice:"Maintenance can prioritize high-impact issues for faster response.",
+   input:"Fictional note: ‘Main production line conveyor stopped; entire line down.’",
+   ask:"On a 1–5 priority rubric (1=low, 5=line-stopping), score this issue.",
+   result:"Score: 5 (illustrative)",
+   next:"Dispatch the on-call maintenance team immediately."},
+  {id:28, industry:"Manufacturing", title:"Supplier non-conformance", type:"Noul", short:"Check whether a supplier response addresses a specific non-conformance request.",
+   practice:"Supplier quality can identify responses that appear to address the issue before full review.",
+   input:"Fictional supplier reply: ‘We have implemented the revised inspection procedure and attached the updated work instruction.’",
+   ask:"Does this address the request for a revised inspection procedure? Return a 0–1 probability.",
+   result:"Noul: 0.91 (illustrative)",
+   next:"Mark as likely addressed and route for verification of the attachment."},
+  {id:29, industry:"Manufacturing", title:"Work instruction completeness", type:"Score", short:"Score how completely a procedure covers required safety and process steps.",
+   practice:"Document control can prioritize incomplete instructions for revision.",
+   input:"Fictional procedure: Lists steps but omits personal protective equipment requirements and emergency stop locations.",
+   ask:"On a 1–5 completeness rubric, score this work instruction.",
+   result:"Score: 2 (illustrative)",
+   next:"Return to the process owner for addition of missing safety elements."},
+  {id:30, industry:"Manufacturing", title:"Production delay cause", type:"Choice", short:"Classify delay reports as material shortage, equipment, labor, or quality hold.",
+   practice:"Operations can route delay reports to the correct team for resolution.",
+   input:"Fictional report: ‘Line stopped waiting for critical component that failed incoming inspection.’",
+   ask:"Which cause? Choose one: material shortage, equipment failure, labor, quality hold, other/unclear.",
+   result:"Choice: quality hold (illustrative)",
+   next:"Notify quality and procurement to resolve the inspection failure."},
+
+  // Logistics (31-35)
+  {id:31, industry:"Logistics", title:"Shipment exception", type:"Choice", short:"Classify exceptions as delayed, damaged, lost, or address issue.",
+   practice:"Operations can apply the correct recovery workflow.",
+   input:"Fictional note: ‘Package scanned as delivered but customer reports not received.’",
+   ask:"Which exception type? Choose one: delayed, damaged, lost/misdelivered, address issue, other/unclear.",
+   result:"Choice: lost/misdelivered (illustrative)",
+   next:"Initiate trace and customer notification under the misdelivery process."},
+  {id:32, industry:"Logistics", title:"Damage severity", type:"Score", short:"Score damage descriptions to determine claim priority and inspection need.",
+   practice:"Claims can prioritize severe damage for faster inspection.",
+   input:"Fictional description: ‘Multiple cartons crushed, contents visibly broken, liquid leaking.’",
+   ask:"On a 1–5 damage severity rubric, score this report.",
+   result:"Score: 4 (illustrative)",
+   next:"Schedule priority inspection and prepare high-value claim documentation."},
+  {id:33, industry:"Logistics", title:"Customs document check", type:"Noul", short:"Check whether a commercial invoice contains a specific required data element.",
+   practice:"Documentation teams can flag invoices missing key fields before submission.",
+   input:"Fictional invoice excerpt: Lists HS codes and values but no country of origin for each line.",
+   ask:"Does this invoice include country of origin for all lines? Return a 0–1 probability.",
+   result:"Noul: 0.15 (illustrative)",
+   next:"Return to the shipper to add missing country-of-origin data."},
+  {id:34, industry:"Logistics", title:"Route exception", type:"Choice", short:"Classify delivery issues as weather, vehicle, access, or customer not available.",
+   practice:"Dispatch can reassign or reschedule based on the cause.",
+   input:"Fictional driver note: ‘Gate locked, no access code provided, customer not answering phone.’",
+   ask:"Which cause? Choose one: weather, vehicle, access, customer unavailable, other/unclear.",
+   result:"Choice: access (illustrative)",
+   next:"Contact customer for access instructions and reschedule if needed."},
+  {id:35, industry:"Logistics", title:"Warehouse discrepancy", type:"Noul", short:"Check whether a cycle-count note explains a specific inventory variance.",
+   practice:"Inventory teams can identify explanations that appear to account for variances.",
+   input:"Fictional note: ‘Variance due to recent large outbound shipment not yet system-updated; physical count matches expected after adjustment.’",
+   ask:"Does this explanation account for the variance? Return a 0–1 probability.",
+   result:"Noul: 0.88 (illustrative)",
+   next:"Accept the explanation pending system update verification."},
+
+  // Energy & utilities (36-40)
+  {id:36, industry:"Energy & utilities", title:"Outage report", type:"Choice", short:"Classify outage reports as planned, unplanned equipment, weather, or customer-caused.",
+   practice:"Operations can route reports to the correct response team.",
+   input:"Fictional report: ‘Power out after tree fell on line during storm.’",
+   ask:"Which type? Choose one: planned, unplanned equipment, weather, customer-caused, other/unclear.",
+   result:"Choice: weather (illustrative)",
+   next:"Assign to the storm response crew and update estimated restoration time."},
+  {id:37, industry:"Energy & utilities", title:"Safety incident severity", type:"Score", short:"Score incident descriptions on a severity rubric for escalation.",
+   practice:"Safety teams can prioritize high-severity incidents for immediate investigation.",
+   input:"Fictional report: ‘Worker injured requiring medical attention after arc flash; equipment damaged.’",
+   ask:"On a 1–5 severity rubric, score this incident.",
+   result:"Score: 4 (illustrative)",
+   next:"Escalate to senior safety and operations leadership for investigation."},
+  {id:38, industry:"Energy & utilities", title:"Billing inquiry", type:"Choice", short:"Route inquiries to usage, payment, meter, or rate questions.",
+   practice:"Customer service can separate meter issues from rate questions.",
+   input:"Fictional message: ‘My bill is much higher than usual; I think the meter may be wrong.’",
+   ask:"Which category? Choose one: usage explanation, payment, meter, rate, other/unclear.",
+   result:"Choice: meter (illustrative)",
+   next:"Schedule a meter verification and provide interim usage analysis."},
+  {id:39, industry:"Energy & utilities", title:"Permit completeness", type:"Noul", short:"Check whether an application addresses a specific environmental permit requirement.",
+   practice:"Permitting teams can identify applications that appear to cover required elements.",
+   input:"Fictional application text: ‘Erosion control plan included as Attachment C, addressing all disturbed areas.’",
+   ask:"Does this address the erosion control requirement? Return a 0–1 probability.",
+   result:"Noul: 0.93 (illustrative)",
+   next:"Mark requirement as likely met and continue checklist review."},
+  {id:40, industry:"Energy & utilities", title:"Maintenance work order", type:"Choice", short:"Classify work requests as preventive, corrective, emergency, or inspection.",
+   practice:"Planning can route requests to the correct scheduling path.",
+   input:"Fictional request: ‘Transformer showing abnormal temperature readings; needs inspection before failure.’",
+   ask:"Which type? Choose one: preventive, corrective, emergency, inspection, other/unclear.",
+   result:"Choice: inspection (illustrative)",
+   next:"Schedule priority inspection by the substation team."},
+
+  // Telecommunications (41-45)
+  {id:41, industry:"Telecommunications", title:"Service issue", type:"Choice", short:"Classify issues as outage, slow speed, billing, or equipment.",
+   practice:"Support can route to the correct technical or billing team.",
+   input:"Fictional message: ‘Internet is completely down in my area since this morning.’",
+   ask:"Which category? Choose one: outage, performance, billing, equipment, other/unclear.",
+   result:"Choice: outage (illustrative)",
+   next:"Check network status and assign to the outage response team."},
+  {id:42, industry:"Telecommunications", title:"Network alarm severity", type:"Score", short:"Score alarm descriptions on a severity rubric for escalation.",
+   practice:"NOC teams can prioritize critical alarms.",
+   input:"Fictional alarm: ‘Core router failure affecting multiple regions; traffic rerouting incomplete.’",
+   ask:"On a 1–5 severity rubric, score this alarm.",
+   result:"Score: 5 (illustrative)",
+   next:"Escalate immediately to senior network engineering."},
+  {id:43, industry:"Telecommunications", title:"Customer complaint", type:"Noul", short:"Check whether a complaint description matches a specific service-level issue.",
+   practice:"Quality teams can flag complaints that appear to indicate SLA breaches.",
+   input:"Fictional complaint: ‘Multiple dropped calls over the past week in the same location.’",
+   ask:"Does this match a potential coverage or capacity issue pattern? Return a 0–1 probability.",
+   result:"Noul: 0.76 (illustrative)",
+   next:"Include in the network quality review for the affected area."},
+  {id:44, industry:"Telecommunications", title:"Order type", type:"Choice", short:"Classify new orders as new service, upgrade, move, or disconnect.",
+   practice:"Order management can apply the correct provisioning workflow.",
+   input:"Fictional order note: ‘Customer moving to new address and wants to transfer existing service.’",
+   ask:"Which order type? Choose one: new service, upgrade, move/transfer, disconnect, other/unclear.",
+   result:"Choice: move/transfer (illustrative)",
+   next:"Initiate the address change and service transfer process."},
+  {id:45, industry:"Telecommunications", title:"Technical documentation relevance", type:"Score", short:"Score how relevant a knowledge article is to a specific error code.",
+   practice:"Support can surface the most relevant articles first.",
+   input:"Fictional article summary: Step-by-step resolution for the exact error code reported by the customer.",
+   ask:"On a 1–5 relevance rubric, score this article for the error.",
+   result:"Score: 5 (illustrative)",
+   next:"Present the article as the primary resolution guide."},
+
+  // Software & IT (46-50)
+  {id:46, industry:"Software & IT", title:"Ticket routing", type:"Choice", short:"Route tickets to infrastructure, application, security, or user support.",
+   practice:"Service desk can separate infrastructure issues from application bugs.",
+   input:"Fictional ticket: ‘Users cannot log in to the CRM; error on authentication service.’",
+   ask:"Which team? Choose one: infrastructure, application, security, user support, other/unclear.",
+   result:"Choice: application (illustrative)",
+   next:"Assign to the CRM application team for investigation."},
+  {id:47, industry:"Software & IT", title:"Incident severity", type:"Score", short:"Score incident descriptions on a severity rubric for escalation.",
+   practice:"On-call teams can prioritize critical incidents.",
+   input:"Fictional incident: ‘Production database unavailable; all customer transactions failing.’",
+   ask:"On a 1–5 severity rubric (1=low, 5=critical business impact), score this incident.",
+   result:"Score: 5 (illustrative)",
+   next:"Page the senior on-call engineer and open a major incident bridge."},
+  {id:48, industry:"Software & IT", title:"Change request completeness", type:"Noul", short:"Check whether a change request addresses a specific required risk assessment element.",
+   practice:"Change advisory boards can identify requests that appear to cover required sections.",
+   input:"Fictional request: ‘Rollback plan detailed in section 4; tested in staging environment.’",
+   ask:"Does this address the rollback plan requirement? Return a 0–1 probability.",
+   result:"Noul: 0.95 (illustrative)",
+   next:"Mark requirement as likely met and continue review."},
+  {id:49, industry:"Software & IT", title:"Bug classification", type:"Choice", short:"Classify bug reports as UI, logic, performance, or data issue.",
+   practice:"Development can assign to the correct specialist.",
+   input:"Fictional bug: ‘Search returns incorrect results when filters are applied in a specific combination.’",
+   ask:"Which type? Choose one: UI, logic, performance, data, other/unclear.",
+   result:"Choice: logic (illustrative)",
+   next:"Assign to the search logic developer for investigation."},
+  {id:50, industry:"Software & IT", title:"Knowledge base relevance", type:"Score", short:"Score how relevant an article is to a user query.",
+   practice:"Self-service can rank articles by relevance.",
+   input:"Fictional article: Exact match for the error message and resolution steps described in the query.",
+   ask:"On a 1–5 relevance rubric, score this article.",
+   result:"Score: 5 (illustrative)",
+   next:"Display as the top suggested article."},
+
+  // Cybersecurity (51-55)
+  {id:51, industry:"Cybersecurity", title:"Alert triage", type:"Choice", short:"Classify alerts as true positive, false positive, or needs investigation.",
+   practice:"SOC analysts can prioritize likely true positives.",
+   input:"Fictional alert: ‘Multiple failed logins followed by successful login from unusual location, then data exfiltration indicators.’",
+   ask:"Classify the alert. Choose one: likely true positive, likely false positive, needs investigation, other/unclear.",
+   result:"Choice: likely true positive (illustrative)",
+   next:"Escalate to incident response for containment assessment."},
+  {id:52, industry:"Cybersecurity", title:"Incident severity", type:"Score", short:"Score incident descriptions on a severity rubric.",
+   practice:"Response teams can escalate high-severity incidents faster.",
+   input:"Fictional incident: ‘Ransomware detected on multiple servers; backups appear affected.’",
+   ask:"On a 1–5 severity rubric, score this incident.",
+   result:"Score: 5 (illustrative)",
+   next:"Activate full incident response plan and notify leadership."},
+  {id:53, industry:"Cybersecurity", title:"Policy violation", type:"Noul", short:"Check whether an activity description matches a specific policy violation.",
+   practice:"Compliance can flag activities that appear to violate a defined policy.",
+   input:"Fictional log: ‘User shared confidential file externally via personal email without approval.’",
+   ask:"Does this match the ‘unauthorized external sharing of confidential data’ policy? Return a 0–1 probability.",
+   result:"Noul: 0.92 (illustrative)",
+   next:"Open a policy violation case for review."},
+  {id:54, industry:"Cybersecurity", title:"Vulnerability prioritization", type:"Score", short:"Score vulnerability descriptions on a priority rubric based on exploitability and impact.",
+   practice:"Patch teams can prioritize high-risk vulnerabilities.",
+   input:"Fictional vulnerability: ‘Critical remote code execution in internet-facing service with public exploit available.’",
+   ask:"On a 1–5 priority rubric, score this vulnerability.",
+   result:"Score: 5 (illustrative)",
+   next:"Schedule emergency patching and monitor for exploitation."},
+  {id:55, industry:"Cybersecurity", title:"Phishing report", type:"Choice", short:"Classify reported emails as phishing, spam, legitimate, or suspicious.",
+   practice:"Security awareness teams can route reports appropriately.",
+   input:"Fictional report: ‘Email asking for password reset with link to non-company domain.’",
+   ask:"Which classification? Choose one: phishing, spam, legitimate, suspicious, other/unclear.",
+   result:"Choice: phishing (illustrative)",
+   next:"Add indicators to block list and notify the reporting user."},
+
+  // Government & public services (56-60)
+  {id:56, industry:"Government & public services", title:"Citizen inquiry", type:"Choice", short:"Route inquiries to permits, benefits, taxes, or general information.",
+   practice:"Contact centers can separate benefit questions from permit applications.",
+   input:"Fictional message: ‘How do I apply for a building permit for a home addition?’",
+   ask:"Which department? Choose one: permits, benefits, taxes, general information, other/unclear.",
+   result:"Choice: permits (illustrative)",
+   next:"Provide the permit application link and checklist."},
+  {id:57, industry:"Government & public services", title:"Application completeness", type:"Noul", short:"Check whether an application addresses a specific required document.",
+   practice:"Processing teams can identify applications that appear to include required items.",
+   input:"Fictional application note: ‘Proof of residency attached as PDF, dated within the last 30 days.’",
+   ask:"Does this address the proof-of-residency requirement? Return a 0–1 probability.",
+   result:"Noul: 0.94 (illustrative)",
+   next:"Mark requirement as likely met and continue review."},
+  {id:58, industry:"Government & public services", title:"Complaint severity", type:"Score", short:"Score complaint descriptions on a severity rubric for prioritization.",
+   practice:"Oversight teams can prioritize high-severity complaints.",
+   input:"Fictional complaint: ‘Alleged improper denial of emergency benefits affecting vulnerable household.’",
+   ask:"On a 1–5 severity rubric, score this complaint.",
+   result:"Score: 4 (illustrative)",
+   next:"Assign to senior reviewer for expedited investigation."},
+  {id:59, industry:"Government & public services", title:"Public records request", type:"Choice", short:"Classify requests as routine, complex, or exempt-related.",
+   practice:"Records teams can apply the correct processing timeline.",
+   input:"Fictional request: ‘All emails between specific officials regarding a named project over two years.’",
+   ask:"Which type? Choose one: routine, complex, potentially exempt, other/unclear.",
+   result:"Choice: complex (illustrative)",
+   next:"Estimate extended processing time and assign to specialized reviewer."},
+  {id:60, industry:"Government & public services", title:"Service eligibility", type:"Noul", short:"Check whether stated facts meet one specific eligibility criterion.",
+   practice:"Benefit processors can identify applications that appear to meet a criterion.",
+   input:"Fictional statement: ‘Household income below threshold for the past three months, verified by pay stubs.’",
+   ask:"Does this meet the income threshold criterion? Return a 0–1 probability.",
+   result:"Noul: 0.89 (illustrative)",
+   next:"Mark criterion as likely met pending document verification."},
+
+  // Legal & professional services (61-65)
+  {id:61, industry:"Legal & professional services", title:"Matter intake", type:"Choice", short:"Classify new matters as litigation, transactional, regulatory, or advisory.",
+   practice:"Intake can route to the correct practice group.",
+   input:"Fictional description: ‘Client facing regulatory investigation and needs response strategy.’",
+   ask:"Which practice? Choose one: litigation, transactional, regulatory, advisory, other/unclear.",
+   result:"Choice: regulatory (illustrative)",
+   next:"Assign to the regulatory practice group for conflict check and engagement."},
+  {id:62, industry:"Legal & professional services", title:"Document relevance", type:"Score", short:"Score how relevant a document is to a specific discovery request.",
+   practice:"Review teams can prioritize highly relevant documents.",
+   input:"Fictional document summary: Directly discusses the contract terms at issue in the request.",
+   ask:"On a 1–5 relevance rubric, score this document.",
+   result:"Score: 5 (illustrative)",
+   next:"Flag for priority review and potential production."},
+  {id:63, industry:"Legal & professional services", title:"Contract clause check", type:"Noul", short:"Check whether a contract draft addresses a specific required clause.",
+   practice:"Contract teams can identify drafts that appear to include required language.",
+   input:"Fictional draft excerpt: ‘Limitation of liability section includes mutual cap at fees paid, as specified.’",
+   ask:"Does this address the required limitation-of-liability clause? Return a 0–1 probability.",
+   result:"Noul: 0.90 (illustrative)",
+   next:"Mark clause as likely present and continue review of remaining terms."},
+  {id:64, industry:"Legal & professional services", title:"Conflict check", type:"Choice", short:"Classify potential conflicts as clear, potential, or confirmed based on description.",
+   practice:"Intake can flag matters needing further conflict analysis.",
+   input:"Fictional note: ‘Opposing party is a current client in an unrelated matter.’",
+   ask:"Classify the conflict. Choose one: clear, potential, confirmed, other/unclear.",
+   result:"Choice: potential (illustrative)",
+   next:"Escalate to conflicts committee for review."},
+  {id:65, industry:"Legal & professional services", title:"Research memo completeness", type:"Score", short:"Score how completely a memo addresses the requested legal questions.",
+   practice:"Supervising attorneys can prioritize incomplete memos for revision.",
+   input:"Fictional memo: Addresses primary question but omits secondary jurisdictional issue raised in the request.",
+   ask:"On a 1–5 completeness rubric, score this memo.",
+   result:"Score: 3 (illustrative)",
+   next:"Return for addition of the jurisdictional analysis."},
+
+  // Education & training (66-70)
+  {id:66, industry:"Education & training", title:"Student inquiry", type:"Choice", short:"Route inquiries to admissions, financial aid, academics, or student services.",
+   practice:"Support can separate aid questions from academic advising.",
+   input:"Fictional message: ‘What scholarships am I eligible for based on my GPA?’",
+   ask:"Which office? Choose one: admissions, financial aid, academics, student services, other/unclear.",
+   result:"Choice: financial aid (illustrative)",
+   next:"Provide scholarship eligibility information or schedule an aid appointment."},
+  {id:67, industry:"Education & training", title:"Assignment completeness", type:"Score", short:"Score how completely a submission addresses the assignment rubric.",
+   practice:"Instructors can prioritize incomplete submissions for feedback.",
+   input:"Fictional submission note: Addresses main thesis but lacks required citations and conclusion section.",
+   ask:"On a 1–5 completeness rubric against the assignment requirements, score this submission.",
+   result:"Score: 2 (illustrative)",
+   next:"Provide feedback requesting the missing elements before final grading."},
+  {id:68, industry:"Education & training", title:"Academic integrity", type:"Noul", short:"Check whether a submission description matches a specific integrity concern pattern.",
+   practice:"Integrity offices can flag submissions that appear to match known issues.",
+   input:"Fictional report: ‘Large sections identical to an online source without citation.’",
+   ask:"Does this match an uncited source-matching pattern? Return a 0–1 probability.",
+   result:"Noul: 0.88 (illustrative)",
+   next:"Refer to the academic integrity review process."},
+  {id:69, industry:"Education & training", title:"Course recommendation", type:"Choice", short:"Classify student goals as introductory, intermediate, or advanced for course matching.",
+   practice:"Advising can suggest appropriate-level courses.",
+   input:"Fictional student statement: ‘I have no prior experience and want to learn the basics of the topic.’",
+   ask:"Which level? Choose one: introductory, intermediate, advanced, other/unclear.",
+   result:"Choice: introductory (illustrative)",
+   next:"Recommend the introductory course sequence."},
+  {id:70, industry:"Education & training", title:"Feedback relevance", type:"Score", short:"Score how relevant peer feedback is to specific assignment criteria.",
+   practice:"Instructors can highlight high-quality feedback.",
+   input:"Fictional feedback: Directly addresses the thesis clarity and evidence criteria with specific examples.",
+   ask:"On a 1–5 relevance rubric to the criteria, score this feedback.",
+   result:"Score: 4 (illustrative)",
+   next:"Flag as high-quality feedback for the student."},
+
+  // Real estate (71-75)
+  {id:71, industry:"Real estate", title:"Inquiry routing", type:"Choice", short:"Route inquiries to sales, leasing, property management, or maintenance.",
+   practice:"Support can separate leasing questions from maintenance requests.",
+   input:"Fictional message: ‘The air conditioning in unit 4B is not working.’",
+   ask:"Which team? Choose one: sales, leasing, property management, maintenance, other/unclear.",
+   result:"Choice: maintenance (illustrative)",
+   next:"Create a work order for the HVAC technician."},
+  {id:72, industry:"Real estate", title:"Application completeness", type:"Noul", short:"Check whether a rental application addresses a specific income verification request.",
+   practice:"Leasing teams can identify applications that appear complete on key items.",
+   input:"Fictional reply: ‘Pay stubs for the last two months attached as requested.’",
+   ask:"Does this address the income verification request? Return a 0–1 probability.",
+   result:"Noul: 0.93 (illustrative)",
+   next:"Mark as likely complete and proceed to background check."},
+  {id:73, industry:"Real estate", title:"Property condition", type:"Score", short:"Score condition descriptions on a severity rubric for repair prioritization.",
+   practice:"Property managers can prioritize urgent repairs.",
+   input:"Fictional note: ‘Roof leak actively damaging ceiling and flooring in occupied unit.’",
+   ask:"On a 1–5 severity rubric, score this condition issue.",
+   result:"Score: 4 (illustrative)",
+   next:"Schedule emergency repair and notify the tenant of temporary arrangements."},
+  {id:74, industry:"Real estate", title:"Lead qualification", type:"Choice", short:"Classify leads as hot, warm, or cold based on stated intent and timeline.",
+   practice:"Sales teams can prioritize high-intent leads.",
+   input:"Fictional lead: ‘Pre-approved for financing and looking to purchase within 30 days.’",
+   ask:"Classify the lead. Choose one: hot, warm, cold, other/unclear.",
+   result:"Choice: hot (illustrative)",
+   next:"Assign to a senior agent for immediate follow-up."},
+  {id:75, industry:"Real estate", title:"Listing accuracy", type:"Noul", short:"Check whether a listing description matches a specific required disclosure.",
+   practice:"Compliance can flag listings missing required disclosures.",
+   input:"Fictional listing: Mentions recent roof replacement but no disclosure of known foundation issue.",
+   ask:"Does the description include the required foundation disclosure? Return a 0–1 probability.",
+   result:"Noul: 0.12 (illustrative)",
+   next:"Return to the listing agent to add the required disclosure."},
+
+  // Construction (76-80)
+  {id:76, industry:"Construction", title:"Safety incident", type:"Choice", short:"Classify incidents as near-miss, first-aid, recordable, or serious.",
+   practice:"Safety teams can apply the correct reporting and investigation process.",
+   input:"Fictional report: ‘Worker fell from ladder, treated on site, returned to work same day.’",
+   ask:"Which classification? Choose one: near-miss, first-aid, recordable, serious, other/unclear.",
+   result:"Choice: first-aid (illustrative)",
+   next:"Document as first-aid case and review ladder safety procedures."},
+  {id:77, industry:"Construction", title:"RFI classification", type:"Choice", short:"Classify requests for information as design, specification, or coordination issue.",
+   practice:"Project teams can route RFIs to the correct discipline.",
+   input:"Fictional RFI: ‘Conflict between structural drawing and mechanical equipment location.’",
+   ask:"Which type? Choose one: design clarification, specification, coordination, other/unclear.",
+   result:"Choice: coordination (illustrative)",
+   next:"Route to the coordination meeting for resolution."},
+  {id:78, industry:"Construction", title:"Submittal completeness", type:"Noul", short:"Check whether a submittal addresses a specific specification requirement.",
+   practice:"Project engineers can identify submittals that appear to meet requirements.",
+   input:"Fictional submittal note: ‘Product data includes the required fire rating certification as specified in section 07 84 00.’",
+   ask:"Does this address the fire-rating certification requirement? Return a 0–1 probability.",
+   result:"Noul: 0.95 (illustrative)",
+   next:"Mark requirement as likely met and continue review."},
+  {id:79, industry:"Construction", title:"Delay cause", type:"Choice", short:"Classify delay notices as weather, material, labor, or design change.",
+   practice:"Project controls can route delay analysis to the correct party.",
+   input:"Fictional notice: ‘Critical path delayed due to late delivery of structural steel.’",
+   ask:"Which cause? Choose one: weather, material, labor, design change, other/unclear.",
+   result:"Choice: material (illustrative)",
+   next:"Notify procurement and evaluate schedule impact."},
+  {id:80, industry:"Construction", title:"Quality observation", type:"Score", short:"Score quality observations on a severity rubric.",
+   practice:"Quality teams can prioritize high-severity issues for correction.",
+   input:"Fictional observation: ‘Reinforcement placement does not match approved shop drawings; structural integrity concern.’",
+   ask:"On a 1–5 severity rubric, score this observation.",
+   result:"Score: 4 (illustrative)",
+   next:"Issue non-conformance report and require correction before proceeding."},
+
+  // Travel & hospitality (81-85)
+  {id:81, industry:"Travel & hospitality", title:"Guest request", type:"Choice", short:"Route requests to front desk, housekeeping, maintenance, or concierge.",
+   practice:"Operations can separate housekeeping requests from maintenance issues.",
+   input:"Fictional message: ‘The shower in room 312 has no hot water.’",
+   ask:"Which team? Choose one: front desk, housekeeping, maintenance, concierge, other/unclear.",
+   result:"Choice: maintenance (illustrative)",
+   next:"Dispatch maintenance to the room and offer an alternative room if needed."},
+  {id:82, industry:"Travel & hospitality", title:"Complaint severity", type:"Score", short:"Score guest complaints on a severity rubric for escalation.",
+   practice:"Guest services can prioritize high-impact complaints.",
+   input:"Fictional complaint: ‘Room was not ready on arrival, no alternative offered, missed important meeting.’",
+   ask:"On a 1–5 severity rubric, score this complaint.",
+   result:"Score: 4 (illustrative)",
+   next:"Escalate to the manager on duty for immediate resolution and compensation review."},
+  {id:83, industry:"Travel & hospitality", title:"Reservation modification", type:"Choice", short:"Classify requests as date change, room type, cancellation, or special request.",
+   practice:"Reservations can apply the correct policy and workflow.",
+   input:"Fictional request: ‘Need to change arrival date from Friday to Saturday.’",
+   ask:"Which type? Choose one: date change, room type, cancellation, special request, other/unclear.",
+   result:"Choice: date change (illustrative)",
+   next:"Check availability and apply the modification policy."},
+  {id:84, industry:"Travel & hospitality", title:"Review sentiment relevance", type:"Score", short:"Score how relevant a review comment is to a specific operational area.",
+   practice:"Operations can prioritize reviews discussing key areas like cleanliness or service.",
+   input:"Fictional review: Detailed comments on slow check-in process and staff responsiveness.",
+   ask:"On a 1–5 relevance rubric to front-desk operations, score this review.",
+   result:"Score: 5 (illustrative)",
+   next:"Flag for front-desk team review and process improvement discussion."},
+  {id:85, industry:"Travel & hospitality", title:"Loyalty inquiry", type:"Noul", short:"Check whether a guest statement matches a specific loyalty benefit eligibility.",
+   practice:"Loyalty teams can identify inquiries that appear eligible for a benefit.",
+   input:"Fictional inquiry: ‘I stayed 12 nights last quarter and should qualify for the free night award.’",
+   ask:"Does this match the stated nights-stayed criterion for the award? Return a 0–1 probability.",
+   result:"Noul: 0.86 (illustrative)",
+   next:"Verify stay history and process the award if confirmed."},
+
+  // Agriculture & food (86-90)
+  {id:86, industry:"Agriculture & food", title:"Quality issue", type:"Choice", short:"Classify quality reports as contamination, labeling, packaging, or process deviation.",
+   practice:"Quality assurance can route issues to the correct investigation path.",
+   input:"Fictional report: ‘Foreign material found in finished product during final inspection.’",
+   ask:"Which category? Choose one: contamination, labeling, packaging, process deviation, other/unclear.",
+   result:"Choice: contamination (illustrative)",
+   next:"Initiate hold and contamination investigation protocol."},
+  {id:87, industry:"Agriculture & food", title:"Recall severity", type:"Score", short:"Score recall descriptions on a severity rubric for classification.",
+   practice:"Food safety teams can prioritize high-severity recalls.",
+   input:"Fictional description: ‘Pathogen detected in distributed product; consumer illness reported.’",
+   ask:"On a 1–5 severity rubric, score this recall situation.",
+   result:"Score: 5 (illustrative)",
+   next:"Activate Class I recall procedures and notify regulatory authorities."},
+  {id:88, industry:"Agriculture & food", title:"Supplier audit response", type:"Noul", short:"Check whether a supplier response addresses a specific corrective action request.",
+   practice:"Supplier quality can identify responses that appear to address findings.",
+   input:"Fictional response: ‘Corrective action implemented; updated HACCP plan attached addressing the critical control point.’",
+   ask:"Does this address the critical control point corrective action? Return a 0–1 probability.",
+   result:"Noul: 0.91 (illustrative)",
+   next:"Mark as likely addressed pending verification of the attachment."},
+  {id:89, industry:"Agriculture & food", title:"Crop report", type:"Choice", short:"Classify field reports as pest, disease, weather, or nutrient issue.",
+   practice:"Agronomy teams can route reports to the correct specialist.",
+   input:"Fictional report: ‘Yellowing leaves and stunted growth in multiple fields after heavy rain.’",
+   ask:"Which type? Choose one: pest, disease, weather, nutrient, other/unclear.",
+   result:"Choice: weather (illustrative)",
+   next:"Recommend drainage assessment and nutrient testing."},
+  {id:90, industry:"Agriculture & food", title:"Label compliance", type:"Noul", short:"Check whether a label description includes a specific required allergen statement.",
+   practice:"Regulatory teams can flag labels missing required statements.",
+   input:"Fictional label text: Lists ingredients but no ‘contains’ statement for the identified allergen.",
+   ask:"Does the label include the required allergen statement? Return a 0–1 probability.",
+   result:"Noul: 0.08 (illustrative)",
+   next:"Return to the labeling team to add the required statement before production."},
+
+  // Media & entertainment (91-95)
+  {id:91, industry:"Media & entertainment", title:"Content moderation", type:"Choice", short:"Classify user reports as spam, harassment, copyright, or misinformation.",
+   practice:"Moderation teams can apply the correct policy and action.",
+   input:"Fictional report: ‘User posting repeated personal attacks against another user.’",
+   ask:"Which category? Choose one: spam, harassment, copyright, misinformation, other/unclear.",
+   result:"Choice: harassment (illustrative)",
+   next:"Apply the harassment policy and issue a warning or removal as appropriate."},
+  {id:92, industry:"Media & entertainment", title:"Content relevance", type:"Score", short:"Score how relevant a piece of content is to a specific editorial topic.",
+   practice:"Editors can prioritize highly relevant submissions.",
+   input:"Fictional submission summary: Directly covers the requested angle with original reporting and sources.",
+   ask:"On a 1–5 relevance rubric to the topic, score this submission.",
+   result:"Score: 5 (illustrative)",
+   next:"Flag for priority editorial review."},
+  {id:93, industry:"Media & entertainment", title:"Rights clearance", type:"Noul", short:"Check whether a usage description matches a specific licensed right.",
+   practice:"Rights teams can identify usages that appear covered by existing licenses.",
+   input:"Fictional request: ‘Clip used is under 10 seconds from a fully licensed music track in a promotional video.’",
+   ask:"Does this match the licensed promotional use rights? Return a 0–1 probability.",
+   result:"Noul: 0.84 (illustrative)",
+   next:"Approve under existing license pending final confirmation."},
+  {id:94, industry:"Media & entertainment", title:"Audience inquiry", type:"Choice", short:"Route inquiries to subscriptions, content, technical, or advertising.",
+   practice:"Support can separate subscription issues from content questions.",
+   input:"Fictional message: ‘I was charged twice for my monthly subscription.’",
+   ask:"Which team? Choose one: subscriptions, content, technical, advertising, other/unclear.",
+   result:"Choice: subscriptions (illustrative)",
+   next:"Investigate the billing and issue a refund if confirmed."},
+  {id:95, industry:"Media & entertainment", title:"Script note", type:"Score", short:"Score development notes on a relevance rubric to specific story elements.",
+   practice:"Development teams can prioritize notes addressing key story issues.",
+   input:"Fictional note: Addresses pacing and character motivation in the second act with specific suggestions.",
+   ask:"On a 1–5 relevance rubric to second-act issues, score this note.",
+   result:"Score: 4 (illustrative)",
+   next:"Include in the revision discussion for the second act."},
+
+  // Automotive & fleet management (96-100)
+  {id:96, industry:"Automotive & fleet management", title:"Service request", type:"Choice", short:"Classify service requests as routine maintenance, repair, recall, or roadside.",
+   practice:"Service teams can apply the correct scheduling and parts process.",
+   input:"Fictional request: ‘Check engine light on; vehicle losing power intermittently.’",
+   ask:"Which type? Choose one: routine maintenance, repair, recall, roadside, other/unclear.",
+   result:"Choice: repair (illustrative)",
+   next:"Schedule diagnostic appointment and prepare potential parts."},
+  {id:97, industry:"Automotive & fleet management", title:"Incident severity", type:"Score", short:"Score fleet incident descriptions on a severity rubric.",
+   practice:"Fleet safety can prioritize high-severity incidents for investigation.",
+   input:"Fictional report: ‘Collision with injury; vehicle undrivable; police report filed.’",
+   ask:"On a 1–5 severity rubric, score this incident.",
+   result:"Score: 4 (illustrative)",
+   next:"Initiate full incident investigation and insurance claim process."},
+  {id:98, industry:"Automotive & fleet management", title:"Warranty claim", type:"Noul", short:"Check whether a claim description addresses a specific warranty coverage criterion.",
+   practice:"Warranty teams can identify claims that appear covered before full review.",
+   input:"Fictional claim: ‘Failure occurred within mileage limit and matches the covered component list.’",
+   ask:"Does this address the mileage and component coverage criteria? Return a 0–1 probability.",
+   result:"Noul: 0.90 (illustrative)",
+   next:"Mark as likely covered pending parts inspection."},
+  {id:99, industry:"Automotive & fleet management", title:"Driver report", type:"Choice", short:"Classify driver reports as vehicle issue, route problem, customer, or safety concern.",
+   practice:"Operations can route reports to the correct team.",
+   input:"Fictional report: ‘Customer refused delivery at the address; no one available.’",
+   ask:"Which type? Choose one: vehicle issue, route problem, customer, safety concern, other/unclear.",
+   result:"Choice: customer (illustrative)",
+   next:"Contact customer for rescheduling instructions."},
+  {id:100, industry:"Automotive & fleet management", title:"Maintenance completeness", type:"Score", short:"Score how completely a maintenance record covers required inspection items.",
+   practice:"Fleet managers can prioritize incomplete records for follow-up.",
+   input:"Fictional record: Lists oil change and tire rotation but omits brake inspection required by the schedule.",
+   ask:"On a 1–5 completeness rubric against the maintenance schedule, score this record.",
+   result:"Score: 2 (illustrative)",
+   next:"Request completion of the missing brake inspection before closing the work order."}
+];
+
+const industries = [...new Set(useCases.map(u => u.industry))];
+let activeTypes = new Set();
+let activeIndustry = null;
+let searchTerm = "";
+
+function render() {
+  const filtered = useCases.filter(u => {
+    const typeOk = activeTypes.size === 0 || activeTypes.has(u.type);
+    const indOk = !activeIndustry || u.industry === activeIndustry;
+    const searchOk = !searchTerm ||
+      u.industry.toLowerCase().includes(searchTerm) ||
+      u.title.toLowerCase().includes(searchTerm) ||
+      u.short.toLowerCase().includes(searchTerm) ||
+      u.practice.toLowerCase().includes(searchTerm);
+    return typeOk && indOk && searchOk;
+  });
+
+  document.getElementById("stats").textContent = `${filtered.length} of 100`;
+
+  // Industry bar
+  const bar = document.getElementById("industry-bar");
+  bar.innerHTML = "";
+  industries.forEach(ind => {
+    const count = useCases.filter(u => u.industry === ind).length;
+    const chip = document.createElement("div");
+    chip.className = "industry-chip" + (activeIndustry === ind ? " active" : "");
+    chip.textContent = `${ind} ${count}`;
+    chip.onclick = () => {
+      activeIndustry = activeIndustry === ind ? null : ind;
+      render();
+    };
+    bar.appendChild(chip);
+  });
+
+  // Content
+  const content = document.getElementById("content");
+  content.innerHTML = "";
+  const grouped = {};
+  filtered.forEach(u => {
+    if (!grouped[u.industry]) grouped[u.industry] = [];
+    grouped[u.industry].push(u);
+  });
+
+  Object.keys(grouped).forEach(ind => {
+    const section = document.createElement("div");
+    section.className = "industry-section";
+    section.innerHTML = `<h2>${ind} <span class="count">${grouped[ind].length}</span></h2>`;
+    grouped[ind].forEach(u => {
+      const el = document.createElement("div");
+      el.className = "usecase";
+      el.innerHTML = `
+        <div class="usecase-header">
+          <div>
+            <div class="title-row">
+              <span class="num">${u.id}</span>
+              <span class="title">${u.title}</span>
+              <span class="badge ${u.type}">${u.type}</span>
+            </div>
+            <div class="short">${u.short}</div>
+          </div>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="usecase-body">
+          <div class="practice">${u.practice}</div>
+          <div class="example">
+            <h4>Fictional scenario</h4>
+            <p><span class="label">Example input</span><br>${u.input}</p>
+            <p><span class="label">Ask Jev</span><br>${u.ask}</p>
+            <div class="result"><span class="label">Illustrative result</span><br>${u.result}</div>
+            <p><span class="label">What happens next</span><br>${u.next}</p>
+          </div>
+        </div>
+      `;
+      el.querySelector(".usecase-header").onclick = () => el.classList.toggle("open");
+      section.appendChild(el);
+    });
+    content.appendChild(section);
+  });
+}
+
+// Event listeners
+document.querySelectorAll(".type-btn").forEach(btn => {
+  btn.onclick = () => {
+    const t = btn.dataset.type;
+    if (activeTypes.has(t)) activeTypes.delete(t);
+    else activeTypes.add(t);
+    btn.classList.toggle("active");
+    render();
+  };
+});
+
+document.getElementById("reset").onclick = () => {
+  activeTypes.clear();
+  activeIndustry = null;
+  searchTerm = "";
+  document.getElementById("search").value = "";
+  document.querySelectorAll(".type-btn").forEach(b => b.classList.remove("active"));
+  render();
+};
+
+document.getElementById("search").oninput = (e) => {
+  searchTerm = e.target.value.toLowerCase();
+  render();
+};
+
+document.getElementById("expand-all").onclick = () => {
+  document.querySelectorAll(".usecase").forEach(el => el.classList.add("open"));
+};
+document.getElementById("collapse-all").onclick = () => {
+  document.querySelectorAll(".usecase").forEach(el => el.classList.remove("open"));
+};
+
+render();
+</script>
+</body>
+</html>

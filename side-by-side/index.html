@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Jev-pilled: Side by Side</title>
+<meta name="description" content="Claude Fable, Codex Astra and Grok's Jev use-case guides in three scrollable columns.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>
+:root{--bg:#f7f7f5;--surface:#ffffff;--text:#1b1b19;--muted:#5f5e59;--line:#e2e1db;--accent:#2f5d8a}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#121211;--surface:#1a1a19;--text:#f0efec;--muted:#c3c2b7;--line:#2c2c2a;--accent:#8fb6dd}}
+:root[data-theme="dark"]{--bg:#121211;--surface:#1a1a19;--text:#f0efec;--muted:#c3c2b7;--line:#2c2c2a;--accent:#8fb6dd}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;display:flex;flex-direction:column}
+header{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:10px 16px;border-bottom:1px solid var(--line)}
+header a.home{color:var(--text);font-weight:700;text-decoration:none}
+header .title{color:var(--muted)}
+.switch{display:none;gap:6px;margin-left:auto}
+.switch button{font:inherit;font-size:.85rem;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:999px;padding:5px 12px;cursor:pointer}
+.switch button[aria-pressed="true"]{background:var(--text);color:var(--bg);border-color:var(--text)}
+main{flex:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));min-height:0}
+.col{display:flex;flex-direction:column;min-height:0;border-right:1px solid var(--line)}
+.col:last-child{border-right:0}
+.col h2{margin:0;padding:8px 14px;font-size:.92rem;display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);background:var(--surface)}
+.col h2 a{font-weight:400;color:var(--accent);font-size:.82rem;text-decoration:none}
+iframe{flex:1;width:100%;border:0;background:var(--bg)}
+@media (max-width:1000px){
+  .switch{display:flex}
+  main{grid-template-columns:1fr}
+  .col{border-right:0}
+  .col:not(.on){display:none}
+}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+<header>
+  <a class="home" href="/">&larr; Jev-pilled</a>
+  <span class="title">Three guides, side by side</span>
+  <div class="switch" role="group" aria-label="Show version">
+    <button type="button" data-col="0" aria-pressed="true">Claude Fable</button>
+    <button type="button" data-col="1" aria-pressed="false">Codex Astra</button>
+    <button type="button" data-col="2" aria-pressed="false">Grok</button>
+  </div>
+</header>
+<main>
+  <section class="col on"><h2>Claude Fable <a href="/claude-fable/">Open full page &nearr;</a></h2><iframe src="/claude-fable/" title="Claude Fable's version"></iframe></section>
+  <section class="col"><h2>Codex Astra <a href="/codex-astra/">Open full page &nearr;</a></h2><iframe src="/codex-astra/" title="Codex Astra's version"></iframe></section>
+  <section class="col"><h2>Grok <a href="/grok/">Open full page &nearr;</a></h2><iframe src="/grok/" title="Grok's version"></iframe></section>
+</main>
+<script>
+(function(){
+  var btns=[].slice.call(document.querySelectorAll('.switch button')), cols=[].slice.call(document.querySelectorAll('.col'));
+  btns.forEach(function(b){b.addEventListener('click',function(){
+    var i=+b.dataset.col;
+    btns.forEach(function(x,j){x.setAttribute('aria-pressed',String(j===i));});
+    cols.forEach(function(c,j){c.classList.toggle('on',j===i);});
+  });});
+})();
+</script>
+</body>
+</html>

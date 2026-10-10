@@ -1,0 +1,1223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>100 Jev Use Cases — Explanations &amp; Examples</title>
+<meta name="description" content="Explore 100 potential Jev decision-model applications across 20 industries. Explore practical explanations and fictional examples; search and filter by Noul, Score, or Choice.">
+<style>
+
+:root{
+  --bg:#f7f7f5; --surface:#ffffff; --text:#1c1c1a; --muted:#6b6b66; --line:#e4e4df;
+  --accent:#2f5d8a; --accent-soft:#e8f0f8;
+  --noul:#8a3b2f; --noul-bg:#fbe9e5;
+  --score:#2f6a4a; --score-bg:#e4f3ea;
+  --choice:#4b4a8a; --choice-bg:#e9e8f7;
+  --shadow:0 1px 2px rgba(0,0,0,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141414; --surface:#1e1e1e; --text:#ececea; --muted:#9a9a94; --line:#2e2e2c;
+    --accent:#8fb6dd; --accent-soft:#1f2c3a;
+    --noul:#f1a08f; --noul-bg:#3a2320;
+    --score:#8fd1aa; --score-bg:#1f3328;
+    --choice:#b9b7f0; --choice-bg:#272640;
+    --shadow:0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141414; --surface:#1e1e1e; --text:#ececea; --muted:#9a9a94; --line:#2e2e2c;
+  --accent:#8fb6dd; --accent-soft:#1f2c3a;
+  --noul:#f1a08f; --noul-bg:#3a2320;
+  --score:#8fd1aa; --score-bg:#1f3328;
+  --choice:#b9b7f0; --choice-bg:#272640;
+  --shadow:0 1px 2px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:880px;margin:0 auto;padding:40px 16px 80px}
+header h1{font-size:2rem;line-height:1.15;margin:0 0 .4rem;letter-spacing:-.01em}
+header .sub{color:var(--muted);margin:0 0 1.25rem;font-size:1.05rem}
+.intro{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;box-shadow:var(--shadow);margin-bottom:20px}
+.intro p{margin:0 0 .75rem}
+.intro p:last-child{margin:0}
+.prims{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0 0}
+.prim{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg)}
+.prim b{display:block;font-size:.95rem;margin-bottom:2px}
+.prim span{color:var(--muted);font-size:.88rem}
+@media (max-width:600px){.prims{grid-template-columns:1fr}}
+.toolbar{position:sticky;top:0;z-index:5;background:var(--bg);padding:12px 0;border-bottom:1px solid var(--line);margin-bottom:18px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.toolbar input{flex:1 1 220px;min-width:0;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--text);font:inherit;font-size:.95rem}
+.toolbar input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:999px;padding:6px 12px;font:inherit;font-size:.85rem;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip[data-p="Noul"][aria-pressed="true"]{background:var(--noul);border-color:var(--noul)}
+.chip[data-p="Score"][aria-pressed="true"]{background:var(--score);border-color:var(--score)}
+.chip[data-p="Choice"][aria-pressed="true"]{background:var(--choice);border-color:var(--choice)}
+:root[data-theme="dark"] .chip[aria-pressed="true"],
+.chip[aria-pressed="true"]{color:#fff}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .chip[aria-pressed="true"]{color:#111}}
+:root[data-theme="dark"] .chip[aria-pressed="true"]{color:#111}
+.count{color:var(--muted);font-size:.85rem;margin-left:auto;white-space:nowrap}
+nav.toc{display:flex;flex-wrap:wrap;gap:6px 14px;margin:0 0 26px;font-size:.9rem}
+nav.toc a{color:var(--accent);text-decoration:none}
+nav.toc a:hover{text-decoration:underline}
+section{margin:0 0 28px}
+section h2{font-size:1.15rem;margin:0 0 10px;padding-top:6px;display:flex;align-items:baseline;gap:10px}
+section h2 small{color:var(--muted);font-weight:400;font-size:.85rem}
+ol{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+li.item{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px 12px 14px;display:grid;grid-template-columns:2.4rem 1fr auto;gap:4px 12px;align-items:start;box-shadow:var(--shadow)}
+li.item .n{color:var(--muted);font-variant-numeric:tabular-nums;font-size:.9rem;padding-top:2px}
+li.item .t{font-weight:600}
+li.item .d{grid-column:2;color:var(--muted);font-size:.95rem}
+li.item .tags{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.tag{font-size:.72rem;font-weight:600;letter-spacing:.02em;padding:2px 8px;border-radius:999px;border:1px solid transparent}
+.tag.Noul{color:var(--noul);background:var(--noul-bg)}
+.tag.Score{color:var(--score);background:var(--score-bg)}
+.tag.Choice{color:var(--choice);background:var(--choice-bg)}
+@media (max-width:600px){
+  li.item{grid-template-columns:2.2rem 1fr}
+  li.item .tags{grid-column:2;justify-content:flex-start;margin-top:4px}
+}
+li.item.hide, section.hide{display:none}
+.empty{display:none;color:var(--muted);text-align:center;padding:30px 0}
+.empty.show{display:block}
+footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:.88rem}
+footer a{color:var(--accent)}
+.caveat{background:var(--accent-soft);border-radius:10px;padding:12px 14px;margin-top:24px;font-size:.93rem}
+
+
+[hidden]{display:none!important}
+.wrap{padding-top:40px}
+.eyebrow{margin:0 0 10px;color:var(--accent);font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;font-weight:650}
+.meta{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 22px;color:var(--muted);font-size:.82rem}
+.meta span{border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+.toolbar{align-items:center}
+.toolbar .chips{align-items:center}
+button{touch-action:manipulation}
+.chip{min-height:38px}
+.chip:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.reset{border:0;background:transparent;color:var(--accent);font:inherit;font-size:.85rem;padding:8px;cursor:pointer;min-height:38px}
+.reset:disabled{color:var(--muted);cursor:default;opacity:.6}
+.reset:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:5px}
+section.industry{scroll-margin-top:110px}
+.toc a{padding:2px 0}
+li.item .t,li.item .d{overflow-wrap:anywhere}
+.caveat p{margin:0 0 8px}.caveat p:last-child{margin:0}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip-link{position:absolute;left:16px;top:-60px;background:var(--surface);color:var(--accent);padding:8px 12px;border-radius:6px;z-index:10}
+.skip-link:focus{top:8px}
+@media(max-width:600px){.wrap{padding-top:28px}header h1{font-size:1.85rem}.toolbar input{flex-basis:100%}.toolbar{gap:6px}.count{margin-left:0}.reset{margin-left:auto}section.industry{scroll-margin-top:150px}nav.toc{gap:8px 14px}.intro{padding:16px}li.item{gap:4px 8px;padding:12px}.prim{padding:9px 12px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{
+:root{--bg:#fff;--surface:#fff;--text:#111;--muted:#444;--line:#ccc;--accent:#24476b;--shadow:none;--noul:#753025;--noul-bg:#faece8;--score:#235439;--score-bg:#eaf5ee;--choice:#3c3b74;--choice-bg:#eeedf8}
+body{font-size:11pt}.wrap{max-width:none;padding:0}.toolbar,nav.toc,.skip-link,.empty{display:none!important}section.industry.hide,li.item.hide{display:block!important}li.item,li.item.hide{display:grid!important;break-inside:avoid;box-shadow:none}.prims{grid-template-columns:repeat(3,1fr)}section h2{break-after:avoid}header h1{font-size:23pt}.caveat{break-inside:avoid}a{color:inherit}section{margin-bottom:20px}
+}
+
+
+.explanation{grid-column:2/-1;margin:8px 0 5px;font-size:.93rem;color:var(--text);line-height:1.65}
+.explanation strong{font-weight:600}
+.example{grid-column:2/-1;min-width:0;margin:3px 0 2px;border-top:1px solid var(--line)}
+.example summary{cursor:pointer;padding:11px 0 8px;color:var(--accent);font-weight:600;font-size:.88rem;min-height:42px}
+.example summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.example-label{color:var(--muted);font-size:.74rem;font-weight:400;margin-left:12px}
+.example-body{padding:4px 0 7px}
+.example dl{display:grid;grid-template-columns:112px minmax(0,1fr);gap:14px 16px;margin:0;font-size:.9rem;line-height:1.6}
+.example dt{margin:0;color:var(--muted);font-size:.78rem;font-weight:600;padding-top:3px}
+.example dd{margin:0;overflow-wrap:anywhere}
+.example-input{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.example-output{color:var(--accent);font-weight:600}
+.reading-tools{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin:0 0 24px}
+.reading-tools p{margin:0;color:var(--muted);font-size:.84rem}
+.reading-tools>div{display:flex;flex-wrap:wrap;gap:8px}
+.reading-button{font:inherit;font-size:.82rem;color:var(--accent);background:var(--surface);border:1px solid var(--line);border-radius:7px;min-height:36px;padding:7px 10px;cursor:pointer}
+.reading-button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.reading-button:disabled{opacity:.5;cursor:default}
+li.item{padding-bottom:10px}
+@media(max-width:600px){.explanation,.example{grid-column:1/-1}.explanation{margin-top:10px}.example dl{display:block}.example dt{margin:15px 0 5px;padding:0}.example dt:first-child{margin-top:0}.example-label{float:right;margin:2px 0 0 8px}.example-body{padding-bottom:10px}.reading-tools{gap:12px}}
+@media print{.reading-tools{display:none!important}.example{border-top:1px solid #ccc}.example summary{color:#333;cursor:default}.example-label{display:none}.example dl{display:grid;grid-template-columns:100px minmax(0,1fr);gap:10px}.explanation,.example{grid-column:2/-1}.example dt{margin:0}.example dd{font-size:10pt}.example-output{color:#222}}
+
+</style>
+</head>
+<body>
+<a class="skip-link" href="#use-cases">Skip to use cases</a>
+<!-- jev-pilled navigation (added; the rest of this page is unchanged) -->
+<script>if(window.top!==window.self)document.documentElement.classList.add('jp-embed');</script>
+<style>
+.jp-bar{position:relative;z-index:60;display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;padding:9px 16px;background:#1b1b19;color:#f0efec;font:13px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.jp-bar a{color:#f0efec;text-decoration:none;opacity:.78}
+.jp-bar a:hover,.jp-bar a:focus-visible{opacity:1;text-decoration:underline}
+.jp-bar a[aria-current]{opacity:1;font-weight:700}
+.jp-bar .jp-home{opacity:1;font-weight:700}
+.jp-bar .jp-links{display:flex;gap:14px;margin-left:auto}
+html.jp-embed .jp-bar{display:none}
+@media print{.jp-bar{display:none}}
+</style>
+<nav class="jp-bar" aria-label="Jev-pilled versions"><a class="jp-home" href="/">&larr; Jev-pilled: compare all three</a><span class="jp-links"><a href="/claude-fable/">Claude Fable</a><a href="/codex-astra/" aria-current="page">Codex Astra</a><a href="/grok/">Grok</a></span></nav>
+
+<main class="wrap">
+<header>
+<p class="eyebrow">A practical use-case library</p>
+<h1>100 places a Jev decision model fits</h1>
+<p class="sub">100 practical explanations, with an example for every use case.</p>
+<div class="meta"><span>100 use cases</span><span>20 industries</span><span>100 worked examples</span></div>
+</header>
+<div class="intro">
+<p><strong>Small, specific questions. Structured answers.</strong> Jev, from TypeSafe AI, evaluates supplied context and returns a predefined choice, a rubric score, or a yes/no probability. Its role in these examples is to classify, route, score, or check evidence.</p>
+<p>These are <strong>potential applications</strong>, not verified deployments. Each example assumes text or structured records as input; images and audio need to be processed upstream.</p>
+<p><strong>How to read the examples.</strong> Every scenario and result is fictional. They illustrate the question, the type of answer, and the next workflow step. Numeric probabilities are invented examples, not measured confidence or evidence of model accuracy.</p>
+<div class="prims" aria-label="Decision primitives">
+<div class="prim"><b><span class="tag Noul">Noul</span></b><span>A 0–1 probability that a yes/no statement is true. Use for one specific evidence or policy check.</span></div>
+<div class="prim"><b><span class="tag Score">Score</span></b><span>A level on a defined, ordered rubric. Use for relevance, completeness, or severity.</span></div>
+<div class="prim"><b><span class="tag Choice">Choice</span></b><span>One option from a list you define. Use for categories, routing, or candidate selection.</span></div>
+</div>
+</div>
+<div class="toolbar" role="search" aria-label="Search and filter use cases">
+<label class="sr-only" for="q">Search use cases or industries</label>
+<input id="q" type="search" placeholder="Search industries or keywords…" autocomplete="off">
+<div class="chips" role="group" aria-label="Filter by primitive">
+<button type="button" class="chip" data-p="Noul" aria-pressed="false">Noul</button>
+<button type="button" class="chip" data-p="Score" aria-pressed="false">Score</button>
+<button type="button" class="chip" data-p="Choice" aria-pressed="false">Choice</button>
+</div>
+<button type="button" class="reset" id="reset" disabled>Reset</button>
+<span class="count" id="count" role="status" aria-live="polite" aria-atomic="true">100 of 100</span>
+</div>
+<nav class="toc" aria-label="Industries">
+<a href="#banking">Banking</a>
+<a href="#insurance">Insurance</a>
+<a href="#healthcare">Healthcare</a>
+<a href="#pharmaceuticals">Pharmaceuticals</a>
+<a href="#retail-e-commerce">Retail &amp; e-commerce</a>
+<a href="#manufacturing">Manufacturing</a>
+<a href="#logistics">Logistics</a>
+<a href="#energy-utilities">Energy &amp; utilities</a>
+<a href="#telecommunications">Telecommunications</a>
+<a href="#software-it">Software &amp; IT</a>
+<a href="#cybersecurity">Cybersecurity</a>
+<a href="#government-public-services">Government &amp; public services</a>
+<a href="#legal-professional-services">Legal &amp; professional services</a>
+<a href="#education-training">Education &amp; training</a>
+<a href="#real-estate">Real estate</a>
+<a href="#construction">Construction</a>
+<a href="#travel-hospitality">Travel &amp; hospitality</a>
+<a href="#agriculture-food">Agriculture &amp; food</a>
+<a href="#media-entertainment">Media &amp; entertainment</a>
+<a href="#automotive-fleet-management">Automotive &amp; fleet management</a>
+</nav>
+<div class="reading-tools" aria-label="Example display controls">
+<p>Read the overview, then open an example to see the workflow.</p>
+<div><button type="button" id="expand-examples" class="reading-button" aria-controls="use-cases">Expand examples</button><button type="button" id="collapse-examples" class="reading-button" aria-controls="use-cases">Collapse examples</button></div>
+</div>
+<div id="use-cases" tabindex="-1">
+<section class="industry" id="banking" data-industry="Banking" aria-labelledby="banking-title"><h2 id="banking-title">Banking <small>5</small></h2><ol start="1">
+<li class="item" data-p="Choice" value="1"><span class="n" aria-hidden="true">1</span><span class="t">Customer support</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Route messages to account access, cards, payments, or lending teams.</span><p class="explanation"><strong>In practice.</strong> A bank can send each incoming support message to the team best equipped to handle it. This keeps account access, card, payment, and lending queues separate while giving staff a consistent first classification for follow-up.</p>
+<details class="example" id="example-1" open>
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional message: ‘My debit card purchase is still pending, but the amount is reserved.’ Context lists account access, cards, payments, and lending queues.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which support queue best matches this message? Apply the rule that pending card-payment issues go to payments. Choose one: account access, cards, payments, lending, other/unclear.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: payments (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Place the message in the selected queue and let the assigned team verify account details and resolve the customer’s stated issue.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="2"><span class="n" aria-hidden="true">2</span><span class="t">Payment disputes</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Classify disputes as duplicate charges, unauthorized transactions, or goods not received.</span><p class="explanation"><strong>In practice.</strong> A disputes team can classify a customer’s explanation before collecting the documents needed for review. The category separates duplicate charges, unauthorized transactions, and goods not received, making the next checklist easier to select.</p>
+<details class="example" id="example-2">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional dispute note: ‘The same online order appears twice on my statement, with identical merchant name and amount.’ Evidence includes the statement excerpt and order confirmation.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which dispute type is described? Choose one: duplicate charge, unauthorized transaction, goods not received, other/unclear.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: duplicate charge (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Open the duplicate-charge review checklist, then have a disputes specialist confirm the statement and merchant records before responding.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Noul" value="3"><span class="n" aria-hidden="true">3</span><span class="t">Loan operations</span><span class="tags"><span class="tag Noul">Noul</span></span><span class="d">Flag whether submitted explanations address a specific missing-document request.</span><p class="explanation"><strong>In practice.</strong> Loan operations can check whether an applicant’s explanation answers one specific missing-document request. The result helps staff identify responses that appear to address the request while leaving approval and document verification to reviewers.</p>
+<details class="example" id="example-3">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional request: ‘Provide the April income statement.’ Applicant reply says, ‘Attached is my employer’s April income statement,’ with the attachment name recorded in the case.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Does the supplied explanation address the specific missing-document request? Answer yes or no; missing or unreadable evidence is not proof that the document is absent.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Noul: 0.86 probability of yes (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Route apparent matches for document verification, while sending incomplete or ambiguous replies back to loan staff for targeted follow-up.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="4"><span class="n" aria-hidden="true">4</span><span class="t">Complaints office</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Categorize complaints by fees, service delays, account restrictions, or communication problems.</span><p class="explanation"><strong>In practice.</strong> A complaints office can assign each complaint to a defined handling category before a case owner reviews the facts. Consistent labels help separate fees, service delays, account restrictions, and communication problems for reporting and routing.</p>
+<details class="example" id="example-4">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional complaint: ‘I was charged a monthly maintenance fee after the representative said the account would be fee-free.’ The note contains no service-delay or restriction details.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which complaint category best fits this note? Choose one: fees, service delays, account restrictions, communication problems, other/unclear.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: fees (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Assign the case to the fees workflow and have a complaints reviewer check the account terms and recorded customer communication.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="5"><span class="n" aria-hidden="true">5</span><span class="t">Fraud investigations</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Categorize investigator notes against predefined fraud indicators for further review.</span><p class="explanation"><strong>In practice.</strong> Fraud investigators can use a controlled label to organize narrative notes around predefined indicators. The label supports triage and consistent queueing, while investigators retain responsibility for examining transaction history and deciding what evidence matters.</p>
+<details class="example" id="example-5">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional investigator note: ‘Several small purchases appeared within minutes at unfamiliar merchants after the device changed.’ The record includes timestamps and a device-change event.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which predefined indicator best describes this note? Choose one: account takeover, identity concern, transaction anomaly, device anomaly, other/unclear.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: transaction anomaly (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Attach the indicator to the investigation record and let the assigned investigator review transaction, device, and customer-contact evidence.</dd>
+</dl></div></details></li>
+</ol></section>
+<section class="industry" id="insurance" data-industry="Insurance" aria-labelledby="insurance-title"><h2 id="insurance-title">Insurance <small>5</small></h2><ol start="6">
+<li class="item" data-p="Choice" value="6"><span class="n" aria-hidden="true">6</span><span class="t">Claims intake</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Classify claim narratives into collision, theft, water damage, or other covered-event categories.</span><p class="explanation"><strong>In practice.</strong> Claims intake can classify a narrative into a covered-event category before an adjuster reviews policy terms. Separating collision, theft, water damage, and other events helps select the right questions and supporting-evidence checklist.</p>
+<details class="example" id="example-6">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional claim narrative: ‘A pipe under the kitchen sink failed overnight and water damaged the cabinet and floor.’ The intake record includes the reported date and room.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which claim event category best matches the narrative? Choose one: collision, theft, water damage, other covered event, unclear.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: water damage (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Start the water-damage intake checklist and have an adjuster confirm coverage, timing, and the reported property evidence.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Noul" value="7"><span class="n" aria-hidden="true">7</span><span class="t">Claims documentation</span><span class="tags"><span class="tag Noul">Noul</span></span><span class="d">Check whether supplied evidence addresses each item in a claims checklist.</span><p class="explanation"><strong>In practice.</strong> A claims team can check whether supplied material addresses each requested evidence item before an adjuster spends time on a complete review. The check highlights apparent coverage of the checklist without deciding claim validity or payment.</p>
+<details class="example" id="example-7">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional checklist has one target item: readable repair estimate. Supplied packet includes a repair-estimate attachment with legible line items and total. Other checklist checks are handled separately.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Is the supplied repair estimate present and readable? Answer yes or no; missing or unreadable evidence is not proof that the repair estimate does not exist.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Noul: 0.81 probability of yes (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Combine this boolean result with other checklist checks in the claims system, then route the packet to adjuster review.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Noul" value="8"><span class="n" aria-hidden="true">8</span><span class="t">Adjuster workbench</span><span class="tags"><span class="tag Noul">Noul</span></span><span class="d">Flag contradictions between a claimant’s account and an inspection report.</span><p class="explanation"><strong>In practice.</strong> An adjuster workbench can flag whether two supplied accounts appear inconsistent, so a human can inspect the discrepancy early. This narrows attention to contradictions without deciding credibility, coverage, liability, or claim outcome.</p>
+<details class="example" id="example-8">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional account says the vehicle was parked at home at 8 p.m.; inspection report records damage observed at the same vehicle at a different location at 8 p.m.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Do the claimant account and inspection report contain an apparent contradiction? Answer yes or no; missing location or time evidence is not proof of consistency.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Noul: 0.91 probability of yes (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Highlight the apparent discrepancy for adjuster review and request clarification using the documented time and location fields.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="9"><span class="n" aria-hidden="true">9</span><span class="t">Policy servicing</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Route requests concerning renewals, beneficiary changes, cancellations, or coverage questions.</span><p class="explanation"><strong>In practice.</strong> Policy servicing can route each customer request into a defined workflow before an employee handles account-specific details. Labels for renewals, beneficiary changes, cancellations, and coverage questions keep downstream checklists and ownership clear.</p>
+<details class="example" id="example-9">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional customer message: ‘Please update the person listed to receive the policy benefit after my family change.’ No renewal, cancellation, or coverage question appears.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which policy-servicing workflow fits this request? Choose one: renewal, beneficiary change, cancellation, coverage question, other/unclear.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: beneficiary change (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Route the request to beneficiary servicing and have staff authenticate the account before reviewing the requested change.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Score" value="10"><span class="n" aria-hidden="true">10</span><span class="t">Quality assurance</span><span class="tags"><span class="tag Score">Score</span></span><span class="d">Score claim-handler notes against a documentation-quality rubric.</span><p class="explanation"><strong>In practice.</strong> Quality assurance can score claim-handler notes against an explicit documentation rubric. A small ordered scale makes review consistent across files while keeping the score focused on note quality rather than claim correctness or settlement decisions.</p>
+<details class="example" id="example-10">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional note records incident date, customer statement, evidence requested, evidence received, and next action. Each item is linked to a dated case entry.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Score documentation quality using this rubric: 0 = key fields absent; 1 = some fields present but gaps remain; 2 = all required fields and links are present.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Score: 2 — complete (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Record the quality score for coaching and sampling, then let a QA reviewer confirm the rubric application on the file.</dd>
+</dl></div></details></li>
+</ol></section>
+<section class="industry" id="healthcare" data-industry="Healthcare" aria-labelledby="healthcare-title"><h2 id="healthcare-title">Healthcare <small>5</small></h2><ol start="11">
+<li class="item" data-p="Choice" value="11"><span class="n" aria-hidden="true">11</span><span class="t">Appointment desk</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Distinguish appointment bookings, rescheduling, cancellations, and administrative questions.</span><p class="explanation"><strong>In practice.</strong> An appointment desk can distinguish scheduling intents before staff open the patient’s administrative record. Separating new bookings, rescheduling, cancellations, and general questions helps each message reach the appropriate scheduling workflow.</p>
+<details class="example" id="example-11">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional message: ‘I cannot attend Thursday’s appointment and need the next available Tuesday morning.’ The record includes the existing appointment date and requested time window.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which appointment intent is expressed? Choose one: booking, rescheduling, cancellation, administrative question, other/unclear.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: rescheduling (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Send the message to rescheduling staff, who can verify identity and check available appointment slots.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Noul" value="12"><span class="n" aria-hidden="true">12</span><span class="t">Referral office</span><span class="tags"><span class="tag Noul">Noul</span></span><span class="d">Check whether referral text includes the information required for administrative processing.</span><p class="explanation"><strong>In practice.</strong> A referral office can check whether referral text states the receiving specialty required for administrative processing. The result helps staff find incomplete submissions while keeping clinical interpretation and care decisions with qualified professionals.</p>
+<details class="example" id="example-12">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional referral states the receiving specialty as dermatology. It also lists the sending clinic, patient record number, referral reason, and requested service in legible text.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Does the referral state the receiving specialty required for processing? Answer yes or no; missing text is insufficient evidence, not proof that the specialty was never supplied.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Noul: 0.84 probability of yes (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Send apparent complete referrals to administrative processing and return specific field gaps to the referring-office queue.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="13"><span class="n" aria-hidden="true">13</span><span class="t">Billing office</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Classify billing questions as coverage, coding clarification, duplicate billing, or payment issues.</span><p class="explanation"><strong>In practice.</strong> A billing office can classify questions before assigning them to the right account workflow. Distinguishing coverage, coding clarification, duplicate billing, and payment issues gives staff a focused starting point for reviewing statements and records.</p>
+<details class="example" id="example-13">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional message: ‘The same visit appears twice on my statement with two identical service dates and amounts.’ The supplied statement excerpt shows both lines.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which billing category best matches this message? Choose one: coverage, coding clarification, duplicate billing, payment issue, other/unclear.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: duplicate billing (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Route the case to duplicate-billing review so staff can compare statement lines with the account ledger.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="14"><span class="n" aria-hidden="true">14</span><span class="t">Patient experience</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Categorize patient feedback into communication, waiting time, facilities, or staff interactions.</span><p class="explanation"><strong>In practice.</strong> Patient-experience teams can organize feedback into consistent service themes before reviewing trends. Labels for communication, waiting time, facilities, and staff interactions support focused follow-up while avoiding clinical judgments about the patient’s care.</p>
+<details class="example" id="example-14">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional feedback: ‘The front desk explained the process clearly, but I waited forty minutes after the scheduled arrival time.’ The note contains no facilities complaint.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which patient-experience theme is primary? Choose one: communication, waiting time, facilities, staff interactions, other/unclear.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: waiting time (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Tag the feedback for waiting-time trend review and let the experience team examine scheduling and arrival records.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="15"><span class="n" aria-hidden="true">15</span><span class="t">Records management</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Assign incoming documents to predefined types such as referrals, discharge summaries, or consent forms.</span><p class="explanation"><strong>In practice.</strong> Records management can assign each incoming document to a predefined type before filing or routing it. Clear labels for referrals, discharge summaries, consent forms, and other documents reduce manual sorting and filing errors.</p>
+<details class="example" id="example-15">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional document excerpt: ‘Patient discharged on Monday; medication list reviewed; follow-up instructions provided.’ The header identifies the encounter and authoring department.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which document type best matches this text? Choose one: referral, discharge summary, consent form, other clinical record, other/unclear.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: discharge summary (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Route the document to the discharge-summary filing workflow for identifier checks, retention rules, and human confirmation.</dd>
+</dl></div></details></li>
+</ol></section>
+<section class="industry" id="pharmaceuticals" data-industry="Pharmaceuticals" aria-labelledby="pharmaceuticals-title"><h2 id="pharmaceuticals-title">Pharmaceuticals <small>5</small></h2><ol start="16">
+<li class="item" data-p="Noul" value="16"><span class="n" aria-hidden="true">16</span><span class="t">Safety intake</span><span class="tags"><span class="tag Noul">Noul</span></span><span class="d">Flag messages describing a possible adverse event for specialist review.</span><p class="explanation"><strong>In practice.</strong> Safety intake can flag messages that describe a possible adverse event for specialist review. The check is limited to the supplied report and does not diagnose a condition, establish causality, or determine regulatory reportability.</p>
+<details class="example" id="example-16">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional message names product Z, states it was used yesterday, and reports a new rash afterward. The message lacks diagnosis, severity assessment, and confirmed causal link.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Does the message describe a possible adverse event for specialist review? Answer yes or no; answer yes only when product exposure and an unwanted health event are both stated, and treat missing details as not proof of absence.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Noul: 0.88 probability of yes (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Flag the message for safety-specialist review and preserve the supplied wording for follow-up questions and case assessment.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="17"><span class="n" aria-hidden="true">17</span><span class="t">Quality assurance</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Categorize deviation reports as equipment, materials, documentation, or process issues.</span><p class="explanation"><strong>In practice.</strong> Quality assurance can categorize deviation reports before assigning subject-matter review. The controlled labels separate equipment, materials, documentation, and process issues, helping teams select an appropriate investigation path and preserve consistent escalation records.</p>
+<details class="example" id="example-17">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional deviation report: ‘The batch record used an outdated form version during line clearance.’ It cites the form identifier and the affected production step.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which deviation category best fits this report? Choose one: equipment, materials, documentation, process, other/unclear.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: documentation (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Route the report to the documentation-deviation workflow for quality review, controlled-record verification, and owner assignment.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="18"><span class="n" aria-hidden="true">18</span><span class="t">Clinical operations</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Classify study-site questions as protocol, supplies, scheduling, or data-entry issues.</span><p class="explanation"><strong>In practice.</strong> Clinical operations can route study-site questions by topic before a coordinator responds. Separating protocol, supplies, scheduling, and data-entry issues helps the right operational owner address the question using approved study materials.</p>
+<details class="example" id="example-18">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional site note: ‘The screening visit is complete, but the electronic form rejects the participant’s date field.’ The note includes the form name and error text.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which study-site issue category applies? Choose one: protocol, supplies, scheduling, data-entry, other/unclear.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: data-entry (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Send the note to the data-entry support queue, where staff can inspect the form rule and documented site context.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="19"><span class="n" aria-hidden="true">19</span><span class="t">Regulatory operations</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Match document excerpts to predefined submission sections for reviewer confirmation.</span><p class="explanation"><strong>In practice.</strong> Regulatory operations can map a document excerpt to one predefined submission section for reviewer confirmation. The classification supports assembly and checking without asserting that the excerpt is sufficient for a submission.</p>
+<details class="example" id="example-19">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional excerpt describes manufacturing controls, test methods, and release specifications for the investigational product. It contains no clinical outcomes or administrative cover-letter text.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which submission section best matches this excerpt? Choose one: safety, efficacy, chemistry-manufacturing-controls, administrative, other/unclear.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: chemistry-manufacturing-controls (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Place the excerpt in the proposed section for regulatory reviewer confirmation, completeness checking, and controlled submission assembly.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="20"><span class="n" aria-hidden="true">20</span><span class="t">Medical information</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Route inquiries to approved-response workflows or specialist review based on topic.</span><p class="explanation"><strong>In practice.</strong> Medical-information teams can route inquiries by topic before selecting an approved response workflow. The labels distinguish routine product-use questions, administrative matters, safety topics, and cases needing specialist review without providing medical advice.</p>
+<details class="example" id="example-20">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional inquiry asks whether a product is stored within the temperature range printed in its approved instructions. No patient-specific symptoms or treatment request is included.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which medical-information route best fits this inquiry? Choose one: approved product use, administrative, safety, specialist review, other/unclear.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: approved product use (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Send the inquiry to the approved-response workflow, where staff can verify the current authorized information before replying.</dd>
+</dl></div></details></li>
+</ol></section>
+<section class="industry" id="retail-e-commerce" data-industry="Retail &amp; e-commerce" aria-labelledby="retail-e-commerce-title"><h2 id="retail-e-commerce-title">Retail &amp; e-commerce <small>5</small></h2><ol start="21">
+<li class="item" data-p="Choice" value="21"><span class="n" aria-hidden="true">21</span><span class="t">Product catalog</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Assign product descriptions to the appropriate category in a retailer’s taxonomy.</span><p class="explanation"><strong>In practice.</strong> A retailer can assign each product description to one category in its taxonomy before publication or search indexing. Consistent labels improve catalog organization while leaving merchants responsible for checking attributes and category policy.</p>
+<details class="example" id="example-21">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional description: ‘Set of two bamboo drawer organizers with adjustable dividers for kitchen utensils.’ The catalog taxonomy includes kitchen tools, home storage, electronics accessories, outdoor, and other.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which catalog category best matches this description? Choose one: kitchen tools, home storage, electronics accessories, outdoor, other/unclear.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: home storage (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Stage the category assignment for catalog review, then publish or correct it after an operator verifies the product attributes.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="22"><span class="n" aria-hidden="true">22</span><span class="t">Returns desk</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Classify return explanations as fit, damage, wrong item, quality, or changed mind.</span><p class="explanation"><strong>In practice.</strong> A returns desk can classify the customer’s stated reason before selecting the appropriate inspection or refund workflow. Separating fit, damage, wrong item, quality, and changed mind creates consistent handling across return requests.</p>
+<details class="example" id="example-22">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional return note: ‘The jacket arrived in the ordered color, but the sleeves are too short even after checking the size chart.’ No damage is reported.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which return reason best matches this note? Choose one: fit, damage, wrong item, quality, changed mind, other/unclear.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: fit (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Apply the fit-return workflow and have returns staff check eligibility, condition, and the order record.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="23"><span class="n" aria-hidden="true">23</span><span class="t">Customer reviews</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Tag reviews with themes such as durability, packaging, sizing, or delivery.</span><p class="explanation"><strong>In practice.</strong> Review teams can tag customer comments with one or more controlled themes for product and fulfillment analysis. A primary label such as durability, packaging, sizing, or delivery makes recurring issues easier to inspect.</p>
+<details class="example" id="example-23">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional review: ‘The backpack arrived on time, but the zipper broke after three uses.’ The text contains no sizing or packaging complaint.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which primary review theme is present? Choose one: durability, packaging, sizing, delivery, other/unclear.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: durability (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Add the durability tag to review analytics and let the product team inspect related comments and warranty records.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Noul" value="24"><span class="n" aria-hidden="true">24</span><span class="t">Marketplace operations</span><span class="tags"><span class="tag Noul">Noul</span></span><span class="d">Flag listings whose descriptions appear inconsistent with a stated marketplace policy.</span><p class="explanation"><strong>In practice.</strong> Marketplace operations can check whether a listing description appears inconsistent with a stated policy before human enforcement review. The check highlights a policy question and does not establish intent, violation, or enforcement outcome.</p>
+<details class="example" id="example-24">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional listing says ‘guaranteed to cure seasonal allergies,’ while the supplied marketplace policy explicitly prohibits disease-cure claims. The listing text and policy excerpt are both available.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Does the listing contain a disease-cure claim prohibited by the supplied policy? Answer yes or no; if either text is missing, do not infer a match.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Noul: 0.93 probability of yes (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Flag the listing for marketplace policy review and preserve the claim and cited policy text for the reviewer.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Score" value="25"><span class="n" aria-hidden="true">25</span><span class="t">Shopping assistant</span><span class="tags"><span class="tag Score">Score</span></span><span class="d">Score candidate products against a customer’s explicitly stated preferences.</span><p class="explanation"><strong>In practice.</strong> A shopping assistant can score a candidate product against preferences the customer explicitly supplied. An ordered rubric makes fit visible for comparison while leaving final selection to the customer or a reviewer.</p>
+<details class="example" id="example-25">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional preferences require a rechargeable desk lamp, warm light, and a price below $40. Candidate listing states rechargeable, warm-light modes, and a $32 price.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Score fit using this rubric: 0 = no or unknown match; 1 = some preferences match but gaps remain; 2 = every explicit preference is met.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Score: 2 — complete match (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Show the candidate as matching the stated preferences, then let the customer or reviewer inspect listing details before choosing.</dd>
+</dl></div></details></li>
+</ol></section>
+<section class="industry" id="manufacturing" data-industry="Manufacturing" aria-labelledby="manufacturing-title"><h2 id="manufacturing-title">Manufacturing <small>5</small></h2><ol start="26">
+<li class="item" data-p="Choice" value="26"><span class="n" aria-hidden="true">26</span><span class="t">Quality inspection</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Classify written defect reports into predefined defect categories.</span><p class="explanation"><strong>In practice.</strong> An inspection coordinator can turn free text from a fictional line check into one approved defect class, making queues consistent and allowing engineers to aggregate recurring issues without letting the classifier approve disposition or alter the quality record.</p>
+<details class="example" id="example-26">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Report QI-026: “Lot K7 housings show hairline cracks beside the mounting hole.” Evidence: inspector note, lot identifier, close-up photo reference, and taxonomy labels: dimensional, cosmetic, structural, contamination.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which approved defect category best matches the report? Choice list: structural; cosmetic; dimensional; contamination.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: structural (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Route the report to the structural-defect queue; an engineer reviews the evidence, confirms severity, and records any containment or disposition decision.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Score" value="27"><span class="n" aria-hidden="true">27</span><span class="t">Maintenance desk</span><span class="tags"><span class="tag Score">Score</span></span><span class="d">Rank maintenance tickets using a supplied operational-urgency rubric.</span><p class="explanation"><strong>In practice.</strong> A maintenance desk can apply one shared urgency rubric to incoming tickets, helping supervisors order work consistently across shifts while preserving human control over lockout, safety, staffing, and production restart decisions.</p>
+<details class="example" id="example-27">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Ticket MT-027 reports press P4 stopped during a run, production halted, and an interlock alarm displayed. Evidence includes operator timestamp, alarm code, and maintenance log excerpt.</dd>
+<dt>Ask Jev</dt><dd class="example-question">How urgent is this ticket under the supplied rubric? Score: 0 = routine, no downtime or safety signal; 1 = elevated, reduced capacity or scheduled intervention; 2 = critical, active stoppage or credible safety risk.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Score: 2 — critical (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Place the ticket at the critical-review level; the maintenance lead verifies the alarm, assigns qualified staff, and approves any safe restart sequence.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="28"><span class="n" aria-hidden="true">28</span><span class="t">Supplier quality</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Categorize supplier complaints as material quality, packaging, documentation, or delivery problems.</span><p class="explanation"><strong>In practice.</strong> Supplier-quality staff can map complaint narratives to a fixed problem family, making follow-up ownership clearer and enabling recurring supplier issues to be summarized without deciding acceptance, rejection, or commercial remedies automatically.</p>
+<details class="example" id="example-28">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Complaint SQ-028 says cartons arrived dry and sealed, but 14 machined pins measured below tolerance. Evidence: receiving count, supplier lot S-18, gauge readings, and the complaint taxonomy.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which supplier-complaint category best matches the evidence? Choice list: material quality; packaging; documentation; delivery.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: material quality (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Send the complaint to supplier-quality review with its measurements attached; a reviewer confirms the finding and selects the appropriate supplier response.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Noul" value="29"><span class="n" aria-hidden="true">29</span><span class="t">Shift handover</span><span class="tags"><span class="tag Noul">Noul</span></span><span class="d">Flag handover notes that leave a required operational question unanswered.</span><p class="explanation"><strong>In practice.</strong> A shift lead can check whether a handover note answers the next shift’s required operational question, reducing avoidable rediscovery across crews while leaving status confirmation and escalation with the responsible operator.</p>
+<details class="example" id="example-29">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Handover H-029 states mixer M2 is isolated after a temperature alarm and gives the next inspection action, but names no responsible owner. Evidence: shift log and isolation tag reference.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Does the handover identify a responsible owner? Noul: yes/no.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Noul: 0.18 (illustrative) probability of yes</dd>
+<dt>What happens next</dt><dd class="example-next">Hold the handover for operator completion; the outgoing lead adds an owner and next action before the incoming shift accepts responsibility.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Noul" value="30"><span class="n" aria-hidden="true">30</span><span class="t">Corrective actions</span><span class="tags"><span class="tag Noul">Noul</span></span><span class="d">Check whether a proposed action addresses a specified finding for engineer review.</span><p class="explanation"><strong>In practice.</strong> An engineer can check whether a proposed corrective action directly addresses a documented finding, creating a focused review prompt that catches mismatches before action approval without replacing root-cause analysis or engineering sign-off.</p>
+<details class="example" id="example-30">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Finding F-030 identifies a worn fixture clamp as the cause of torque variance. Proposed action is refresher training on the torque sequence. Evidence: finding text and dated action plan.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Does the proposed action directly address the specified finding? Noul: yes/no.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Noul: 0.09 (illustrative) probability of yes</dd>
+<dt>What happens next</dt><dd class="example-next">Return the action for revision; the engineer requests a fixture inspection or replacement step and documents why it addresses the stated finding.</dd>
+</dl></div></details></li>
+</ol></section>
+<section class="industry" id="logistics" data-industry="Logistics" aria-labelledby="logistics-title"><h2 id="logistics-title">Logistics <small>5</small></h2><ol start="31">
+<li class="item" data-p="Choice" value="31"><span class="n" aria-hidden="true">31</span><span class="t">Shipment monitoring</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Classify carrier updates as customs hold, address issue, damage, or delivery attempt.</span><p class="explanation"><strong>In practice.</strong> A logistics coordinator can classify carrier updates into a small set of exception types, helping each message reach the right desk quickly while reviewers retain authority over customer commitments and carrier disputes.</p>
+<details class="example" id="example-31">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Carrier update SH-031: “Entry packet incomplete; customs will not release shipment.” Evidence: tracking event, destination country code, broker note, and the approved exception labels.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which shipment exception category best matches the carrier update? Choice list: customs hold; address issue; damage; delivery attempt.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: customs hold (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Route the shipment to the customs desk with the broker note; a coordinator checks missing documents and chooses the next customer-facing update.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Noul" value="32"><span class="n" aria-hidden="true">32</span><span class="t">Freight claims</span><span class="tags"><span class="tag Noul">Noul</span></span><span class="d">Check whether supporting narratives address the required claim-evidence questions.</span><p class="explanation"><strong>In practice.</strong> A claims coordinator can check whether a freight narrative covers the required evidence questions, creating a consistent intake gate before investigation while keeping liability assessment and payment decisions with authorized staff.</p>
+<details class="example" id="example-32">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Claim FC-032 says a pallet arrived damaged but does not identify who signed delivery. Evidence: claim checklist, delivery receipt reference, two package photos, narrative text, and recorded occurrence date.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Does the narrative identify the delivery acknowledgment signer? Noul: yes/no.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Noul: 0.12 (illustrative) probability of yes</dd>
+<dt>What happens next</dt><dd class="example-next">Keep the claim in evidence-incomplete status; request the missing timing and acknowledgment details before an adjuster assesses responsibility.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="33"><span class="n" aria-hidden="true">33</span><span class="t">Warehouse support</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Route exception reports to receiving, picking, packing, inventory, or dispatch teams.</span><p class="explanation"><strong>In practice.</strong> Warehouse support can route exception reports to the operational team named by their content, reducing manual triage and preserving a clear handoff for supervisors who decide corrective work and inventory adjustments.</p>
+<details class="example" id="example-33">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Exception WX-033 says an inbound pallet is present, but receiving cannot match its barcode to the advance notice. Evidence: dock scan, purchase-order reference, pallet count, and team routing labels.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which warehouse team should receive this exception? Choice list: receiving; picking; packing; inventory; dispatch.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: receiving (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Send the exception to receiving for reconciliation; the supervisor verifies the purchase order and corrects the inventory record if appropriate.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Noul" value="34"><span class="n" aria-hidden="true">34</span><span class="t">Customs operations</span><span class="tags"><span class="tag Noul">Noul</span></span><span class="d">Flag apparent inconsistencies between shipment descriptions across supplied documents.</span><p class="explanation"><strong>In practice.</strong> Customs operations can flag apparent description inconsistencies across supplied shipment documents, helping brokers focus review quickly across shipments while requiring a human to verify classification, valuation, and any filing correction.</p>
+<details class="example" id="example-34">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">File CO-034 lists “plastic fittings” on the invoice and “steel valves” on the packing list. Evidence: invoice excerpt, packing-list excerpt, item code, and broker comparison checklist.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Do the supplied documents contain an apparent description inconsistency? Noul: yes/no.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Noul: 0.97 (illustrative) probability of yes</dd>
+<dt>What happens next</dt><dd class="example-next">Flag the file for broker reconciliation; a qualified reviewer confirms the goods description and decides whether corrected documents are required.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="35"><span class="n" aria-hidden="true">35</span><span class="t">Delivery support</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Distinguish requests for tracking, redelivery, address correction, or missing-package investigation.</span><p class="explanation"><strong>In practice.</strong> Delivery support can classify a customer’s written request into a single service path, making responses easier to route while agents retain control over address changes, redelivery promises, and missing-package investigations.</p>
+<details class="example" id="example-35">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Message DS-035: “Tracking shows delivered at 15:42, but the recipient reports the parcel was not received.” Evidence: delivery event, last scan location, recipient statement, and approved request categories.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which delivery-support request category best matches the message? Choice list: tracking; redelivery; address correction; missing-package investigation.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: missing-package investigation (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Open a missing-package investigation with the last scan attached; an agent verifies carrier status and communicates the approved next step.</dd>
+</dl></div></details></li>
+</ol></section>
+<section class="industry" id="energy-utilities" data-industry="Energy &amp; utilities" aria-labelledby="energy-utilities-title"><h2 id="energy-utilities-title">Energy &amp; utilities <small>5</small></h2><ol start="36">
+<li class="item" data-p="Choice" value="36"><span class="n" aria-hidden="true">36</span><span class="t">Outage contact center</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Categorize customer reports as power loss, voltage fluctuation, streetlight failure, or billing issues.</span><p class="explanation"><strong>In practice.</strong> An outage contact center can classify incoming reports into operational categories, helping dispatch and billing teams separate service incidents from account questions without allowing automated messages to promise restoration times.</p>
+<details class="example" id="example-36">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Call note OC-036 says three neighboring addresses lost power after a transformer bang; no billing question was mentioned. Evidence: service-area code, timestamp, caller narrative, and category list.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which contact-center category best matches the report? Choice list: power loss; voltage fluctuation; streetlight failure; billing issue.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: power loss (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Route the report to outage operations for correlation; a dispatcher validates the incident and decides customer communication under approved procedures.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="37"><span class="n" aria-hidden="true">37</span><span class="t">Field maintenance</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Classify technician notes by equipment type and reported problem.</span><p class="explanation"><strong>In practice.</strong> Field-maintenance teams can map technician notes to an equipment and problem category, improving work-order routing across service areas and shifts while preserving technician judgment about diagnosis, isolation, parts, and repair completion.</p>
+<details class="example" id="example-37">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Note FM-037: “Feeder pump P-12 vibrates above normal during startup.” Evidence: asset identifier, technician observation, vibration reading, and approved equipment-problem categories.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which field-maintenance category best matches the note? Choice list: pump vibration; motor overheating; valve leakage; control fault.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: pump vibration (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Route the work order to pump maintenance; the technician lead reviews the reading and authorizes inspection or isolation as needed.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Score" value="38"><span class="n" aria-hidden="true">38</span><span class="t">Asset management</span><span class="tags"><span class="tag Score">Score</span></span><span class="d">Score maintenance-report completeness against an asset-specific rubric.</span><p class="explanation"><strong>In practice.</strong> Asset managers can score maintenance reports against an asset-specific completeness rubric, making missing evidence visible before review meetings and handoffs while keeping repair priority and safety decisions with qualified personnel.</p>
+<details class="example" id="example-38">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Report AM-038 names transformer T3 and the observed oil leak, but omits isolation state and follow-up measurement. Evidence: asset register, report text, inspection checklist, and one timestamp.</dd>
+<dt>Ask Jev</dt><dd class="example-question">How complete is this report under the supplied rubric? Score: 0 = missing core asset or observation; 1 = core details present but one or more required follow-ups are missing; 2 = all required fields and follow-up evidence present.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Score: 1 — core details present, follow-up missing (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Return the report for completion; the asset owner adds isolation status and the required measurement before maintenance review proceeds.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="39"><span class="n" aria-hidden="true">39</span><span class="t">Billing disputes</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Identify whether a complaint concerns estimated readings, tariffs, payments, or account ownership.</span><p class="explanation"><strong>In practice.</strong> A utility billing desk can distinguish the issue type in a complaint, helping send it to the correct specialist while agents verify account history, explain charges, and approve any adjustment.</p>
+<details class="example" id="example-39">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Complaint BD-039 says the latest bill used an estimated meter reading even though the customer supplied a dated meter photo. Evidence: bill excerpt, reading type, photo reference, and complaint categories.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which billing-dispute category best matches the complaint? Choice list: estimated readings; tariffs; payments; account ownership.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: estimated readings (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Route the complaint to meter-reading review; an agent verifies the photo and account history before deciding whether a rebill is warranted.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="40"><span class="n" aria-hidden="true">40</span><span class="t">Renewable energy operations</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Match textual equipment alerts to predefined investigation playbooks for operator review.</span><p class="explanation"><strong>In practice.</strong> Renewable-energy operators can map textual equipment alerts to approved investigation playbooks, making the first response consistent across sites and shifts while operators confirm sensor health, operating conditions, and any safe-control action.</p>
+<details class="example" id="example-40">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Alert RE-040 says inverter INV-2 shows repeated ground-fault warnings during low irradiance. Evidence: alert text, device identifier, three timestamps, and playbook labels for operator review.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which investigation playbook should receive this alert? Choice list: inverter ground fault; tracker alignment; panel temperature; communications loss.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: inverter ground fault (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Open the inverter ground-fault playbook for operator review; the control-room lead verifies the alert and authorizes any safe inspection step.</dd>
+</dl></div></details></li>
+</ol></section>
+<section class="industry" id="telecommunications" data-industry="Telecommunications" aria-labelledby="telecommunications-title"><h2 id="telecommunications-title">Telecommunications <small>5</small></h2><ol start="41">
+<li class="item" data-p="Choice" value="41"><span class="n" aria-hidden="true">41</span><span class="t">Technical support</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Classify reports as connectivity, speed, coverage, device setup, or billing problems.</span><p class="explanation"><strong>In practice.</strong> Technical support can classify a customer’s written problem into one service category, reducing repeat questioning and improving queue assignment across channels while agents remain responsible for troubleshooting, account checks, and remedies.</p>
+<details class="example" id="example-41">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Ticket TS-041 says home internet connects intermittently, while a wired test also drops. Evidence: modem log excerpt, test timestamp, service plan placeholder, and approved category labels.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which technical-support category best matches the report? Choice list: connectivity; speed; coverage; device setup; billing.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: connectivity (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Route the ticket to connectivity troubleshooting; an agent checks service telemetry and guides the customer through the approved diagnostic sequence.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Noul" value="42"><span class="n" aria-hidden="true">42</span><span class="t">Network operations</span><span class="tags"><span class="tag Noul">Noul</span></span><span class="d">Flag whether multiple incident descriptions appear to concern the same service disruption.</span><p class="explanation"><strong>In practice.</strong> Network operations can check whether separate incident descriptions likely refer to one disruption, helping analysts correlate work across regions without creating an incident, suppressing alerts, or declaring root cause automatically.</p>
+<details class="example" id="example-42">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Incident notes N-042 from two fictional neighborhoods both report loss of mobile data at 14:05 near the same cell cluster. Evidence: timestamps, service type, area codes, and notes.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Do these descriptions appear to concern the same service disruption? Noul: yes/no.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Noul: 0.88 (illustrative) probability of yes</dd>
+<dt>What happens next</dt><dd class="example-next">Suggest a correlation link for analyst review; the network lead verifies telemetry and decides whether to group the incidents operationally.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Noul" value="43"><span class="n" aria-hidden="true">43</span><span class="t">Installation teams</span><span class="tags"><span class="tag Noul">Noul</span></span><span class="d">Identify unresolved access or preparation issues in installation notes.</span><p class="explanation"><strong>In practice.</strong> Installation teams can identify unresolved access or preparation issues in visit notes, helping coordinators reschedule or prepare customers consistently across regions while preserving human control over appointments, safety, and contractual commitments.</p>
+<details class="example" id="example-43">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Visit note IT-043 says the technician could not enter the locked equipment room and the site contact was absent. Evidence: appointment record, access note, arrival timestamp, and preparation checklist.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Does the installation note identify an unresolved access or preparation issue? Noul: yes/no.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Noul: 0.99 (illustrative) probability of yes</dd>
+<dt>What happens next</dt><dd class="example-next">Hold completion and contact scheduling; a coordinator confirms access arrangements and chooses a reviewed reschedule or escalation path.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="44"><span class="n" aria-hidden="true">44</span><span class="t">Retention desk</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Categorize stated cancellation reasons as price, reliability, relocation, or service experience.</span><p class="explanation"><strong>In practice.</strong> A retention desk can categorize stated cancellation reasons into a small approved set, helping tailor the human follow-up across channels while leaving eligibility, offers, and cancellation completion with authorized agents.</p>
+<details class="example" id="example-44">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Message RT-044 says the customer is moving to an area outside the service footprint next month. Evidence: stated reason, move date, serviceability placeholder, and cancellation categories.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which cancellation-reason category best matches the message? Choice list: price; reliability; relocation; service experience.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: relocation (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Route the case to relocation handling; an agent verifies serviceability, explains available options, and processes any requested cancellation.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Score" value="45"><span class="n" aria-hidden="true">45</span><span class="t">Service assurance</span><span class="tags"><span class="tag Score">Score</span></span><span class="d">Score resolution notes against a checklist of required troubleshooting steps.</span><p class="explanation"><strong>In practice.</strong> Service-assurance reviewers can score resolution notes against required troubleshooting steps, exposing documentation gaps before closure across queues and shifts while agents and supervisors retain responsibility for technical correctness and customer communication.</p>
+<details class="example" id="example-45">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Resolution note SA-045 records modem reboot and signal check but omits line test and customer confirmation. Evidence: ticket history, troubleshooting checklist, timestamps, and closure note.</dd>
+<dt>Ask Jev</dt><dd class="example-question">How complete is this resolution note under the checklist rubric? Score: 0 = required steps absent; 1 = some steps documented but one or more required checks missing; 2 = all steps and customer confirmation documented.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Score: 1 — required checks missing (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Return the note before closure; the agent documents the line test and customer confirmation or explains the reviewed exception.</dd>
+</dl></div></details></li>
+</ol></section>
+<section class="industry" id="software-it" data-industry="Software &amp; IT" aria-labelledby="software-it-title"><h2 id="software-it-title">Software &amp; IT <small>5</small></h2><ol start="46">
+<li class="item" data-p="Choice" value="46"><span class="n" aria-hidden="true">46</span><span class="t">Bug intake</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Classify reports as defects, feature requests, usage questions, or configuration problems.</span><p class="explanation"><strong>In practice.</strong> Bug intake can assign each report to one queue category, improving triage consistency across products and release teams while engineers decide reproducibility, priority, roadmap treatment, and any configuration change consistently.</p>
+<details class="example" id="example-46">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Report BI-046 asks for CSV export from a dashboard that currently supports only JSON, with no claim of malfunction. Evidence: reporter text, product version placeholder, and category definitions.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which bug-intake category best matches the report? Choice list: defect; feature request; usage question; configuration problem.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: feature request (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Route the report to product-request triage; a product owner validates scope, demand, and feasibility before recording any roadmap decision.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Score" value="47"><span class="n" aria-hidden="true">47</span><span class="t">Engineering triage</span><span class="tags"><span class="tag Score">Score</span></span><span class="d">Suggest bug severity using an explicit impact rubric and supplied evidence.</span><p class="explanation"><strong>In practice.</strong> Engineering triage can apply an explicit impact rubric to bug evidence, producing a repeatable severity suggestion across teams and releases while engineers verify affected users, reproducibility, workarounds, and release risk.</p>
+<details class="example" id="example-47">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Bug ET-047 affects every fictional tenant after version 4.2, blocks invoice export, has no workaround, and includes a reproducible test log. Evidence: impact note, version, steps, and log excerpt.</dd>
+<dt>Ask Jev</dt><dd class="example-question">What severity follows the supplied impact rubric? Score: 0 = cosmetic or isolated; 1 = limited impact with workaround; 2 = broad blocking impact with no workaround.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Score: 2 — broad blocking impact (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Place the report in the highest severity review queue; the incident owner confirms scope and approves engineering response and communication.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="48"><span class="n" aria-hidden="true">48</span><span class="t">Service desk</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Route tickets to identity, devices, applications, networking, or infrastructure teams.</span><p class="explanation"><strong>In practice.</strong> A service desk can route tickets by affected technology area, reducing handoff delay across queues and preserving clear ownership across shifts while specialists authenticate users, inspect systems, and approve remediation.</p>
+<details class="example" id="example-48">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Ticket SD-048 says a laptop cannot reach the corporate wireless network, while other applications work offline. Evidence: device type, network name placeholder, error text, and routing taxonomy.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which service-desk team should receive this ticket? Choice list: identity; devices; applications; networking; infrastructure.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: networking (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Assign the ticket to networking support; the specialist verifies device context and follows the approved connectivity troubleshooting procedure.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Score" value="49"><span class="n" aria-hidden="true">49</span><span class="t">Knowledge search</span><span class="tags"><span class="tag Score">Score</span></span><span class="d">Score retrieved documentation passages for relevance to a user’s question.</span><p class="explanation"><strong>In practice.</strong> A knowledge-search workflow can score a retrieved passage against a user’s precise question, helping agents select useful references across approved collections while requiring them to read the source and judge applicability before answering.</p>
+<details class="example" id="example-49">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Question KS-049 asks how to rotate a fictional API key. Passage P-12 describes key rotation steps, required permission, and rollback timing. Evidence: question text, passage, and relevance rubric.</dd>
+<dt>Ask Jev</dt><dd class="example-question">How relevant is the passage to the supplied question? Score: 0 = unrelated; 1 = partially relevant but missing a needed detail; 2 = directly answers the question with required context.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Score: 2 — directly relevant (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Present the passage as a candidate reference; the agent verifies its currency and applies the documented procedure within approved access controls.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Noul" value="50"><span class="n" aria-hidden="true">50</span><span class="t">AI governance, including Jeeves</span><span class="tags"><span class="tag Noul">Noul</span></span><span class="d">Flag whether submitted evidence addresses a specific governance-review question.</span><p class="explanation"><strong>In practice.</strong> An AI-governance reviewer can check whether submitted evidence addresses one defined review question, making gaps visible before a decision while keeping approval, exceptions, and risk acceptance with the review panel.</p>
+<details class="example" id="example-50">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Packet GV-050 asks whether a fictional model has documented human oversight. The checklist requires an operating procedure and sample review record; the packet includes a policy excerpt but neither required item. Evidence: checklist, policy excerpt, and submission index.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Does the packet include the required human-oversight operating procedure? Noul: yes/no.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Noul: 0.16 (illustrative) probability of yes</dd>
+<dt>What happens next</dt><dd class="example-next">Mark the packet evidence-incomplete for panel review; request the operating procedure and sample record before any governance conclusion or approval.</dd>
+</dl></div></details></li>
+</ol></section>
+<section class="industry" id="cybersecurity" data-industry="Cybersecurity" aria-labelledby="cybersecurity-title"><h2 id="cybersecurity-title">Cybersecurity <small>5</small></h2><ol start="51">
+<li class="item" data-p="Choice" value="51"><span class="n" aria-hidden="true">51</span><span class="t">Phishing desk</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Classify reported messages against predefined phishing indicators for analyst review.</span><p class="explanation"><strong>In practice.</strong> An analyst receives a reported email with sender, subject, body excerpt, link text, attachment names, and a short reporting reason. Jev classifies the message against a fixed indicator taxonomy, helping the phishing desk prioritize analyst review while keeping the final disposition with a qualified investigator.</p>
+<details class="example" id="example-51">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional report PH-204 says a message from billing-example.test asks for an urgent password reset, uses a mismatched link domain, and includes no approved campaign reference.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Does this reported message fit a phishing indicator category? Choice list: credential theft; malware delivery; impersonation; benign or unclear.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: credential theft</dd>
+<dt>What happens next</dt><dd class="example-next">Send the category and supplied evidence to the phishing analyst, who verifies headers, links, and reporting context before any containment action.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="52"><span class="n" aria-hidden="true">52</span><span class="t">Security operations</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Route alert narratives to endpoint, identity, email, or cloud-security teams.</span><p class="explanation"><strong>In practice.</strong> Security operations normalize alert narratives before assigning ownership. Given the artifact, affected service, initial telemetry, and routing rules, Jev chooses one predefined team. Mailbox-forwarding anomalies go to email for initial investigation, while analysts confirm scope and any cross-team escalation.</p>
+<details class="example" id="example-52">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional alert AL-778 reports repeated sign-ins from an unfamiliar device, a new mailbox forwarding rule, and no endpoint detection event in the supplied tenant snapshot.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which security team should review this alert first? Choice list: endpoint; identity; email; cloud security.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: email</dd>
+<dt>What happens next</dt><dd class="example-next">Route the alert to the selected team with the evidence bundle, then let that team confirm scope, ownership, and any needed cross-team escalation.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="53"><span class="n" aria-hidden="true">53</span><span class="t">Incident management</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Suggest incident categories from analyst-provided observations.</span><p class="explanation"><strong>In practice.</strong> An incident manager provides analyst observations, affected asset type, access symptoms, and observed timing. Jev maps those facts to one incident category from a controlled list, giving the coordinator a consistent starting label without asserting root cause or replacing incident command judgment.</p>
+<details class="example" id="example-53">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional notes for INC-311 describe an exposed service account, unusual API calls, one affected application, and no confirmed data access in the initial review.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which incident category best matches the supplied observations? Choice list: account compromise; malware; data exposure; denial of service.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: account compromise</dd>
+<dt>What happens next</dt><dd class="example-next">Give the proposed category to the incident manager, who checks the observations and records a confirmed category only after the response team reviews evidence.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Noul" value="54"><span class="n" aria-hidden="true">54</span><span class="t">Vendor assessments</span><span class="tags"><span class="tag Noul">Noul</span></span><span class="d">Flag questionnaire answers that fail to address a requested security control.</span><p class="explanation"><strong>In practice.</strong> A vendor questionnaire response is paired with the exact control wording and any cited policy excerpt. Jev checks whether the response addresses that one requested control, highlighting incomplete answers for assessor follow-up instead of deciding whether the vendor is acceptable.</p>
+<details class="example" id="example-54">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional vendor V-42 answers that access is reviewed periodically, while control AC-07 specifically requests quarterly privileged-access review records and an owner.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Does this questionnaire answer address control AC-07? Noul: yes or no.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Noul: 0.22 probability of yes (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Ask the assessor to inspect the cited answer and request quarterly records or ownership details when the response leaves the control requirement unresolved.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Score" value="55"><span class="n" aria-hidden="true">55</span><span class="t">Vulnerability management</span><span class="tags"><span class="tag Score">Score</span></span><span class="d">Score how relevant a supplied advisory is to a documented technology environment.</span><p class="explanation"><strong>In practice.</strong> A vulnerability analyst supplies an advisory excerpt, affected product and version, deployed technology inventory, and known exposure notes. Jev scores relevance on a defined rubric, helping prioritize research while leaving remediation decisions, exploitability assessment, and validation to security staff.</p>
+<details class="example" id="example-55">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional advisory ADV-19 concerns Nimbus Cache 4.2 remote parsing, while inventory lists Nimbus Cache 4.1 on one isolated test host and no production deployment.</dd>
+<dt>Ask Jev</dt><dd class="example-question">How relevant is this advisory to the documented environment? Score rubric: 0 = no matching technology; 1 = possible or limited match; 2 = confirmed material match.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Score: 1 — possible or limited match</dd>
+<dt>What happens next</dt><dd class="example-next">Have vulnerability management verify version exposure and asset criticality, then adjust prioritization only after confirming the inventory and advisory scope.</dd>
+</dl></div></details></li>
+</ol></section>
+<section class="industry" id="government-public-services" data-industry="Government &amp; public services" aria-labelledby="government-public-services-title"><h2 id="government-public-services-title">Government &amp; public services <small>5</small></h2><ol start="56">
+<li class="item" data-p="Choice" value="56"><span class="n" aria-hidden="true">56</span><span class="t">Citizen service center</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Route requests concerning roads, waste collection, permits, parks, or public records.</span><p class="explanation"><strong>In practice.</strong> A citizen service center can classify a resident’s written request using the text, service area, location, and any supplied reference number. Jev selects the appropriate queue so staff can respond consistently, while municipal personnel retain responsibility for eligibility, scheduling, and service decisions.</p>
+<details class="example" id="example-56">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional request CS-118 reports an overflowing recycling bin at 14 Pine Court, includes a pickup date, and asks when the next collection will occur.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which service queue should receive this request? Choice list: roads; waste collection; permits; parks; public records.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: waste collection</dd>
+<dt>What happens next</dt><dd class="example-next">Send the classified request and location to the waste team, which verifies the service record and provides the resident’s approved response.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="57"><span class="n" aria-hidden="true">57</span><span class="t">Permit intake</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Classify project descriptions into the appropriate permit-review queue.</span><p class="explanation"><strong>In practice.</strong> Permit intake staff can provide a project description, stated site use, work type, and attached intake notes. Jev assigns one predefined review queue, reducing manual sorting while leaving completeness checks, legal interpretation, and permit approval with the responsible public reviewers.</p>
+<details class="example" id="example-57">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional intake P-903 describes replacing a storefront sign at a small commercial unit, with dimensions, mounting method, parcel reference, and a preliminary drawing attached.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which permit-review queue fits this project description? Choice list: building; signage; land use; right of way.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: signage</dd>
+<dt>What happens next</dt><dd class="example-next">Place the intake in the signage queue, where staff confirm jurisdiction, completeness, and applicable requirements before contacting the applicant.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="58"><span class="n" aria-hidden="true">58</span><span class="t">Public consultation</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Categorize public comments by policy topic and stated concern.</span><p class="explanation"><strong>In practice.</strong> Public consultation teams can organize comments by policy topic and stated concern before staff synthesize themes. Jev assigns one topic label from an approved list using the comment and consultation question, supporting transparent review without ranking speakers or deciding policy outcomes.</p>
+<details class="example" id="example-58">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional comment PC-77 supports a proposed bus-lane pilot but asks whether evening loading zones will remain available for nearby businesses during the trial.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which policy topic best describes this comment? Choice list: transit operations; parking and loading; street design; business support.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: parking and loading</dd>
+<dt>What happens next</dt><dd class="example-next">Add the topic label to the consultation record, then let policy staff review the full comment and incorporate it into the public response process.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Noul" value="59"><span class="n" aria-hidden="true">59</span><span class="t">Grant administration</span><span class="tags"><span class="tag Noul">Noul</span></span><span class="d">Flag whether an application narrative addresses a particular application requirement.</span><p class="explanation"><strong>In practice.</strong> Grant administrators can test one application narrative against one explicitly stated requirement, supplying the requirement text, narrative, and any page or attachment reference. Jev flags apparent coverage for staff review, avoiding a completeness or funding decision from a single automated check.</p>
+<details class="example" id="example-59">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional application G-214 requires a two-year maintenance plan; its narrative states that the plan covers the next two years, names a facilities lead, lists quarterly inspections, and cites a budget line on page 6.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Does this application narrative address the two-year maintenance-plan requirement? Noul: yes or no.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Noul: 0.86 probability of yes (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Have grant staff verify the cited page and requirement wording, then record any missing duration, ownership, or budget detail before continuing review.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Noul" value="60"><span class="n" aria-hidden="true">60</span><span class="t">Municipal maintenance</span><span class="tags"><span class="tag Noul">Noul</span></span><span class="d">Identify potentially duplicate service reports from their descriptions and locations.</span><p class="explanation"><strong>In practice.</strong> Municipal maintenance teams can compare a new service description with nearby open reports, using location, symptoms, timestamps, and asset identifiers. Jev flags whether the descriptions may refer to the same issue, helping staff consolidate review without automatically merging or closing records.</p>
+<details class="example" id="example-60">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional reports M-501 and M-509 both describe a damaged streetlight at 88 Cedar Avenue, submitted two hours apart, with the same pole identifier but different photos.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Do these two service reports potentially describe the same maintenance issue? Noul: yes or no.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Noul: 0.91 probability of yes (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Present both records to the maintenance coordinator, who checks the photos and field status before linking, merging, or retaining separate work orders.</dd>
+</dl></div></details></li>
+</ol></section>
+<section class="industry" id="legal-professional-services" data-industry="Legal &amp; professional services" aria-labelledby="legal-professional-services-title"><h2 id="legal-professional-services-title">Legal &amp; professional services <small>5</small></h2><ol start="61">
+<li class="item" data-p="Choice" value="61"><span class="n" aria-hidden="true">61</span><span class="t">Client intake</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Classify inquiries by practice area for attorney assignment.</span><p class="explanation"><strong>In practice.</strong> A legal intake coordinator can supply a short inquiry, jurisdiction, requested service, and conflict-check metadata. Jev assigns a practice-area label from a controlled list, helping direct the inquiry to an attorney while avoiding legal advice, merits assessment, or client acceptance decisions.</p>
+<details class="example" id="example-61">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional inquiry L-18 concerns a supplier disagreement over delayed delivery, includes a signed purchase order excerpt, and identifies the requester as a small retailer in Minnesota.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which practice area should receive this inquiry? Choice list: commercial contracts; employment; family; intellectual property.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: commercial contracts</dd>
+<dt>What happens next</dt><dd class="example-next">Send the proposed practice-area label to intake staff, who complete conflict checks and attorney review before communicating any legal assessment.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Noul" value="62"><span class="n" aria-hidden="true">62</span><span class="t">Contract review</span><span class="tags"><span class="tag Noul">Noul</span></span><span class="d">Flag whether a supplied clause addresses a specified contractual topic.</span><p class="explanation"><strong>In practice.</strong> Contract reviewers can isolate one clause, state the contractual topic under review, and provide surrounding definitions. Jev checks whether the supplied language addresses that topic, creating a focused review cue while leaving interpretation, negotiation, and legal conclusions to counsel.</p>
+<details class="example" id="example-62">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional clause C-44 states that either party must notify the other within ten days after discovering a security incident, but the review question asks about audit rights.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Does this supplied clause address audit rights? Noul: yes or no.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Noul: 0.08 probability of yes (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Have counsel inspect the clause and surrounding definitions, then locate a separate audit-rights provision or mark the topic for drafting review.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Score" value="63"><span class="n" aria-hidden="true">63</span><span class="t">Document review</span><span class="tags"><span class="tag Score">Score</span></span><span class="d">Score documents for relevance to a lawyer-defined issue.</span><p class="explanation"><strong>In practice.</strong> A document reviewer can provide an issue statement, relevance rubric, and document excerpt or metadata. Jev scores how directly the document bears on that defined issue, helping organize a review set while preserving attorney control over privilege, interpretation, and case strategy.</p>
+<details class="example" id="example-63">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional matter M-22 asks about delivery acceptance; document D-17 is an email confirming the buyer accepted shipment lot 3 after a receiving inspection.</dd>
+<dt>Ask Jev</dt><dd class="example-question">How relevant is this document to the delivery-acceptance issue? Score rubric: 0 = unrelated; 1 = indirect context; 2 = directly addresses the issue.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Score: 2 — directly addresses the issue</dd>
+<dt>What happens next</dt><dd class="example-next">Place the scored document in the reviewer’s queue, who checks context, privilege, and authenticity before relying on it in the matter.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="64"><span class="n" aria-hidden="true">64</span><span class="t">Matter management</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Classify correspondence as discovery, scheduling, billing, settlement, or general administration.</span><p class="explanation"><strong>In practice.</strong> Matter-management staff can classify incoming correspondence using its text, matter identifier, sender role, and referenced deadline. Jev assigns one workflow category so the message reaches the right team, while attorneys and administrators verify deadlines and substantive significance.</p>
+<details class="example" id="example-64">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional message MM-308 references a deposition date, asks whether a witness can attend, and copies opposing counsel and the scheduling coordinator.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which matter-management category fits this correspondence? Choice list: discovery; scheduling; billing; settlement; general administration.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: scheduling</dd>
+<dt>What happens next</dt><dd class="example-next">Route the message to the scheduling workflow, where staff confirm the date, participants, and any required attorney response.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Noul" value="65"><span class="n" aria-hidden="true">65</span><span class="t">Engagement quality</span><span class="tags"><span class="tag Noul">Noul</span></span><span class="d">Check whether a deliverable addresses a specific requirement in the engagement brief.</span><p class="explanation"><strong>In practice.</strong> A professional-services reviewer can compare a draft deliverable with one requirement from the engagement brief and provide the relevant section or evidence. Jev flags apparent coverage for review, helping catch omissions without certifying quality, compliance, or client acceptance.</p>
+<details class="example" id="example-65">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional brief B-12 requires a three-scenario cost table; draft D-12 contains baseline, conservative, and growth columns with assumptions listed below the table.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Does this deliverable address the three-scenario cost-table requirement? Noul: yes or no.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Noul: 0.89 probability of yes (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Ask the engagement reviewer to confirm the scenarios and assumptions against the brief, then request a revision if any required detail is absent.</dd>
+</dl></div></details></li>
+</ol></section>
+<section class="industry" id="education-training" data-industry="Education &amp; training" aria-labelledby="education-training-title"><h2 id="education-training-title">Education &amp; training <small>5</small></h2><ol start="66">
+<li class="item" data-p="Choice" value="66"><span class="n" aria-hidden="true">66</span><span class="t">Student services</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Route questions to admissions, financial aid, registration, accommodation, or IT support.</span><p class="explanation"><strong>In practice.</strong> Student-services teams can classify a question using the student’s stated need, program context, and relevant administrative reference. Jev routes it to a service queue, helping staff respond consistently while leaving enrollment, aid, accommodation, and records decisions to authorized personnel.</p>
+<details class="example" id="example-66">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional message ST-41 asks how to replace a lost campus access card, names a continuing-education course, and includes no request about grades or enrollment.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which student-services queue should receive this question? Choice list: admissions; financial aid; registration; accommodation; IT support.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: IT support</dd>
+<dt>What happens next</dt><dd class="example-next">Route the message to IT support, whose staff verify identity through approved procedures and provide the institution’s documented replacement steps.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Score" value="67"><span class="n" aria-hidden="true">67</span><span class="t">Classroom assessment</span><span class="tags"><span class="tag Score">Score</span></span><span class="d">Suggest rubric scores for a narrowly defined response criterion, subject to teacher review.</span><p class="explanation"><strong>In practice.</strong> A teacher can submit one narrowly defined response criterion, the student response, and an ordered rubric. Jev suggests a criterion score for teacher review, making feedback more consistent while keeping grading, accommodations, and educational judgment with the instructor.</p>
+<details class="example" id="example-67">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional response R-8 identifies two causes of a weather event and cites the assigned reading once; the criterion asks for evidence-supported explanation, with a three-level rubric supplied.</dd>
+<dt>Ask Jev</dt><dd class="example-question">How well does this response meet the evidence-supported explanation criterion? Score rubric: 0 = absent; 1 = partial; 2 = clear and supported.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Score: 1 — partial</dd>
+<dt>What happens next</dt><dd class="example-next">Give the suggested criterion score and cited response evidence to the teacher, who confirms the grade and writes any needed feedback.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Score" value="68"><span class="n" aria-hidden="true">68</span><span class="t">Learning platforms</span><span class="tags"><span class="tag Score">Score</span></span><span class="d">Match a learner’s question to relevant resources from an approved collection.</span><p class="explanation"><strong>In practice.</strong> A learning platform can compare a learner’s question with approved resource summaries, titles, and prerequisite notes. Jev scores resource relevance on a defined rubric, helping surface candidates while an instructor or content owner verifies accuracy and suitability.</p>
+<details class="example" id="example-68">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional learner question asks how to create a pivot table; resource R-31 covers pivot-table setup with spreadsheet examples, while R-44 covers chart formatting only.</dd>
+<dt>Ask Jev</dt><dd class="example-question">How relevant is resource R-31 to the learner’s question? Score rubric: 0 = unrelated; 1 = partial context; 2 = directly useful.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Score: 2 — directly useful</dd>
+<dt>What happens next</dt><dd class="example-next">Show the high-scoring resource as a candidate, then let the instructor confirm access, prerequisites, and alignment before recommending it.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="69"><span class="n" aria-hidden="true">69</span><span class="t">Course evaluation</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Categorize feedback about pacing, materials, instruction, workload, or accessibility.</span><p class="explanation"><strong>In practice.</strong> Course-evaluation staff can classify feedback using the comment text and a fixed theme list. Jev assigns one primary theme to support aggregate review, while staff preserve the original comment and avoid inferring a student’s identity, intent, or outcome.</p>
+<details class="example" id="example-69">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional evaluation comment says weekly readings were clear, but lectures moved quickly and left too little time for questions during the final fifteen minutes.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which course-evaluation theme best fits this comment? Choice list: pacing; materials; instruction; workload; accessibility.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: pacing</dd>
+<dt>What happens next</dt><dd class="example-next">Add the theme beside the preserved comment, then let course staff review patterns alongside response counts and other evaluation evidence.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="70"><span class="n" aria-hidden="true">70</span><span class="t">Corporate training assessment</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Classify scenario responses against a defined competency rubric.</span><p class="explanation"><strong>In practice.</strong> Corporate-training teams can classify a written scenario response using a provided first-action competency rule. Jev selects pause or escalate, investigate, direct workaround, or documentation for facilitator review, supporting consistent coaching while avoiding employment decisions or unsupported judgments about a participant.</p>
+<details class="example" id="example-70">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional response TR-14 says the participant would pause a release, notify the incident lead, and document the customer impact before proposing a workaround.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which category matches the first action under the supplied rule? Choice list: pause or escalate; investigate; direct workaround; documentation.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: pause or escalate</dd>
+<dt>What happens next</dt><dd class="example-next">Give the category and response excerpt to the facilitator, who compares it with the rubric and supplies coaching or a revised assessment.</dd>
+</dl></div></details></li>
+</ol></section>
+<section class="industry" id="real-estate" data-industry="Real estate" aria-labelledby="real-estate-title"><h2 id="real-estate-title">Real estate <small>5</small></h2><ol start="71">
+<li class="item" data-p="Choice" value="71"><span class="n" aria-hidden="true">71</span><span class="t">Property management</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Route maintenance descriptions to plumbing, electrical, heating, cleaning, or general repairs.</span><p class="explanation"><strong>In practice.</strong> Property managers can classify maintenance descriptions with the reported symptom, unit or building location, and any urgency note. Jev chooses a repair queue, helping dispatch work efficiently while technicians verify conditions and managers retain responsibility for access and prioritization.</p>
+<details class="example" id="example-71">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional work order RE-601 reports water pooling beneath a kitchen sink in unit 3B, includes a tenant availability window, and notes no visible ceiling damage.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which maintenance queue should receive this work order? Choice list: plumbing; electrical; heating; cleaning; general repairs.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: plumbing</dd>
+<dt>What happens next</dt><dd class="example-next">Route the work order to plumbing, where staff confirm access, urgency, and the technician’s findings before closing or escalating it.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="72"><span class="n" aria-hidden="true">72</span><span class="t">Leasing support</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Classify inquiries as viewing requests, availability questions, lease questions, or renewals.</span><p class="explanation"><strong>In practice.</strong> Leasing support can classify an inquiry using the message, property identifier, requested move date, and any listed unit preference. Jev selects one response queue, helping staff answer consistently without deciding availability, eligibility, or lease terms.</p>
+<details class="example" id="example-72">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional inquiry LS-27 names Harbor View Building, asks whether a two-bedroom is available in September, and requests a Saturday viewing appointment.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which leasing-support category fits this inquiry? Choice list: viewing request; availability question; lease question; renewal.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: availability question</dd>
+<dt>What happens next</dt><dd class="example-next">Send the inquiry to availability staff, who check current listings and then coordinate a viewing if an appropriate unit exists.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Noul" value="73"><span class="n" aria-hidden="true">73</span><span class="t">Facilities operations</span><span class="tags"><span class="tag Noul">Noul</span></span><span class="d">Flag potentially duplicate work orders based on location and reported symptoms.</span><p class="explanation"><strong>In practice.</strong> Facilities teams can compare a new work order with nearby open orders using location, asset, reported symptoms, and submission time. Jev flags a possible duplicate for coordinator review, reducing parallel dispatches without merging records automatically.</p>
+<details class="example" id="example-73">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional orders FO-711 and FO-719 both cite a warm third-floor corridor at North Annex, were opened the same morning, and identify the same air-handling unit.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Could these work orders describe the same facilities issue? Noul: yes or no.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Noul: 0.93 probability of yes (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Ask the facilities coordinator to compare technician notes and current status before linking, consolidating, or keeping the work orders separate.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="74"><span class="n" aria-hidden="true">74</span><span class="t">Inspection teams</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Categorize inspection notes by room, building component, and issue type.</span><p class="explanation"><strong>In practice.</strong> Inspection teams can organize notes by building component and issue type using the property, room or area, observed condition, and inspection date. Jev assigns one category from a controlled list, making follow-up easier while inspectors validate the observation.</p>
+<details class="example" id="example-74">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional inspection note IN-55 records cracked grout around the shower enclosure in apartment 2A, with inspection date, room label, and a repair photo reference.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which inspection category best fits this note? Choice list: plumbing; finishes; electrical; structure; exterior.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: finishes</dd>
+<dt>What happens next</dt><dd class="example-next">Place the note in the finishes queue, where an inspector confirms the condition and assigns any repair follow-up under established procedures.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="75"><span class="n" aria-hidden="true">75</span><span class="t">Transaction coordination</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Classify incoming correspondence by transaction stage and responsible team.</span><p class="explanation"><strong>In practice.</strong> Transaction coordinators can classify correspondence using the identifier, text, referenced document, deadline, and sender role. Jev selects a transaction stage first; application code maps that stage to a responsible team. Coordinators verify the record and any time-sensitive obligation.</p>
+<details class="example" id="example-75">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional email TX-204 attaches a signed inspection response, references the buyer’s repair-request deadline, and copies the listing coordinator and escrow contact.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which transaction stage fits this correspondence? Choice list: offer negotiation; inspection; financing; closing; post-close service.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: inspection</dd>
+<dt>What happens next</dt><dd class="example-next">Map the inspection stage to inspection coordination, where staff confirm the deadline, attached response, and required next communication.</dd>
+</dl></div></details></li>
+</ol></section>
+<section class="industry" id="construction" data-industry="Construction" aria-labelledby="construction-title"><h2 id="construction-title">Construction <small>5</small></h2><ol start="76">
+<li class="item" data-p="Choice" value="76"><span class="n" aria-hidden="true">76</span><span class="t">Project management</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Route requests for information to structural, architectural, mechanical, or electrical reviewers.</span><p class="explanation"><strong>In practice.</strong> A project coordinator can send each request for information to the discipline that owns the answer, preserving a short audit trail of the question, drawing reference, and requested response date. This reduces forwarding loops while leaving technical interpretation with qualified reviewers.</p>
+<details class="example" id="example-76">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional Harborline Clinic expansion RFI-014 cites drawing A-203, asks whether a wall assembly meets the partition detail, and attaches the RFI text plus discipline responsibility matrix.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which reviewer should receive this RFI? Choices: structural; architectural; mechanical; electrical.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: architectural</dd>
+<dt>What happens next</dt><dd class="example-next">Assign the RFI to the selected discipline queue, retain the drawing reference, and have the designated reviewer answer the technical question.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Noul" value="77"><span class="n" aria-hidden="true">77</span><span class="t">Submittal review</span><span class="tags"><span class="tag Noul">Noul</span></span><span class="d">Flag whether product documentation addresses a specific specification requirement.</span><p class="explanation"><strong>In practice.</strong> A submittal desk can check one documented specification requirement at a time before routing a product package for acceptance. The check surfaces missing evidence early, while the architect or engineer retains responsibility for interpreting compliance and approving the material.</p>
+<details class="example" id="example-77">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional Solace Tower submittal lists fire door model FD-90, includes manufacturer text &quot;90-minute fire rating&quot; and &quot;listed labeled hardware,&quot; and cites generic specification ID SPEC-DOOR-08; the requirement requests both.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Does the submittal evidence state that the fire door has the required 90-minute rating? Answer yes/no.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Noul: 0.93 probability of yes (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Have the specification reviewer verify the cited rating and hardware labels before accepting, returning, or requesting clarification on the submittal.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="78"><span class="n" aria-hidden="true">78</span><span class="t">Change management</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Classify change requests as scope, design, site-condition, or material changes.</span><p class="explanation"><strong>In practice.</strong> A change administrator can place incoming change requests into a consistent review lane before estimating cost or schedule effects. Separating scope, design, site-condition, and material changes gives the right team a clear starting point without deciding entitlement.</p>
+<details class="example" id="example-78">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional Pinecrest Library renovation request CR-08 proposes replacing specified tile after an unexpected slab condition; the request includes the field note, revised sketch, and cost estimate.</dd>
+<dt>Ask Jev</dt><dd class="example-question">What kind of change does this request describe? Choices: scope; design; site-condition; material.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: site-condition</dd>
+<dt>What happens next</dt><dd class="example-next">Route the request to the change reviewer, preserve the field evidence, and ask that reviewer to assess cost, schedule, and contract implications.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="79"><span class="n" aria-hidden="true">79</span><span class="t">Safety office</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Categorize written safety observations for qualified reviewer assessment.</span><p class="explanation"><strong>In practice.</strong> A safety office can organize written observations into a small set of review queues so qualified staff see relevant hazards quickly. Classification supports triage and trend reporting, while a competent safety professional decides controls, escalation, and any work pause.</p>
+<details class="example" id="example-79">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">At fictional CedarWorks site, observation SO-22 describes an open Level 3 floor edge near hoisting, cites photo P-22, and notes that a guardrail is missing.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which safety review category best fits this observation? Choices: fall protection; housekeeping; electrical exposure; equipment guarding.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: fall protection</dd>
+<dt>What happens next</dt><dd class="example-next">Send the observation and photo reference to the qualified safety reviewer, who should verify conditions and prescribe the appropriate corrective action.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="80"><span class="n" aria-hidden="true">80</span><span class="t">Site reporting</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Classify reported blockers as labor, materials, equipment, access, or design clarification.</span><p class="explanation"><strong>In practice.</strong> A site reporting workflow can classify blockers before the daily coordination meeting, making ownership visible and reducing time spent sorting free-text updates. The label informs routing only; supervisors still confirm facts, sequence work, and resolve competing constraints.</p>
+<details class="example" id="example-80">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional Northbank school site report says masonry work is paused because the specified blocks have not arrived; the entry includes the delivery log and two-day lookahead.</dd>
+<dt>Ask Jev</dt><dd class="example-question">What is the primary blocker in this report? Choices: labor; materials; equipment; access; design clarification.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: materials</dd>
+<dt>What happens next</dt><dd class="example-next">Place the report in the materials queue, link the delivery evidence, and ask the site coordinator to confirm a recovery date.</dd>
+</dl></div></details></li>
+</ol></section>
+<section class="industry" id="travel-hospitality" data-industry="Travel &amp; hospitality" aria-labelledby="travel-hospitality-title"><h2 id="travel-hospitality-title">Travel &amp; hospitality <small>5</small></h2><ol start="81">
+<li class="item" data-p="Choice" value="81"><span class="n" aria-hidden="true">81</span><span class="t">Hotel guest services</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Route guest requests to housekeeping, maintenance, reception, dining, or concierge teams.</span><p class="explanation"><strong>In practice.</strong> A hotel guest-services desk can route short requests to the team able to act, keeping routine work visible and reducing transfers. The classification should use only the guest’s stated need; staff remain responsible for confirming room details and fulfilling it.</p>
+<details class="example" id="example-81">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional Lakeshore Hotel guest message for room 418 requests two extra towels and a replacement shower mat; the reservation record supplies the room number and stay dates.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which hotel team should receive this request? Choices: housekeeping; maintenance; reception; dining; concierge.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: housekeeping</dd>
+<dt>What happens next</dt><dd class="example-next">Create a housekeeping task with the room reference, then let staff confirm completion through the hotel’s ordinary service workflow.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="82"><span class="n" aria-hidden="true">82</span><span class="t">Airline customer support</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Classify requests as rebooking, baggage, refunds, accessibility assistance, or loyalty issues.</span><p class="explanation"><strong>In practice.</strong> An airline support queue can separate incoming cases by the customer’s immediate need before an agent opens the full record. Consistent labels make ownership clearer, while trained staff still verify itinerary details, policy eligibility, and any required accommodations.</p>
+<details class="example" id="example-82">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional Northstar Air traveler message says a cancelled flight requires a same-day replacement, cites booking Q7LM2, and includes the cancellation notice received by email.</dd>
+<dt>Ask Jev</dt><dd class="example-question">What is the primary support need? Choices: rebooking; baggage; refunds; accessibility assistance; loyalty.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: rebooking</dd>
+<dt>What happens next</dt><dd class="example-next">Route the case to rebooking support with the cancellation evidence, and have an agent verify available options and applicable policy.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Score" value="83"><span class="n" aria-hidden="true">83</span><span class="t">Itinerary matching</span><span class="tags"><span class="tag Score">Score</span></span><span class="d">Score candidate itineraries against supplied traveler preferences and constraints.</span><p class="explanation"><strong>In practice.</strong> A travel planner can compare each candidate itinerary against preferences that the traveler has explicitly supplied, such as nonstop travel, dates, budget, or arrival time. The score supports sorting and discussion; it does not invent preferences or book travel.</p>
+<details class="example" id="example-83">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional traveler requests a nonstop weekend trip under 600 dollars, departing after 4 p.m.; itinerary B includes a connection and costs 540 dollars, with the fare and schedule shown.</dd>
+<dt>Ask Jev</dt><dd class="example-question">How well does this itinerary satisfy the stated preferences? Score 0 = meets none or conflicts with key constraints; 1 = meets some constraints; 2 = meets all stated constraints.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Score: 1 — meets some constraints (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Show the score alongside the fare and schedule evidence, then ask the traveler or agent to decide whether the connection is acceptable.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Score" value="84"><span class="n" aria-hidden="true">84</span><span class="t">Service recovery</span><span class="tags"><span class="tag Score">Score</span></span><span class="d">Suggest complaint priority using an explicit service-impact rubric.</span><p class="explanation"><strong>In practice.</strong> A service-recovery desk can apply a shared impact rubric to complaints before assigning follow-up priority. The rubric makes queue decisions consistent across properties, while a manager checks the facts, customer history, and any operational response before acting.</p>
+<details class="example" id="example-84">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional Harborview Hotel complaint cites three missed room cleanings during a four-night stay, includes dated messages to reception, and reports no documented resolution before checkout.</dd>
+<dt>Ask Jev</dt><dd class="example-question">What priority should this complaint receive? Score 0 = low or isolated impact; 1 = moderate documented disruption; 2 = severe or repeated disruption requiring priority follow-up.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Score: 2 — severe or repeated disruption (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Place the complaint in the priority follow-up queue and have a service manager verify the timeline before selecting an appropriate remedy.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="85"><span class="n" aria-hidden="true">85</span><span class="t">Tourism review analysis</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Categorize visitor feedback about attractions, transport, accommodation, or accessibility.</span><p class="explanation"><strong>In practice.</strong> A tourism organization can group visitor feedback into operational themes so destination teams can review patterns without reading every comment first. The category is a navigation aid; staff should inspect the original wording before changing services or accessibility information.</p>
+<details class="example" id="example-85">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional visitor review praises the Old Mill exhibit but says the shuttle stopped early and the posted ramp entrance was difficult to find; the review includes visit date and attraction name.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which topic best describes the primary feedback? Choices: attractions; transport; accommodation; accessibility.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: accessibility</dd>
+<dt>What happens next</dt><dd class="example-next">Send the review to the accessibility feedback queue with its original wording, then ask the destination team to verify the visitor experience.</dd>
+</dl></div></details></li>
+</ol></section>
+<section class="industry" id="agriculture-food" data-industry="Agriculture &amp; food" aria-labelledby="agriculture-food-title"><h2 id="agriculture-food-title">Agriculture &amp; food <small>5</small></h2><ol start="86">
+<li class="item" data-p="Choice" value="86"><span class="n" aria-hidden="true">86</span><span class="t">Agricultural extension services</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Route growers’ written questions to irrigation, soil, crop, equipment, or market specialists.</span><p class="explanation"><strong>In practice.</strong> An agricultural extension desk can direct written grower questions to the specialist most likely to provide useful guidance. Routing keeps the response process organized while preserving the need for local measurements, seasonal context, and expert review before advice is given.</p>
+<details class="example" id="example-86">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional Juniper Fields grower asks why drip lines show uneven flow in a south plot, attaching a pressure reading, irrigation map, and recent maintenance note.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which specialist should receive this question? Choices: irrigation; soil; crop; equipment; market.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: irrigation</dd>
+<dt>What happens next</dt><dd class="example-next">Route the question and pressure evidence to irrigation support, whose specialist should request any missing field measurements before responding.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="87"><span class="n" aria-hidden="true">87</span><span class="t">Food processing quality control</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Classify inspection notes as packaging, labeling, appearance, or process deviations.</span><p class="explanation"><strong>In practice.</strong> A food processor can sort inspection notes into a defined quality queue before the responsible lead investigates. The label distinguishes packaging, labeling, appearance, and process concerns, helping organize records while leaving release or hold decisions to qualified staff.</p>
+<details class="example" id="example-87">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional Meadow Jar inspection note says the batch code is absent from twelve labels, while seal checks and product appearance passed; the note includes batch ID MJ-41 and line record.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which quality category best fits this note? Choices: packaging; labeling; appearance; process deviation.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: labeling</dd>
+<dt>What happens next</dt><dd class="example-next">Open a labeling review task with the batch and line records, then have quality staff determine containment and correction requirements.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Noul" value="88"><span class="n" aria-hidden="true">88</span><span class="t">Supplier assurance</span><span class="tags"><span class="tag Noul">Noul</span></span><span class="d">Flag whether supplier documentation addresses a requested assurance criterion.</span><p class="explanation"><strong>In practice.</strong> A supplier-assurance workflow can check whether a submitted document actually addresses one requested criterion before a reviewer spends time on the full package. This creates a traceable evidence check and leaves certification interpretation with the responsible quality or procurement team.</p>
+<details class="example" id="example-88">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional Greenbasket supplier submits a dated certificate and facility identifier; its policy excerpt states, &quot;Raw peanuts are segregated from finished goods in a labeled, access-controlled area,&quot; addressing the requested allergen-segregation criterion.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Does this supplied policy excerpt address the requested allergen-segregation assurance criterion? Answer yes/no.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Noul: 0.91 probability of yes (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Have supplier assurance staff verify the certificate scope and date, then record acceptance or request the missing evidence.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="89"><span class="n" aria-hidden="true">89</span><span class="t">Equipment maintenance</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Categorize repair reports by machine subsystem and described problem.</span><p class="explanation"><strong>In practice.</strong> An agricultural operations desk can classify repair reports by subsystem so technicians receive a focused queue and managers can see recurring equipment issues. The category organizes work; technicians still diagnose the machine, confirm isolation, and document the repair.</p>
+<details class="example" id="example-89">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional Orchard Vale report says the cooling unit on storage room 2 cycles off after ten minutes, cites temperature logs, and includes the last service date.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which equipment category best fits this report? Choices: refrigeration; conveyor; mixer; boiler.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: refrigeration</dd>
+<dt>What happens next</dt><dd class="example-next">Route the report to refrigeration maintenance with the temperature log, and have a technician verify the fault before repair.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Noul" value="90"><span class="n" aria-hidden="true">90</span><span class="t">Consumer complaints</span><span class="tags"><span class="tag Noul">Noul</span></span><span class="d">Flag complaints mentioning possible contamination or undeclared allergens for specialist review.</span><p class="explanation"><strong>In practice.</strong> A consumer-complaint intake can flag wording that may require specialist food-safety review, allowing the complaint to leave a general queue quickly. The flag is an evidence-screening aid; qualified staff must investigate records and decide any response or notification.</p>
+<details class="example" id="example-90">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional customer reports a reaction after consuming a sealed Cedar Spoon soup jar and notes peanuts are absent from the ingredient label; the report includes lot CS-18 and purchase date.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Does this complaint mention possible contamination or an undeclared allergen requiring specialist review? Answer yes/no.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Noul: 0.97 probability of yes (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Escalate the complaint and lot evidence to qualified food-safety staff, who should follow the documented investigation and notification procedure.</dd>
+</dl></div></details></li>
+</ol></section>
+<section class="industry" id="media-entertainment" data-industry="Media &amp; entertainment" aria-labelledby="media-entertainment-title"><h2 id="media-entertainment-title">Media &amp; entertainment <small>5</small></h2><ol start="91">
+<li class="item" data-p="Choice" value="91"><span class="n" aria-hidden="true">91</span><span class="t">Newsroom intake</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Classify story pitches by editorial desk and subject area.</span><p class="explanation"><strong>In practice.</strong> A newsroom can place incoming pitches with the editorial desk best suited to assess them, making intake faster and ownership clearer. The category supports assignment only; editors still check sourcing, conflicts, news value, and the pitch’s actual scope.</p>
+<details class="example" id="example-91">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional pitch proposes a reported feature on neighborhood heat-pump rebates, naming two local installers and attaching a public rebate notice plus a short interview plan.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which editorial desk should receive this pitch? Choices: local; business; culture; science.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: local</dd>
+<dt>What happens next</dt><dd class="example-next">Send the pitch to the selected desk with its source references, then have an editor assess fit, verification needs, and assignment scope.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="92"><span class="n" aria-hidden="true">92</span><span class="t">Publishing operations</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Assign manuscripts or articles to predefined genres, topics, or audience categories.</span><p class="explanation"><strong>In practice.</strong> A publishing team can assign incoming manuscripts or articles to a stable catalog category before scheduling, metadata work, or human commissioning. The category makes handoffs consistent while editors retain authority over final genre, audience, and publication decisions.</p>
+<details class="example" id="example-92">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional manuscript excerpt follows a baker documenting regional recipes and family history, with chapter headings and a proposed audience statement supplied by the author.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which catalog category best fits this manuscript? Choices: fiction; nonfiction; education; lifestyle.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: lifestyle</dd>
+<dt>What happens next</dt><dd class="example-next">Place the manuscript in the lifestyle review queue, preserving the excerpt and audience statement for an editor’s final catalog decision.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Noul" value="93"><span class="n" aria-hidden="true">93</span><span class="t">Rights management</span><span class="tags"><span class="tag Noul">Noul</span></span><span class="d">Flag whether supplied license terms address a proposed usage for legal review.</span><p class="explanation"><strong>In practice.</strong> A rights desk can check whether a license excerpt speaks to one proposed use before asking counsel to inspect the entire agreement. The check narrows review and preserves the source clause, while legal staff decide scope, territory, duration, and permissions.</p>
+<details class="example" id="example-93">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional Silverline label license permits audio streaming in North America for two years; the proposed use is a worldwide promotional video, with the clause and campaign brief attached.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Does the supplied license language address the proposed worldwide promotional-video use? Answer yes/no.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Noul: 0.18 probability of yes (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Send the clause and proposed use to legal review, asking counsel to confirm permission scope before any campaign publication.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="94"><span class="n" aria-hidden="true">94</span><span class="t">Gaming player support</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Classify reports as account access, billing, bugs, cheating allegations, or player conduct.</span><p class="explanation"><strong>In practice.</strong> A game-support queue can separate reports by the operational team that should investigate them, reducing reassignment and preserving the player’s original wording. The label does not resolve the case; support staff verify account records, transaction details, and conduct evidence.</p>
+<details class="example" id="example-94">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional player message says a purchased expansion was charged twice, cites receipt R-552, and includes the platform transaction timestamp and account support identifier.</dd>
+<dt>Ask Jev</dt><dd class="example-question">What type of support report is this? Choices: account access; billing; bugs; cheating allegations; player conduct.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: billing</dd>
+<dt>What happens next</dt><dd class="example-next">Route the report and receipt evidence to billing support, which should verify the transaction before deciding the account remedy.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="95"><span class="n" aria-hidden="true">95</span><span class="t">Platform moderation</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Categorize reported text against defined content policies for moderator review.</span><p class="explanation"><strong>In practice.</strong> A platform can place reported text into a defined moderation queue so trained reviewers receive consistent context and policy references. Classification supports review operations only; moderators must inspect the complete report, apply the current policy, and document the decision.</p>
+<details class="example" id="example-95">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional community report quotes a post advertising repeated unsolicited links and includes three message URLs, reporter notes, and the applicable anti-spam policy excerpt.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which policy category best fits this report? Choices: spam; harassment; impersonation; prohibited commercial content.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: spam</dd>
+<dt>What happens next</dt><dd class="example-next">Send the report and policy excerpt to a trained moderator, who should review the full context and record the applicable policy outcome.</dd>
+</dl></div></details></li>
+</ol></section>
+<section class="industry" id="automotive-fleet-management" data-industry="Automotive &amp; fleet management" aria-labelledby="automotive-fleet-management-title"><h2 id="automotive-fleet-management-title">Automotive &amp; fleet management <small>5</small></h2><ol start="96">
+<li class="item" data-p="Choice" value="96"><span class="n" aria-hidden="true">96</span><span class="t">Service centers</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Classify customer-described problems into braking, electrical, engine, body, or infotainment categories.</span><p class="explanation"><strong>In practice.</strong> An automotive service center can turn a customer’s free-text symptom into a diagnostic intake category before a technician opens the vehicle record. The category improves queueing, while inspection, testing, and repair decisions remain with qualified technicians.</p>
+<details class="example" id="example-96">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional driver says the sedan’s brake pedal feels soft after a rainy commute, includes the service date, mileage band, and dashboard warning description, and requests an inspection.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which service category best fits the described problem? Choices: braking; electrical; engine; body; infotainment.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: braking</dd>
+<dt>What happens next</dt><dd class="example-next">Route the intake to braking service with the symptom details, and have a technician inspect the vehicle before recommending work.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Noul" value="97"><span class="n" aria-hidden="true">97</span><span class="t">Warranty operations</span><span class="tags"><span class="tag Noul">Noul</span></span><span class="d">Flag whether technician notes address the documentation requirements for a warranty claim.</span><p class="explanation"><strong>In practice.</strong> A warranty desk can check whether a technician’s notes contain the evidence required for one claim requirement before an administrator reviews eligibility. This reduces avoidable back-and-forth while leaving coverage interpretation, authorization, and payment decisions to warranty staff.</p>
+<details class="example" id="example-97">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional Northloop Auto claim W-204 includes a technician note identifying the failed part as a rear wheel-speed sensor, plus an inspection date and photo; the warranty checklist specifically requires failed-part identification.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Do the technician notes identify the failed part as required by the warranty checklist? Answer yes/no.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Noul: 0.95 probability of yes (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Have a warranty administrator verify each checklist item against the source record before deciding whether the claim can proceed.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="98"><span class="n" aria-hidden="true">98</span><span class="t">Engineering quality</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Group field reports by predefined symptom or component categories.</span><p class="explanation"><strong>In practice.</strong> An engineering-quality team can group field reports by symptom or component so recurring issues reach the right analysis queue. The grouping supports trend review and investigation setup, while engineers validate the report, reproduce conditions, and determine root cause.</p>
+<details class="example" id="example-98">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional Roadstar field report says the rear camera intermittently loses its image after a software update, citing vehicle series RS-4 and two dated service observations.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which engineering category best fits this report? Choices: braking; drivetrain; electrical; body; software.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: software</dd>
+<dt>What happens next</dt><dd class="example-next">Place the report in the software quality queue with its observations, then have engineers verify version, reproduction steps, and scope.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Choice" value="99"><span class="n" aria-hidden="true">99</span><span class="t">Fleet operations desk</span><span class="tags"><span class="tag Choice">Choice</span></span><span class="d">Route driver reports to maintenance, dispatch, scheduling, or incident-review teams.</span><p class="explanation"><strong>In practice.</strong> A fleet operations desk can route driver reports to the team that can take the next operational action, reducing delays during a shift. The label is an intake aid; supervisors confirm location, vehicle status, urgency, and any incident process.</p>
+<details class="example" id="example-99">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional courier driver reports a van’s liftgate will not close at depot 3, includes vehicle tag CV-31, route number, timestamp, and a maintenance warning photo.</dd>
+<dt>Ask Jev</dt><dd class="example-question">Which fleet team should receive this report? Choices: maintenance; dispatch; scheduling; incident review.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Choice: maintenance</dd>
+<dt>What happens next</dt><dd class="example-next">Route the report and photo to maintenance, while dispatch confirms vehicle availability and any immediate route coverage change.</dd>
+</dl></div></details></li>
+<li class="item" data-p="Score" value="100"><span class="n" aria-hidden="true">100</span><span class="t">Owner support</span><span class="tags"><span class="tag Score">Score</span></span><span class="d">Match owner questions to relevant sections of supplied manuals or service bulletins.</span><p class="explanation"><strong>In practice.</strong> An owner-support desk can compare a question with supplied manual or bulletin sections before directing the owner to a likely source. A relevance score makes search reviewable, while staff verify the cited instructions and handle safety or repair advice.</p>
+<details class="example" id="example-100">
+<summary>See an example<span class="example-label">Fictional scenario</span></summary>
+<div class="example-body"><dl>
+<dt>Example input</dt><dd class="example-input">Fictional owner asks how to pair a phone after battery replacement; candidate manual section &quot;Bluetooth reset and pairing&quot; describes menu steps, while a separate tire-pressure bulletin is also supplied.</dd>
+<dt>Ask Jev</dt><dd class="example-question">How relevant is the candidate &quot;Bluetooth reset and pairing&quot; section to the owner’s phone-pairing question? Score 0 = unrelated; 1 = partially related; 2 = directly answers the question.</dd>
+<dt>Illustrative result</dt><dd class="example-output">Score: 2 — directly answers the question (illustrative)</dd>
+<dt>What happens next</dt><dd class="example-next">Show the scored section to support staff, who should verify the current manual version and provide the owner the approved instructions.</dd>
+</dl></div></details></li>
+</ol></section>
+</div>
+<p class="empty" id="empty">No use cases match your filters. Try another keyword or select Reset.</p>
+<div class="caveat">
+<p><strong>Design for review.</strong> Test each use case on representative examples. Keep consequential medical, financial, legal, employment, and safety decisions under appropriate human review. A confidence score is not a guarantee of correctness.</p>
+<p>Tags indicate a suggested primitive for the core question. Split multi-part tasks into separate questions and combine results in application code.</p>
+</div>
+<footer>
+<p>Capability references: <a href="https://docs.typesafe.ai/introduction">TypeSafe introduction</a> &middot; <a href="https://docs.typesafe.ai/confidence">Confidence guidance</a><br>100 illustrative applications and fictional examples &middot; Expanded October 10, 2026</p>
+</footer>
+</main>
+<script>
+(function(){
+'use strict';
+const q=document.getElementById('q');
+const chips=Array.from(document.querySelectorAll('.chip'));
+const reset=document.getElementById('reset');
+const items=Array.from(document.querySelectorAll('li.item'));
+const sections=Array.from(document.querySelectorAll('section.industry'));
+const links=Array.from(document.querySelectorAll('nav.toc a'));
+const count=document.getElementById('count');
+const empty=document.getElementById('empty');
+const examples=Array.from(document.querySelectorAll('details.example'));
+const expandExamples=document.getElementById('expand-examples');
+const collapseExamples=document.getElementById('collapse-examples');
+let printOpenState=null;
+let active=null;
+const searchText=new Map(items.map(item=>[item,(item.closest('section').dataset.industry+' '+item.textContent).toLocaleLowerCase()]));
+function apply(){
+ const terms=q.value.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
+ let shown=0;
+ for(const item of items){
+  const match=(!active||item.dataset.p===active)&&terms.every(term=>searchText.get(item).includes(term));
+  item.classList.toggle('hide',!match);
+  if(match){shown++;if(terms.length)item.querySelector('details.example').open=true;}
+ }
+ for(const section of sections){
+  const visible=section.querySelectorAll('li.item:not(.hide)').length;
+  section.classList.toggle('hide',visible===0);
+  section.querySelector('h2 small').textContent=String(visible);
+ }
+ for(const link of links)link.hidden=document.getElementById(link.hash.slice(1)).classList.contains('hide');
+ for(const chip of chips)chip.setAttribute('aria-pressed',String(chip.dataset.p===active));
+ count.textContent=shown+' of '+items.length;
+ empty.classList.toggle('show',shown===0);
+ reset.disabled=!q.value&&!active;
+ expandExamples.disabled=shown===0;collapseExamples.disabled=shown===0;
+}
+for(const chip of chips)chip.addEventListener('click',()=>{active=active===chip.dataset.p?null:chip.dataset.p;apply()});
+q.addEventListener('input',apply);
+reset.addEventListener('click',()=>{q.value='';active=null;apply();q.focus()});
+q.addEventListener('keydown',event=>{if(event.key==='Escape'){q.value='';active=null;apply()}});
+expandExamples.addEventListener('click',()=>items.filter(item=>!item.classList.contains('hide')).forEach(item=>item.querySelector('details.example').open=true));
+collapseExamples.addEventListener('click',()=>items.filter(item=>!item.classList.contains('hide')).forEach(item=>item.querySelector('details.example').open=false));
+window.addEventListener('beforeprint',()=>{
+ if(printOpenState===null)printOpenState=examples.map(example=>example.open);
+ examples.forEach(example=>example.open=true);
+ sections.forEach(section=>section.querySelector('h2 small').textContent='5');
+});
+window.addEventListener('afterprint',()=>{
+ apply();
+ if(printOpenState!==null)examples.forEach((example,index)=>example.open=printOpenState[index]);
+ printOpenState=null;
+});
+apply();
+})();
+</script>
+</body>
+</html>
