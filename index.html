@@ -58,6 +58,7 @@ a{color:var(--accent)}
 .eyebrow{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;margin:0 0 10px}
 h1{font-size:clamp(2rem,4.6vw,3.1rem);line-height:1.08;letter-spacing:-.02em;margin:0 0 16px;max-width:18ch}
 .lede{font-size:1.15rem;color:var(--muted);max-width:62ch;margin:0}
+.lede+.lede{margin-top:14px}
 .versions{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:36px 0 0}
 @media (max-width:860px){.versions{grid-template-columns:1fr}}
 .vcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
@@ -198,6 +199,7 @@ footer p{max-width:70ch}
       <a href="#numbers">By the numbers</a>
       <a href="#same">Same job, 3 answers</a>
       <a href="/side-by-side/">Side by side</a>
+      <a href="#share">Share yours</a>
     </nav>
   </div>
 </header>
@@ -205,9 +207,10 @@ footer p{max-width:70ch}
 <main id="main">
 <div class="wrap">
 <div class="hero">
-  <p class="eyebrow">One brief &middot; three AI models &middot; 300 use cases</p>
-  <h1>Where could a tiny decision model earn its keep?</h1>
-  <p class="lede">We gave Claude Fable, Codex Astra and Grok the same brief: list 100 places Jev could be used, and explain each with an example. This site explains Jev in plain terms with a few diagrams, then shows what each model built and how they differ.</p>
+  <p class="eyebrow">My Jev pill &middot; three AI models &middot; 300 use cases</p>
+  <h1>How could a tiny decision model be so interesting?</h1>
+  <p class="lede">Ever since Jev was released, I&rsquo;ve been fascinated by where all it can be used. Any use case comes in and my first thought is: hey, why don&rsquo;t we use Jev over there? So this is me sharing my Jev pill with all of you. Hopefully you&rsquo;ll see what I see in this model.</p>
+  <p class="lede">Here&rsquo;s what I did. I shared the exact same questions with Grok, Claude and Codex, and asked each one for 100 places Jev could be used, with an example for every one. Below is what each of them kept telling me.</p>
 
   <div class="versions">
     <article class="vcard">
@@ -549,12 +552,22 @@ footer p{max-width:70ch}
     <a class="btn" href="/grok/">Grok</a>
   </div>
 </section>
+
+<section class="s" id="share">
+  <p class="kicker">Your turn</p>
+  <h2>Got a use case? Share it</h2>
+  <p>I like these examples, and I hope you do too. If you have more, share them, and let&rsquo;s help each other out. Thank you!</p>
+  <div class="cta">
+    <a class="btn primary" href="https://github.com/roshanis/jev-pilled/issues/new?title=Use%20case%3A%20&amp;labels=use-case">Share a use case &rarr;</a>
+    <a class="btn" href="https://github.com/roshanis/jev-pilled">See the project on GitHub</a>
+  </div>
+</section>
 </div>
 </main>
 
 <footer>
   <div class="wrap">
-    <p><strong>About this comparison.</strong> This page was written by Claude, the same model family as one of the three entrants. The counts and feature checks above are mechanical and anyone can reproduce them from the pages; the short descriptions are judgment calls, so open each version and decide for yourself. The three guides are shown as each model produced them, with only a navigation bar added at the top.</p>
+    <p><strong>About this comparison.</strong> I put this page together with Claude&rsquo;s help, and Claude also made one of the three guides. The counts and feature checks are mechanical and anyone can reproduce them from the pages; the short descriptions are judgment calls, so open each version and decide for yourself. The three guides are shown as each model produced them, with only a navigation bar added at the top.</p>
     <p>Sources on Jev: <a href="https://docs.typesafe.ai/introduction">TypeSafe introduction</a> &middot; <a href="https://docs.typesafe.ai/confidence">TypeSafe confidence guidance</a> &middot; <a href="https://beam.ai/agentic-insights/llm-as-a-judge-jev">Beam: LLM-as-a-judge vs. Jev</a> &middot; <a href="https://composio.dev/blog/typesafe-jev-guide-and-best-practical-usecases">Composio: TypeSafe Jev guide</a> &middot; <a href="https://sebastianraschka.com/blog/2026/jev-classification-generalization.html">Sebastian Raschka: It&rsquo;s Easy to Dismiss Jev as Just a Classifier</a>. All examples across the three guides are illustrative.</p>
   </div>
 </footer>
