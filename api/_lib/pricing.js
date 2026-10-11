@@ -12,3 +12,8 @@ export function costUsd(usage, price) {
   if (!usage || !price) return null;
   return ((usage.input_tokens || 0) * price.input + (usage.output_tokens || 0) * price.output) / 1e6;
 }
+
+export const OPENAI_MODELS = {
+  "gpt-6.1-sol": { label: "GPT-6.1 Sol", input: 2.0, output: 10.0 },
+  "gpt-6-luna": { label: "GPT-6 Luna", input: 0.1, output: 0.5 },
+};

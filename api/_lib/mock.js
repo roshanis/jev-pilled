@@ -1,7 +1,7 @@
 // MOCK=1 returns made-up answers so the UI can be tried without API keys.
 // Every mocked result is flagged so the page labels it clearly.
-import { CLAUDE_MODELS, JEV_PRICE, costUsd } from "./pricing.js";
-import { buildPrompt, toJevShape } from "./claude.js";
+import { CLAUDE_MODELS, JEV_PRICE, OPENAI_MODELS, costUsd } from "./pricing.js";
+import { buildPrompt, toJevShape } from "./prompt.js";
 
 function seeded(seed) {
   let h = 2166136261;
@@ -54,5 +54,18 @@ export async function mockClaude({ state, questions, model }) {
     answers: toJevShape(questions, randomRaw(questions, rand)),
     reasoning: "Mock mode: no model was called. Set ANTHROPIC_API_KEY and run without MOCK=1 for real output.",
     usage, costUsd: costUsd(usage, CLAUDE_MODELS[model]), latencyMs,
+  };
+}
+
+export async function mockOpenAI({ state, questions, openaiModel }) {
+  const rand = seeded("openai" + JSON.stringify([state, questions, openaiModel]));
+  const latencyMs = Math.round(700 + rand() * 1800);
+  await sleep(latencyMs);
+  const usage = { input_tokens: tokens(buildPrompt(state, questions)) + 170, output_tokens: 110 + Math.round(rand() * 200) };
+  return {
+    provider: "openai", mock: true, model: `${openaiModel} (mock)`,
+    answers: toJevShape(questions, randomRaw(questions, rand)),
+    reasoning: "Mock mode: no model was called. Set OPENAI_API_KEY and run without MOCK=1 for real output.",
+    usage, costUsd: costUsd(usage, OPENAI_MODELS[openaiModel]), latencyMs,
   };
 }

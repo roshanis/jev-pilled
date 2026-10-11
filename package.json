@@ -10,9 +10,12 @@
     "mock": "MOCK=1 node server.js",
     "test": "node --test"
   },
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.133.0"
+    "@anthropic-ai/sdk": "^0.133.0",
+    "openai": "^7.32.0"
   },
   "devDependencies": {
     "dotenv": "^16.4.5",

@@ -7,12 +7,13 @@ const MAX_CHARS = 1000;
 export const VOICES = {
   claude: process.env.ELEVENLABS_VOICE_CLAUDE || "JBFqnCBsd6RMkjVDRZzb",
   jev: process.env.ELEVENLABS_VOICE_JEV || "21m00Tcm4TlvDq8ikWAM",
+  openai: process.env.ELEVENLABS_VOICE_OPENAI || "pNInz6obpgDQGcFmaJgB",
 };
 
 export async function speak({ text, side }) {
   const apiKey = process.env.ELEVENLABS_API_KEY;
   if (!apiKey) throw Object.assign(new Error("ELEVENLABS_API_KEY is not set"), { status: 503 });
-  if (!VOICES[side]) throw Object.assign(new Error("side must be claude or jev"), { status: 400 });
+  if (!VOICES[side]) throw Object.assign(new Error("side must be openai, claude or jev"), { status: 400 });
   if (typeof text !== "string" || !text.trim()) throw Object.assign(new Error("text is required"), { status: 400 });
   if (text.length > MAX_CHARS) throw Object.assign(new Error(`text is limited to ${MAX_CHARS} characters`), { status: 400 });
 

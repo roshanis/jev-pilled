@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { buildOutputSchema, buildPrompt, toJevShape } from "../api/_lib/claude.js";
+import { buildOutputSchema, buildPrompt, toJevShape } from "../api/_lib/prompt.js";
 import { validateQuestions } from "../api/_lib/questions.js";
 import { PRESETS } from "../api/_lib/presets.js";
 

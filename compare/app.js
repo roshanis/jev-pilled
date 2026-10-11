@@ -9,6 +9,13 @@ const pct = (p) => `${Math.round(p * 100)}%`;
 const fmtUsd = (v) =>
   v == null ? "–" : v === 0 ? "$0" : v < 0.0001 ? `$${v.toExponential(2)}` : `$${v.toFixed(v < 0.01 ? 5 : 4)}`;
 
+const SIDES = [
+  ["openai", "OpenAI"],
+  ["claude", "Claude"],
+  ["jev", "Jev"],
+];
+const LABEL = Object.fromEntries(SIDES);
+
 let config;
 let lastRun = null;
 let audio = null;
@@ -18,13 +25,14 @@ async function init() {
 
   const banner = $("#banner");
   const missing = [];
+  if (!config.keys.openai) missing.push("OPENAI_API_KEY");
   if (!config.keys.anthropic) missing.push("ANTHROPIC_API_KEY");
   if (!config.keys.typesafe) missing.push("TYPESAFE_API_KEY");
   if (config.mock) {
     banner.textContent = "Mock mode: answers below are random placeholders, not real model output.";
     banner.hidden = false;
   } else if (missing.length) {
-    banner.textContent = `Missing ${missing.join(" and ")} in .env, so that side will show an error.`;
+    banner.textContent = `Missing ${missing.join(", ")} in .env, so ${missing.length === 1 ? "that side" : "those sides"} will show an error.`;
     banner.hidden = false;
   }
 
@@ -40,6 +48,9 @@ async function init() {
   preset.append(new Option("Custom", "custom"));
   preset.addEventListener("change", () => loadPreset(preset.value));
 
+  for (const m of config.openaiModels) {
+    $("#openaiModel").append(new Option(m.label, m.id, false, m.id === config.defaultOpenaiModel));
+  }
   for (const m of config.models) $("#model").append(new Option(m.label, m.id, false, m.id === config.defaultModel));
   for (const e of config.efforts) $("#effort").append(new Option(e, e, false, e === "low"));
 
@@ -98,6 +109,7 @@ async function run() {
         state: readState($("#state").value),
         questions,
         model: $("#model").value,
+        openaiModel: $("#openaiModel").value,
         effort: $("#effort").value,
       }),
     });
@@ -108,7 +120,7 @@ async function run() {
     formError.textContent = e.message;
   } finally {
     btn.disabled = false;
-    btn.textContent = "Run both";
+    btn.textContent = "Run all three";
   }
 }
 
@@ -162,78 +174,105 @@ function renderAnswer(q, a) {
   return box;
 }
 
-// Returns true/false for agreement, or null when either side has no answer.
-function agrees(q, c, j) {
-  if (!c || !j) return null;
-  if (q.type === "noul") return c.noul >= 0.5 === j.noul >= 0.5;
-  if (q.type === "choice") return c.choice === j.choice;
-  return Math.round(c.score) === Math.round(j.score);
+// The headline answer used to decide whether sides agree.
+function verdictKey(q, a) {
+  if (q.type === "noul") return a.noul >= 0.5 ? "yes" : "no";
+  if (q.type === "choice") return a.choice;
+  return String(Math.round(a.score));
 }
 
-function render(questions, { claude, jev }) {
-  lastRun = { questions, claude, jev };
+// Returns { cls, text } for the agreement pill, or null with fewer than two answers.
+function agreement(q, answersBySide) {
+  const present = Object.entries(answersBySide).filter(([, a]) => a);
+  if (present.length < 2) return null;
+  const groups = {};
+  for (const [side, a] of present) (groups[verdictKey(q, a)] ??= []).push(side);
+  const sizes = Object.values(groups);
+  if (sizes.length === 1) return { cls: "agree", text: present.length === 3 ? "All agree" : "Agree" };
+  if (present.length === 3 && sizes.length === 2) {
+    const odd = sizes.find((g) => g.length === 1)[0];
+    return { cls: "partial", text: `${LABEL[odd]} differs` };
+  }
+  return { cls: "disagree", text: present.length === 3 ? "All differ" : "Disagree" };
+}
+
+function render(questions, results) {
+  lastRun = { questions, ...results };
   stopAudio();
   $("#results").hidden = false;
-  for (const [side, r] of [["claude", claude], ["jev", jev]]) {
+  for (const [side] of SIDES) {
+    const r = results[side] || { error: "No result" };
+    results[side] = r;
+    renderStats(side, r);
     $(`.listen[data-side="${side}"]`).hidden = !config.keys.elevenlabs || Boolean(r.error);
   }
-  renderStats("claude", claude);
-  renderStats("jev", jev);
 
   const list = $("#answers");
   list.replaceChildren();
-  let agreeCount = 0;
+  let allAgree = 0;
   let compared = 0;
 
   for (const [name, q] of Object.entries(questions)) {
-    const c = claude.answers?.[name];
-    const j = jev.answers?.[name];
+    const bySide = Object.fromEntries(SIDES.map(([side]) => [side, results[side].answers?.[name]]));
     const card = el("article", "q-card");
     const head = el("div", "q-head");
     const h = el("h3", null, name);
     h.append(el("span", "type", q.type));
     head.append(h);
-    const ok = agrees(q, c, j);
-    if (ok != null) {
+    const ag = agreement(q, bySide);
+    if (ag) {
       compared++;
-      if (ok) agreeCount++;
-      head.append(el("span", `pill ${ok ? "agree" : "disagree"}`, ok ? "Agree" : "Disagree"));
+      if (ag.cls === "agree") allAgree++;
+      head.append(el("span", `pill ${ag.cls}`, ag.text));
     }
     card.append(head);
     card.append(el("p", "q-instr", typeof q.instructions === "string" ? q.instructions : JSON.stringify(q.instructions)));
 
     const sides = el("div", "q-sides");
-    for (const [side, label, a, r] of [["claude", "Claude", c, claude], ["jev", "Jev", j, jev]]) {
+    for (const [side, label] of SIDES) {
       const s = el("div", "side");
       s.dataset.side = side;
       s.append(el("h4", null, label));
-      s.append(r.error ? el("p", "na", "Request failed, see error above") : renderAnswer(q, a));
+      s.append(results[side].error ? el("p", "na", "Request failed, see error above") : renderAnswer(q, bySide[side]));
       sides.append(s);
     }
     card.append(sides);
     list.append(card);
   }
 
+  const ok = SIDES.filter(([side]) => !results[side].error);
   const parts = [];
-  if (compared) parts.push(`They agree on ${agreeCount} of ${compared} question${compared === 1 ? "" : "s"}.`);
-  if (claude.latencyMs && jev.latencyMs) {
-    const ratio = claude.latencyMs / jev.latencyMs;
-    parts.push(ratio >= 1 ? `Jev was ${ratio.toFixed(1)}× faster.` : `Claude was ${(1 / ratio).toFixed(1)}× faster.`);
+  if (compared) {
+    parts.push(`${ok.length === 3 ? "All three" : "Both"} agree on ${allAgree} of ${compared} question${compared === 1 ? "" : "s"}.`);
   }
-  if (claude.costUsd && jev.costUsd) {
-    parts.push(`Claude cost ${Math.round(claude.costUsd / jev.costUsd).toLocaleString()}× as much for this run.`);
+  const jev = results.jev;
+  const others = SIDES.filter(([side]) => side !== "jev" && !results[side].error);
+  if (jev.latencyMs && others.length) {
+    parts.push(`Jev was ${others.map(([side, label]) => `${(results[side].latencyMs / jev.latencyMs).toFixed(1)}× faster than ${label}`).join(" and ")}.`);
+  }
+  if (jev.costUsd && others.length) {
+    parts.push(`Cost vs Jev: ${others.map(([side, label]) => `${label} ${Math.round(results[side].costUsd / jev.costUsd).toLocaleString()}×`).join(", ")}.`);
   }
   $("#summary").textContent = parts.join(" ");
 
-  $("#reasoningBox").hidden = !claude.reasoning;
-  $("#reasoning").textContent = claude.reasoning || "";
+  const box = $("#reasoning");
+  box.replaceChildren();
+  for (const [side, label] of SIDES) {
+    if (!results[side].reasoning) continue;
+    const p = el("p");
+    p.dataset.side = side;
+    p.className = "side";
+    p.append(el("b", null, `${label}: `), results[side].reasoning);
+    box.append(p);
+  }
+  $("#reasoningBox").hidden = box.childElementCount === 0;
 }
 
 // A short spoken summary of one side's answers.
 function speechText(side) {
   const { questions } = lastRun;
   const r = lastRun[side];
-  const lines = [`${side === "claude" ? "Claude" : "Jev"} says.`];
+  const lines = [`${LABEL[side]} says.`];
   for (const [name, q] of Object.entries(questions)) {
     const a = r.answers?.[name];
     if (!a) continue;

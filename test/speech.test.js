@@ -20,3 +20,8 @@ test("speech honours the passcode", async () => {
   assert.equal((await speech({ side: "jev", text: "hi" }, "nope")).status, 401);
   delete process.env.COMPARE_PASSCODE;
 });
+
+test("speech accepts the openai side", async () => {
+  delete process.env.ELEVENLABS_API_KEY;
+  assert.equal((await speech({ side: "openai", text: "hi" })).status, 503);
+});

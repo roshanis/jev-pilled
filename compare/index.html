@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Claude vs Jev · Jev-pilled</title>
+  <title>OpenAI vs Claude vs Jev · Jev-pilled</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
     <a class="home" href="/">&larr; Jev-pilled</a>
-    <h1>Claude <span class="vs">vs</span> Jev</h1>
+    <h1>OpenAI <span class="vs">vs</span> Claude <span class="vs">vs</span> Jev</h1>
     <p class="sub">Same state, same typed questions. Compare answers, calibration, speed and cost.</p>
     <div id="banner" class="banner" hidden></div>
   </header>
@@ -20,6 +20,9 @@
       <div class="row">
         <label>Example
           <select id="preset"></select>
+        </label>
+        <label>OpenAI model
+          <select id="openaiModel"></select>
         </label>
         <label>Claude model
           <select id="model"></select>
@@ -42,13 +45,23 @@
       </label>
 
       <div class="actions">
-        <button id="run">Run both</button>
+        <button id="run">Run all three</button>
         <span id="formError" class="error"></span>
       </div>
     </section>
 
     <section id="results" class="results" hidden>
       <div class="stats">
+        <div class="stat-col" data-side="openai">
+          <button class="listen" data-side="openai" hidden>&#9654; Listen</button>
+          <h2>OpenAI <span class="model-name"></span></h2>
+          <dl>
+            <div><dt>Latency</dt><dd class="latency">–</dd></div>
+            <div><dt>Tokens in / out</dt><dd class="tokens">–</dd></div>
+            <div><dt>Cost</dt><dd class="cost">–</dd></div>
+          </dl>
+          <p class="side-error error"></p>
+        </div>
         <div class="stat-col" data-side="claude">
           <button class="listen" data-side="claude" hidden>&#9654; Listen</button>
           <h2>Claude <span class="model-name"></span></h2>
@@ -73,8 +86,8 @@
       <p id="summary" class="summary"></p>
       <div id="answers"></div>
       <details id="reasoningBox" class="panel">
-        <summary>Claude's reasoning</summary>
-        <p id="reasoning"></p>
+        <summary>OpenAI's and Claude's reasoning</summary>
+        <div id="reasoning"></div>
       </details>
     </section>
   </main>
