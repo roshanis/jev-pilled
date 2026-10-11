@@ -1,0 +1,63 @@
+// Request handling shared by the Vercel functions in api/ and the local
+// Express server in server.js.
+import { runClaude, DEFAULT_CLAUDE_MODEL } from "./claude.js";
+import { runJev } from "./jev.js";
+import { mockClaude, mockJev } from "./mock.js";
+import { CLAUDE_MODELS } from "./pricing.js";
+import { PRESETS } from "./presets.js";
+import { asText, validateQuestions } from "./questions.js";
+
+const EFFORTS = ["low", "medium", "high", "xhigh", "max"];
+const MAX_STATE_CHARS = 20_000;
+const isMock = () => process.env.MOCK === "1";
+
+export function configPayload() {
+  return {
+    mock: isMock(),
+    passcodeRequired: Boolean(process.env.COMPARE_PASSCODE),
+    keys: {
+      anthropic: Boolean(process.env.ANTHROPIC_API_KEY),
+      typesafe: Boolean(process.env.TYPESAFE_API_KEY),
+    },
+    defaultModel: DEFAULT_CLAUDE_MODEL,
+    models: Object.entries(CLAUDE_MODELS).map(([id, m]) => ({ id, label: m.label })),
+    efforts: EFFORTS,
+    presets: PRESETS,
+  };
+}
+
+// Runs one side and turns a failure into an error result, so one provider
+// failing still shows the other side.
+async function settle(fn) {
+  try {
+    return await fn();
+  } catch (err) {
+    return { error: err.message || String(err) };
+  }
+}
+
+// Returns { status, body }.
+export async function compare(reqBody, passcode) {
+  const required = process.env.COMPARE_PASSCODE;
+  if (required && passcode !== required) {
+    return { status: 401, body: { error: "Wrong or missing passcode" } };
+  }
+
+  const { state, questions, model = DEFAULT_CLAUDE_MODEL, effort = "low" } = reqBody || {};
+  try {
+    if (state == null || state === "") throw new Error("state is required");
+    if (asText(state).length > MAX_STATE_CHARS) throw new Error(`state is limited to ${MAX_STATE_CHARS} characters`);
+    validateQuestions(questions);
+    if (!CLAUDE_MODELS[model]) throw new Error(`unknown model ${model}`);
+    if (!EFFORTS.includes(effort)) throw new Error(`unknown effort ${effort}`);
+  } catch (err) {
+    return { status: 400, body: { error: err.message } };
+  }
+
+  const input = { state, questions, model, effort };
+  const [claude, jev] = await Promise.all([
+    settle(() => (isMock() ? mockClaude(input) : runClaude(input))),
+    settle(() => (isMock() ? mockJev(input) : runJev(input))),
+  ]);
+  return { status: 200, body: { claude, jev } };
+}

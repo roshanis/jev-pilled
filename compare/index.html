@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Claude vs Jev · Jev-pilled</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <a class="home" href="/">&larr; Jev-pilled</a>
+    <h1>Claude <span class="vs">vs</span> Jev</h1>
+    <p class="sub">Same state, same typed questions. Compare answers, calibration, speed and cost.</p>
+    <div id="banner" class="banner" hidden></div>
+  </header>
+
+  <main>
+    <section class="panel input">
+      <div class="row">
+        <label>Example
+          <select id="preset"></select>
+        </label>
+        <label>Claude model
+          <select id="model"></select>
+        </label>
+        <label>Effort
+          <select id="effort"></select>
+        </label>
+      </div>
+
+      <label>State <span class="hint">text, or JSON for structured input</span>
+        <textarea id="state" rows="6" spellcheck="false"></textarea>
+      </label>
+
+      <label>Questions <span class="hint">TypeSafe System One schema: choice, score or noul</span>
+        <textarea id="questions" rows="14" spellcheck="false" class="mono"></textarea>
+      </label>
+
+      <label id="passcodeRow" hidden>Passcode <span class="hint">this deployment is protected</span>
+        <input id="passcode" type="password" autocomplete="off" />
+      </label>
+
+      <div class="actions">
+        <button id="run">Run both</button>
+        <span id="formError" class="error"></span>
+      </div>
+    </section>
+
+    <section id="results" class="results" hidden>
+      <div class="stats">
+        <div class="stat-col" data-side="claude">
+          <h2>Claude <span class="model-name"></span></h2>
+          <dl>
+            <div><dt>Latency</dt><dd class="latency">–</dd></div>
+            <div><dt>Tokens in / out</dt><dd class="tokens">–</dd></div>
+            <div><dt>Cost</dt><dd class="cost">–</dd></div>
+          </dl>
+          <p class="side-error error"></p>
+        </div>
+        <div class="stat-col" data-side="jev">
+          <h2>Jev <span class="model-name"></span></h2>
+          <dl>
+            <div><dt>Latency</dt><dd class="latency">–</dd></div>
+            <div><dt>Tokens in / out</dt><dd class="tokens">–</dd></div>
+            <div><dt>Cost</dt><dd class="cost">–</dd></div>
+          </dl>
+          <p class="side-error error"></p>
+        </div>
+      </div>
+      <p id="summary" class="summary"></p>
+      <div id="answers"></div>
+      <details id="reasoningBox" class="panel">
+        <summary>Claude's reasoning</summary>
+        <p id="reasoning"></p>
+      </details>
+    </section>
+  </main>
+
+  <script src="app.js" type="module"></script>
+</body>
+</html>

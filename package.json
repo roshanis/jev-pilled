@@ -1,0 +1,21 @@
+{
+  "name": "jev-pilled",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Jev explainer site plus a live Claude vs Jev comparison page",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "mock": "MOCK=1 node server.js",
+    "test": "node --test"
+  },
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.133.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2"
+  }
+}

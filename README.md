@@ -13,17 +13,44 @@ example for each. This static site explains Jev with diagrams and compares the t
 | `/codex-astra/` | Codex Astra's guide (100 cases, 20 industries) |
 | `/grok/` | Grok's guide (100 cases, 20 industries) |
 | `/side-by-side/` | All three in scrollable columns |
+| `/compare/` | Live comparison: send the same task to Claude and to Jev and see both answers side by side |
 
 The three guides are kept as each model produced them; only a small navigation bar was added at the top.
+
+## Claude vs Jev live comparison (`/compare/`)
+
+Jev doesn't write text: you give it a **state** (text or JSON) and typed questions (`choice`, `score`, `noul`), and it returns calibrated probabilities. The compare page sends the same state and questions to Jev unchanged, and to Claude as a structured-output request asking for a probability per option. Claude's answer is converted into Jev's response shape, so each question shows both answers with probability bars, an agree/disagree tag, and latency, tokens and cost per side. Four example tasks are built in (ticket triage, review sentiment, an LLM guardrail, smart-home intent routing), and you can edit the questions JSON freely.
+
+The page calls two serverless routes, `api/config.js` and `api/compare.js`; shared logic lives in `api/_lib/`.
+
+| Env var | Needed for |
+|---|---|
+| `ANTHROPIC_API_KEY` | the Claude side |
+| `TYPESAFE_API_KEY` | the Jev side (keys come from the TypeSafe console) |
+| `COMPARE_PASSCODE` | optional; when set, the page asks for it before running, so a public deployment can't spend your credits |
+| `CLAUDE_MODEL` | optional default model (`claude-opus-5-5`; Sonnet 5.5 and Haiku 5.5 are selectable on the page) |
+| `MOCK=1` | optional; random placeholder answers, no API calls |
+
+Run it locally:
+
+```bash
+npm install
+cp .env.example .env    # add your keys
+npm start               # http://localhost:3000/compare/
+```
+
+`npm run mock` runs the page without keys, and `npm test` runs the unit tests.
 
 ## Deploy on Vercel
 
 No build step. In Vercel: **Add New → Project → Import** `roshanis/jev-pilled`, set
 Framework Preset to **Other**, leave Build Command and Output Directory empty, and deploy.
-Every push to `main` redeploys automatically.
+For the compare page, add `ANTHROPIC_API_KEY`, `TYPESAFE_API_KEY` and ideally `COMPARE_PASSCODE` under
+**Settings → Environment Variables**. Every push to `main` redeploys automatically.
 
 ## Preview locally
 
 ```bash
-npx serve .
+npx serve .      # static pages only
+npm start        # static pages plus the compare API (see above)
 ```
