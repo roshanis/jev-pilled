@@ -6,6 +6,7 @@ import { mockClaude, mockJev } from "./mock.js";
 import { CLAUDE_MODELS } from "./pricing.js";
 import { PRESETS } from "./presets.js";
 import { asText, validateQuestions } from "./questions.js";
+import { speak } from "./speech.js";
 
 const EFFORTS = ["low", "medium", "high", "xhigh", "max"];
 const MAX_STATE_CHARS = 20_000;
@@ -18,6 +19,7 @@ export function configPayload() {
     keys: {
       anthropic: Boolean(process.env.ANTHROPIC_API_KEY),
       typesafe: Boolean(process.env.TYPESAFE_API_KEY),
+      elevenlabs: Boolean(process.env.ELEVENLABS_API_KEY),
     },
     defaultModel: DEFAULT_CLAUDE_MODEL,
     models: Object.entries(CLAUDE_MODELS).map(([id, m]) => ({ id, label: m.label })),
@@ -36,12 +38,18 @@ async function settle(fn) {
   }
 }
 
-// Returns { status, body }.
-export async function compare(reqBody, passcode) {
+function passcodeError(passcode) {
   const required = process.env.COMPARE_PASSCODE;
   if (required && passcode !== required) {
     return { status: 401, body: { error: "Wrong or missing passcode" } };
   }
+  return null;
+}
+
+// Returns { status, body }.
+export async function compare(reqBody, passcode) {
+  const denied = passcodeError(passcode);
+  if (denied) return denied;
 
   const { state, questions, model = DEFAULT_CLAUDE_MODEL, effort = "low" } = reqBody || {};
   try {
@@ -60,4 +68,15 @@ export async function compare(reqBody, passcode) {
     settle(() => (isMock() ? mockJev(input) : runJev(input))),
   ]);
   return { status: 200, body: { claude, jev } };
+}
+
+// Returns { status, body } where body is an MP3 Buffer on success.
+export async function speech(reqBody, passcode) {
+  const denied = passcodeError(passcode);
+  if (denied) return denied;
+  try {
+    return { status: 200, body: await speak(reqBody || {}), contentType: "audio/mpeg" };
+  } catch (err) {
+    return { status: err.status || 500, body: { error: err.message } };
+  }
 }

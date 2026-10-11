@@ -10,6 +10,8 @@ const fmtUsd = (v) =>
   v == null ? "–" : v === 0 ? "$0" : v < 0.0001 ? `$${v.toExponential(2)}` : `$${v.toFixed(v < 0.01 ? 5 : 4)}`;
 
 let config;
+let lastRun = null;
+let audio = null;
 
 async function init() {
   config = await (await fetch("/api/config")).json();
@@ -40,6 +42,8 @@ async function init() {
 
   for (const m of config.models) $("#model").append(new Option(m.label, m.id, false, m.id === config.defaultModel));
   for (const e of config.efforts) $("#effort").append(new Option(e, e, false, e === "low"));
+
+  for (const b of document.querySelectorAll(".listen")) b.addEventListener("click", () => listen(b));
 
   loadPreset(config.presets[0].id);
   $("#run").addEventListener("click", run);
@@ -167,7 +171,12 @@ function agrees(q, c, j) {
 }
 
 function render(questions, { claude, jev }) {
+  lastRun = { questions, claude, jev };
+  stopAudio();
   $("#results").hidden = false;
+  for (const [side, r] of [["claude", claude], ["jev", jev]]) {
+    $(`.listen[data-side="${side}"]`).hidden = !config.keys.elevenlabs || Boolean(r.error);
+  }
   renderStats("claude", claude);
   renderStats("jev", jev);
 
@@ -218,6 +227,71 @@ function render(questions, { claude, jev }) {
 
   $("#reasoningBox").hidden = !claude.reasoning;
   $("#reasoning").textContent = claude.reasoning || "";
+}
+
+// A short spoken summary of one side's answers.
+function speechText(side) {
+  const { questions } = lastRun;
+  const r = lastRun[side];
+  const lines = [`${side === "claude" ? "Claude" : "Jev"} says.`];
+  for (const [name, q] of Object.entries(questions)) {
+    const a = r.answers?.[name];
+    if (!a) continue;
+    const label = name.replace(/[_-]+/g, " ");
+    if (a.type === "choice") {
+      lines.push(`${label}: ${a.choice.replace(/[_-]+/g, " ")}, ${pct(a.confidence ?? a.probabilities?.[a.choice] ?? 1)} confident.`);
+    } else if (a.type === "score") {
+      const legend = a.legend || Object.fromEntries(q.criteria.map((c, i) => [String(i), String(c)]));
+      lines.push(`${label}: ${legend[String(Math.round(a.score))] ?? ""}, score ${a.score.toFixed(1)}.`);
+    } else if (a.type === "noul") {
+      lines.push(`${label}: ${a.noul >= 0.5 ? "yes" : "no"}, ${pct(a.noul)} chance of yes.`);
+    }
+  }
+  let text = lines.join(" ");
+  if (r.reasoning) text += ` Reasoning: ${r.reasoning}`;
+  return text.length > 1000 ? text.slice(0, 997) + "..." : text;
+}
+
+function stopAudio() {
+  if (audio) {
+    audio.pause();
+    URL.revokeObjectURL(audio.src);
+    audio = null;
+  }
+  for (const b of document.querySelectorAll(".listen")) {
+    b.classList.remove("playing");
+    b.innerHTML = "&#9654; Listen";
+  }
+}
+
+async function listen(btn) {
+  const side = btn.dataset.side;
+  const wasPlaying = btn.classList.contains("playing");
+  stopAudio();
+  if (wasPlaying || !lastRun) return;
+
+  const errBox = $(`.stat-col[data-side="${side}"] .side-error`);
+  errBox.textContent = "";
+  btn.disabled = true;
+  btn.textContent = "Loading…";
+  try {
+    const res = await fetch("/api/speak", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Compare-Passcode": $("#passcode").value },
+      body: JSON.stringify({ side, text: speechText(side) }),
+    });
+    if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || `HTTP ${res.status}`);
+    audio = new Audio(URL.createObjectURL(await res.blob()));
+    audio.addEventListener("ended", stopAudio);
+    await audio.play();
+    btn.classList.add("playing");
+    btn.innerHTML = "&#9632; Stop";
+  } catch (e) {
+    errBox.textContent = `Voice: ${e.message}`;
+    btn.innerHTML = "&#9654; Listen";
+  } finally {
+    btn.disabled = false;
+  }
 }
 
 init();

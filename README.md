@@ -21,12 +21,13 @@ The three guides are kept as each model produced them; only a small navigation b
 
 Jev doesn't write text: you give it a **state** (text or JSON) and typed questions (`choice`, `score`, `noul`), and it returns calibrated probabilities. The compare page sends the same state and questions to Jev unchanged, and to Claude as a structured-output request asking for a probability per option. Claude's answer is converted into Jev's response shape, so each question shows both answers with probability bars, an agree/disagree tag, and latency, tokens and cost per side. Four example tasks are built in (ticket triage, review sentiment, an LLM guardrail, smart-home intent routing), and you can edit the questions JSON freely.
 
-The page calls two serverless routes, `api/config.js` and `api/compare.js`; shared logic lives in `api/_lib/`.
+The page calls three serverless routes, `api/config.js`, `api/compare.js` and `api/speak.js`; shared logic lives in `api/_lib/`.
 
 | Env var | Needed for |
 |---|---|
 | `ANTHROPIC_API_KEY` | the Claude side |
 | `TYPESAFE_API_KEY` | the Jev side (keys come from the TypeSafe console) |
+| `ELEVENLABS_API_KEY` | optional; adds a **Listen** button to each side that reads that model's answers aloud through ElevenLabs, in a different voice per side (`ELEVENLABS_VOICE_CLAUDE`, `ELEVENLABS_VOICE_JEV` to change them) |
 | `COMPARE_PASSCODE` | optional; when set, the page asks for it before running, so a public deployment can't spend your credits |
 | `CLAUDE_MODEL` | optional default model (`claude-opus-5-5`; Sonnet 5.5 and Haiku 5.5 are selectable on the page) |
 | `MOCK=1` | optional; random placeholder answers, no API calls |
@@ -45,7 +46,7 @@ npm start               # http://localhost:3000/compare/
 
 No build step. In Vercel: **Add New → Project → Import** `roshanis/jev-pilled`, set
 Framework Preset to **Other**, leave Build Command and Output Directory empty, and deploy.
-For the compare page, add `ANTHROPIC_API_KEY`, `TYPESAFE_API_KEY` and ideally `COMPARE_PASSCODE` under
+For the compare page, add `ANTHROPIC_API_KEY`, `TYPESAFE_API_KEY`, optionally `ELEVENLABS_API_KEY`, and ideally `COMPARE_PASSCODE` under
 **Settings → Environment Variables**. Every push to `main` redeploys automatically.
 
 ## Preview locally

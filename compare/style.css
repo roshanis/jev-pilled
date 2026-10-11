@@ -79,6 +79,11 @@ button:disabled { opacity: 0.5; cursor: progress; }
 }
 .stat-col[data-side="claude"] { --side: var(--claude); }
 .stat-col[data-side="jev"] { --side: var(--jev); }
+.listen {
+  float: right; padding: 4px 12px; font-size: 13px;
+  background: transparent; color: var(--side); border: 1px solid var(--side);
+}
+.listen.playing { background: var(--side); color: var(--panel); }
 .stat-col h2 { margin: 0 0 8px; font-size: 18px; color: var(--side); }
 .model-name { color: var(--muted); font-size: 13px; font-weight: 400; }
 dl { margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
