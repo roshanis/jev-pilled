@@ -253,6 +253,7 @@ function render(questions, results) {
 
   const ok = SIDES.filter(([side]) => !results[side].error);
   renderTldr(ok, results, { allAgree, compared, splits });
+  renderTiming(ok, results);
 
   const box = $("#reasoning");
   box.replaceChildren();
@@ -292,6 +293,29 @@ function renderTldr(ok, results, { allAgree, compared, splits }) {
   const box = $("#tldr");
   box.querySelector("ul").replaceChildren(...lines.map((t) => el("li", null, t)));
   box.hidden = lines.length === 0;
+}
+
+// Horizontal bars of each model's response time, on one scale from zero.
+function renderTiming(ok, results) {
+  const box = $("#timing");
+  const rows = $(".timing-rows", box);
+  const timed = ok.filter(([side]) => Number.isFinite(results[side].latencyMs));
+  const max = Math.max(...timed.map(([side]) => results[side].latencyMs));
+  rows.replaceChildren(
+    ...timed.map(([side, label]) => {
+      const ms = results[side].latencyMs;
+      const row = el("div", "timing-row");
+      row.dataset.side = side;
+      row.title = `${label}: ${fmtMs(ms)}`;
+      const track = el("span", "timing-track");
+      const bar = el("span", "timing-bar");
+      bar.style.width = `${Math.max((ms / max) * 85, 1.5)}%`;
+      track.append(bar, el("span", "timing-value", fmtMs(ms)));
+      row.append(el("span", "timing-label", label), track);
+      return row;
+    }),
+  );
+  box.hidden = timed.length === 0;
 }
 
 // "a", "a and b", "a, b and c".
