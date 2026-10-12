@@ -25,5 +25,5 @@ app.use(express.static(root, { dotfiles: "ignore", index: "index.html" }));
 
 app.listen(PORT, () => {
   const mode = process.env.MOCK === "1" ? " (MOCK mode)" : "";
-  console.log(`Compare page: http://localhost:${PORT}/compare/${mode}`);
+  console.log(`Compare page: http://localhost:${PORT}/${mode}`);
 });

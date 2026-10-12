@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Jev-pilled: One Brief, Three Models</title>
+<meta name="description" content="Jev explained in plain terms, plus what Claude Fable, Codex Astra and Grok each built when asked for 100 ways to use it.">
+<meta property="og:title" content="Jev-pilled: one brief, three models">
+<meta property="og:description" content="Jev explained with diagrams, and a side-by-side look at 100-use-case guides from Claude Fable, Codex Astra and Grok.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>
+:root{
+  --bg:#f7f7f5; --surface:#ffffff; --surface-2:#f1f0ec; --text:#1b1b19; --muted:#5f5e59; --faint:#898781;
+  --line:#e2e1db; --line-strong:#c3c2b7;
+  --accent:#2f5d8a; --accent-soft:#e9f0f7;
+  --noul:#2a78d6; --score:#1baf7a; --choice:#eb6834;
+  --shadow:0 1px 2px rgba(0,0,0,.05);
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121211; --surface:#1a1a19; --surface-2:#232321; --text:#f0efec; --muted:#c3c2b7; --faint:#898781;
+    --line:#2c2c2a; --line-strong:#4a4a46;
+    --accent:#8fb6dd; --accent-soft:#1d2a38;
+    --noul:#3987e5; --score:#199e70; --choice:#d95926;
+    --shadow:0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121211; --surface:#1a1a19; --surface-2:#232321; --text:#f0efec; --muted:#c3c2b7; --faint:#898781;
+  --line:#2c2c2a; --line-strong:#4a4a46;
+  --accent:#8fb6dd; --accent-soft:#1d2a38;
+  --noul:#3987e5; --score:#199e70; --choice:#d95926;
+  --shadow:0 1px 2px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--text);font:17px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.skip{position:absolute;left:-999px;top:8px;background:var(--surface);padding:8px 12px;border-radius:6px;z-index:99}
+.skip:focus{left:8px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* top nav */
+.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:20px;height:54px}
+.brand{font-weight:700;letter-spacing:-.01em;color:var(--text);text-decoration:none;white-space:nowrap}
+.top nav{display:flex;gap:18px;overflow-x:auto;scrollbar-width:none;font-size:.9rem}
+.top nav::-webkit-scrollbar{display:none}
+.top nav a{color:var(--muted);text-decoration:none;white-space:nowrap}
+.top nav a:hover{color:var(--text)}
+
+/* hero */
+.hero{padding:64px 0 28px}
+.eyebrow{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;margin:0 0 10px}
+h1{font-size:clamp(2rem,4.6vw,3.1rem);line-height:1.08;letter-spacing:-.02em;margin:0 0 16px;max-width:18ch}
+.lede{font-size:1.15rem;color:var(--muted);max-width:62ch;margin:0}
+.lede+.lede{margin-top:14px}
+.versions{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:36px 0 0}
+@media (max-width:860px){.versions{grid-template-columns:1fr}}
+.vcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
+.vcard h3{margin:0;font-size:1.2rem}
+.vcard .tagline{margin:0;color:var(--muted);font-size:.95rem}
+.vcard .stats{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0}
+.pill{font-size:.78rem;border:1px solid var(--line);border-radius:999px;padding:2px 9px;color:var(--muted);background:var(--surface-2)}
+.vcard h4{margin:6px 0 2px;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.vcard ul{margin:0;padding-left:18px;font-size:.93rem}
+.vcard li{margin:2px 0}
+.vcard .open{margin-top:auto;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 14px;border-radius:9px;background:var(--text);color:var(--bg);text-decoration:none;font-weight:600;font-size:.93rem}
+.vcard .open:hover{opacity:.9}
+
+/* sections */
+section.s{padding:56px 0;border-top:1px solid var(--line)}
+section.s:first-of-type{border-top:0}
+.s h2{font-size:clamp(1.5rem,3vw,2rem);line-height:1.15;letter-spacing:-.015em;margin:0 0 12px}
+.s .kicker{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);font-weight:700;margin:0 0 8px}
+.s p{max-width:62ch}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,440px);gap:48px;align-items:start}
+@media (max-width:860px){.split{grid-template-columns:1fr;gap:24px}}
+.split.flip{grid-template-columns:minmax(0,440px) minmax(0,1fr)}
+@media (max-width:860px){.split.flip{grid-template-columns:1fr}.split.flip figure{order:2}}
+.goodfor{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px;max-width:62ch}
+@media (max-width:520px){.goodfor{grid-template-columns:1fr}}
+.goodfor div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.goodfor h3{margin:0 0 6px;font-size:.95rem}
+.goodfor ul{margin:0;padding-left:18px;font-size:.93rem;color:var(--muted)}
+.readmore{font-size:.95rem;border-left:3px solid var(--accent);padding:2px 0 2px 12px;color:var(--muted)}
+.readmore a{font-weight:600}
+.callout{background:var(--accent-soft);border-radius:12px;padding:14px 16px;font-size:.95rem;max-width:62ch}
+
+/* figures & diagrams */
+figure{margin:0}
+figcaption{font-size:.88rem;color:var(--muted);margin-top:10px;line-height:1.5}
+.fig{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+@media (max-width:520px){.fig{padding:10px}.prim{padding:14px 12px}}
+.dg{display:block;width:100%;height:auto;color:var(--text);font-family:inherit}
+.dg .box{fill:var(--surface);stroke:var(--line-strong);stroke-width:1.5}
+.dg .box.hl{fill:var(--accent-soft);stroke:var(--accent);stroke-width:2}
+.dg .box.code{stroke-dasharray:5 4}
+.dg .t{fill:currentColor;font-size:14px;font-weight:650}
+.dg .s{fill:var(--muted);font-size:12px}
+.dg .lbl{fill:var(--muted);font-size:12px}
+.dg .mono{font-family:var(--mono);font-size:11.5px}
+.dg .wire{stroke:var(--faint);stroke-width:1.5;fill:none}
+.dg .ah{fill:var(--faint)}
+.dg .track{stroke:var(--line);stroke-width:10;stroke-linecap:round}
+.dg .val{fill:currentColor;font-size:13px;font-weight:650;font-family:var(--mono)}
+.dg .tick{fill:var(--muted);font-size:11px}
+.dg .base{stroke:var(--line-strong);stroke-width:1}
+.dg .noul{fill:var(--noul)} .dg .noul-s{stroke:var(--noul)}
+.dg .score{fill:var(--score)}
+.dg .choice{fill:var(--choice)}
+.dg .dim{opacity:.35}
+.dg .knob{fill:var(--surface);stroke:var(--noul);stroke-width:3}
+
+.prims{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px}
+@media (max-width:860px){.prims{grid-template-columns:1fr}}
+.prim{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow)}
+.prim .ph{display:flex;align-items:center;gap:8px;margin:0 0 2px}
+.prim .ph h3{margin:0;font-size:1.05rem}
+.prim .plain{color:var(--muted);font-size:.9rem}
+.prim .q{font-size:.92rem;margin:8px 0 6px;font-style:italic}
+.prim .use{font-size:.85rem;color:var(--muted);margin:8px 0 0}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex:none}
+.dot.Noul{background:var(--noul)} .dot.Score{background:var(--score)} .dot.Choice{background:var(--choice)}
+.ptag{display:inline-flex;align-items:center;gap:5px;font-size:.78rem;font-weight:600;border:1px solid var(--line);border-radius:999px;padding:1px 9px 1px 7px;background:var(--surface);color:var(--text);white-space:nowrap}
+
+/* chart */
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow);margin-top:20px;position:relative}
+.chart h3{margin:0 0 4px;font-size:1rem}
+.chart .sub{margin:0 0 14px;color:var(--muted);font-size:.88rem}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.85rem;color:var(--muted);margin-bottom:12px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.row{display:grid;grid-template-columns:110px 1fr;gap:12px;align-items:center;margin:10px 0}
+.row .name{font-size:.9rem;font-weight:600}
+.bar{display:flex;gap:2px;height:28px}
+.seg{position:relative;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:#111;min-width:0;cursor:default}
+.seg:first-child{border-radius:4px 0 0 4px}
+.seg:last-child{border-radius:0 4px 4px 0}
+.seg.Noul{background:var(--noul)} .seg.Score{background:var(--score)} .seg.Choice{background:var(--choice)}
+.chart .note{font-size:.82rem;color:var(--muted);margin:10px 0 0}
+.tip{position:absolute;pointer-events:none;background:var(--text);color:var(--bg);font-size:.8rem;padding:6px 9px;border-radius:7px;white-space:nowrap;opacity:0;transform:translate(-50%,-110%);transition:opacity .1s}
+.tip.on{opacity:1}
+@media (max-width:520px){.row{grid-template-columns:1fr;gap:4px}}
+
+/* scorecard */
+.tablewrap{overflow-x:auto;margin-top:20px;border:1px solid var(--line);border-radius:14px;background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:.92rem}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);background:var(--surface-2)}
+tbody th{font-weight:500;color:var(--muted);width:32%}
+tbody tr:last-child th,tbody tr:last-child td{border-bottom:0}
+td.y::before{content:"\2713  ";color:var(--score);font-weight:700}
+td.n::before{content:"\2013  ";color:var(--faint);font-weight:700}
+td.p::before{content:"~  ";color:var(--faint);font-weight:700}
+
+/* same case */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 16px}
+.tabs button{font:inherit;font-size:.9rem;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:999px;padding:7px 14px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--text);color:var(--bg);border-color:var(--text)}
+.case{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.case[hidden]{display:none}
+@media (max-width:900px){.case{grid-template-columns:1fr}}
+.take{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow);font-size:.92rem}
+.take .who{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:4px}
+.take .who b{font-size:1rem}
+.take .who a{font-size:.8rem;color:var(--muted)}
+.take h3{margin:0 0 6px;font-size:1.02rem}
+.take .tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
+.take .sum{color:var(--muted);margin:0 0 8px}
+.take .exp{margin:0 0 10px}
+.take dl{margin:0;display:grid;gap:2px;background:var(--surface-2);border-radius:9px;padding:10px 12px}
+.take dt{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;margin-top:6px}
+.take dt:first-child{margin-top:0}
+.take dd{margin:0}
+.take .wc{font-size:.78rem;color:var(--faint);margin-top:8px}
+
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface);color:var(--text);text-decoration:none;font-weight:600;font-size:.95rem}
+.cta-note{align-self:center;color:var(--muted);font-size:.92rem}
+.hero .cta{margin-bottom:22px}
+.btn.primary{background:var(--text);color:var(--bg);border-color:var(--text)}
+
+footer{border-top:1px solid var(--line);padding:32px 0 56px;color:var(--muted);font-size:.88rem}
+footer p{max-width:70ch}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/">Jev-pilled</a>
+    <nav aria-label="Sections">
+      <a href="/">Live comparison</a>
+      <a href="#what">What is Jev</a>
+      <a href="/side-by-side/">Side by side</a>
+      <a href="#share">Share yours</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap">
+<div class="hero">
+  <p class="eyebrow">My Jev pill &middot; three AI models &middot; 300 use cases</p>
+  <h1>How could a tiny decision model be so interesting?</h1>
+  <p class="lede">Ever since Jev was released, I&rsquo;ve been fascinated by where all it can be used. Any use case comes in and my first thought is: hey, why don&rsquo;t we use Jev over there? So this is me sharing my Jev pill with all of you. Hopefully you&rsquo;ll see what I see in this model.</p>
+  <div class="cta">
+    <a class="btn primary" href="/">Try the live comparison &rarr;</a>
+    <span class="cta-note">Run one question through OpenAI, Claude and Jev and see how they answer.</span>
+  </div>
+  <p class="lede">Here&rsquo;s what I did. I shared the exact same questions with Grok, Claude and Codex, and asked each one for 100 places Jev could be used, with an example for every one. Below is what each of them kept telling me.</p>
+
+  <div class="versions">
+    <article class="vcard">
+      <h3>Claude Fable</h3>
+      <p class="tagline">Deep and specific</p>
+      <div class="stats"><span class="pill">17 industries</span><span class="pill">78 words / case</span><span class="pill">25 multi-question cases</span></div>
+      <h4>Stands out for</h4>
+      <ul>
+        <li>Concrete thresholds and the exact next step in every example</li>
+        <li>Healthcare depth: nine health-plan cases, from prior auth to CMS appeal clocks</li>
+        <li>An AI-governance section: judge cascades, guardrails, red-team grading</li>
+      </ul>
+      <h4>Watch for</h4>
+      <ul>
+        <li>Fewest industries of the three</li>
+        <li>Quotes vendor-reported speed and cost figures</li>
+      </ul>
+      <a class="open" href="/claude-fable/">Open Claude Fable&rsquo;s version &rarr;</a>
+    </article>
+    <article class="vcard">
+      <h3>Codex Astra</h3>
+      <p class="tagline">Broad and careful</p>
+      <div class="stats"><span class="pill">20 industries</span><span class="pill">115 words / case</span><span class="pill">Best accessibility</span></div>
+      <h4>Stands out for</h4>
+      <ul>
+        <li>Widest coverage, five cases in each of 20 industries</li>
+        <li>Every example labeled fictional, with keep-a-human-in-review framing</li>
+        <li>Skip link, screen-reader labels, live result count, print view, links to TypeSafe&rsquo;s docs</li>
+      </ul>
+      <h4>Watch for</h4>
+      <ul>
+        <li>Leans on one question type (62 of 100 are Choice)</li>
+        <li>Longest read; examples start collapsed</li>
+      </ul>
+      <a class="open" href="/codex-astra/">Open Codex Astra&rsquo;s version &rarr;</a>
+    </article>
+    <article class="vcard">
+      <h3>Grok</h3>
+      <p class="tagline">Compact and scannable</p>
+      <div class="stats"><span class="pill">20 industries</span><span class="pill">57 words / case</span><span class="pill">Most even mix</span></div>
+      <h4>Stands out for</h4>
+      <ul>
+        <li>Shortest read; cards start collapsed so titles scan fast</li>
+        <li>Clickable industry filter, multi-select type filter and a Reset button</li>
+        <li>Most balanced use of the three question types</li>
+      </ul>
+      <h4>Watch for</h4>
+      <ul>
+        <li>Intro, industry list and first three cases match Codex Astra&rsquo;s word for word</li>
+        <li>No dark mode; page is drawn by JavaScript, and search skips example text</li>
+      </ul>
+      <a class="open" href="/grok/">Open Grok&rsquo;s version &rarr;</a>
+    </article>
+  </div>
+</div>
+
+<!-- WHAT IS JEV -->
+<section class="s" id="what">
+  <div class="split">
+    <div>
+      <p class="kicker">Start here</p>
+      <h2>What is Jev?</h2>
+      <p>Most AI models write. Jev, from TypeSafe AI, decides. You give it some text and a question with a fixed set of possible answers. It picks one and tells you how sure it is. That&rsquo;s the whole job.</p>
+      <p>Because it never writes, it is fast (around a fifth of a second in published tests) and cheap enough to run on every message, claim or output instead of a sample. The catch: it won&rsquo;t explain itself, so your code, and sometimes a person, decides what to do with the answer.</p>
+      <p class="readmore">Want the deeper take? Sebastian Raschka argues it&rsquo;s more than a classifier, and that how well it generalizes across tasks is the real story: <a href="https://sebastianraschka.com/blog/2026/jev-classification-generalization.html">It&rsquo;s Easy to Dismiss Jev as Just a Classifier &rarr;</a></p>
+      <div class="goodfor">
+        <div>
+          <h3>Good at</h3>
+          <ul><li>Routing to the right team</li><li>Yes/no policy and evidence checks</li><li>Rating against a rubric</li><li>Gating risky actions</li></ul>
+        </div>
+        <div>
+          <h3>Not built for</h3>
+          <ul><li>Writing or summarizing</li><li>Math or new values</li><li>Images or audio</li><li>Explaining its answer</li></ul>
+        </div>
+      </div>
+    </div>
+    <figure class="fig">
+      <svg class="dg" viewBox="0 0 400 458" role="img" aria-label="Flow: your app sends text, a question and allowed answers to Jev; Jev returns an answer with a probability; your threshold rule acts automatically when confident, sends uncertain cases to an LLM or a person, and takes the other path when confidently no.">
+        <defs><marker id="ah1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+        <rect class="box" x="100" y="8" width="200" height="56" rx="10"/>
+        <text class="t" x="200" y="32" text-anchor="middle">Your app</text>
+        <text class="s" x="200" y="51" text-anchor="middle">gathers the text</text>
+        <line class="wire" x1="200" y1="64" x2="200" y2="125" marker-end="url(#ah1)"/>
+        <text class="lbl" x="212" y="90">text + a question</text>
+        <text class="lbl" x="212" y="106">+ the allowed answers</text>
+        <rect class="box hl" x="100" y="128" width="200" height="56" rx="10"/>
+        <text class="t" x="200" y="152" text-anchor="middle">Jev</text>
+        <text class="s" x="200" y="171" text-anchor="middle">picks one &#183; ~170 ms</text>
+        <line class="wire" x1="200" y1="184" x2="200" y2="245" marker-end="url(#ah1)"/>
+        <text class="lbl" x="212" y="210">answer + probability</text>
+        <text class="lbl mono" x="212" y="226">&#8220;yes&#8221;, 0.96</text>
+        <rect class="box code" x="100" y="248" width="200" height="56" rx="10"/>
+        <text class="t" x="200" y="272" text-anchor="middle">Your threshold rule</text>
+        <text class="s" x="200" y="291" text-anchor="middle">plain code, set per risk</text>
+        <path class="wire" d="M200 304 V330 M70 330 H330"/>
+        <line class="wire" x1="70" y1="330" x2="70" y2="383" marker-end="url(#ah1)"/>
+        <line class="wire" x1="200" y1="330" x2="200" y2="383" marker-end="url(#ah1)"/>
+        <line class="wire" x1="330" y1="330" x2="330" y2="383" marker-end="url(#ah1)"/>
+        <text class="lbl mono" x="78" y="361">&#8805; 0.9</text>
+        <text class="lbl" x="208" y="361">in between</text>
+        <text class="lbl mono" x="338" y="361">&#8804; 0.1</text>
+        <rect class="box" x="12" y="386" width="116" height="62" rx="10"/>
+        <text class="t" x="70" y="412" text-anchor="middle">Act on it</text>
+        <text class="s" x="70" y="431" text-anchor="middle">automatically</text>
+        <rect class="box" x="142" y="386" width="116" height="62" rx="10"/>
+        <text class="t" x="200" y="412" text-anchor="middle">Escalate</text>
+        <text class="s" x="200" y="431" text-anchor="middle">LLM or a person</text>
+        <rect class="box" x="272" y="386" width="116" height="62" rx="10"/>
+        <text class="t" x="330" y="412" text-anchor="middle">Other path</text>
+        <text class="s" x="330" y="431" text-anchor="middle">route it elsewhere</text>
+      </svg>
+      <figcaption>Jev only answers the question; your code decides what happens. Thresholds are yours to set per risk, higher for anything you can&rsquo;t undo. TypeSafe&rsquo;s guidance is to start conservative and tune on your own data.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- THREE KINDS -->
+<section class="s" id="kinds">
+  <p class="kicker">The building blocks</p>
+  <h2>Every question is one of three kinds</h2>
+  <p>Jev&rsquo;s makers call them Noul, Score and Choice. In plain words: a yes/no, a rating, or a pick from a list. You can ask several in one call, and each is answered on its own.</p>
+  <div class="prims">
+    <figure class="prim">
+      <div class="ph"><span class="dot Noul"></span><h3>Noul</h3></div>
+      <div class="plain">A yes/no, answered as a probability</div>
+      <p class="q">&ldquo;Is this answer supported by the source?&rdquo;</p>
+      <svg class="dg" viewBox="0 0 300 150" role="img" aria-label="Noul output: a single number on a 0 to 1 track, here 0.94, close to yes.">
+        <line class="track" x1="20" y1="70" x2="280" y2="70"/>
+        <line class="noul-s" x1="20" y1="70" x2="264" y2="70" stroke-width="10" stroke-linecap="round"/>
+        <circle class="knob" cx="264" cy="70" r="9"/>
+        <text class="val" x="264" y="46" text-anchor="middle">0.94</text>
+        <text class="tick" x="14" y="98">0 &#183; no</text>
+        <text class="tick" x="150" y="98" text-anchor="middle">0.5</text>
+        <text class="tick" x="286" y="98" text-anchor="end">1 &#183; yes</text>
+        <text class="lbl" x="150" y="136" text-anchor="middle">one number between 0 and 1</text>
+      </svg>
+      <p class="use">Use it for: policy checks, evidence checks, &ldquo;needs a human?&rdquo; gates.</p>
+    </figure>
+    <figure class="prim">
+      <div class="ph"><span class="dot Score"></span><h3>Score</h3></div>
+      <div class="plain">A rating on a scale you define</div>
+      <p class="q">&ldquo;How frustrated is this customer?&rdquo;</p>
+      <svg class="dg" viewBox="0 0 300 150" role="img" aria-label="Score output: a probability for each level of an ordered scale, calm, annoyed, frustrated, angry; angry is highest at 0.72.">
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+        <rect class="score dim" x="43" y="97.6" width="34" height="2.4" rx="1"/>
+        <rect class="score dim" x="103" y="94.4" width="34" height="5.6" rx="2"/>
+        <rect class="score dim" x="163" y="85.6" width="34" height="14.4" rx="3"/>
+        <rect class="score" x="223" y="42.4" width="34" height="57.6" rx="4"/>
+        <line class="base" x1="28" y1="100" x2="272" y2="100"/>
+        <text class="val" x="240" y="34" text-anchor="middle">0.72</text>
+        <text class="tick" x="60" y="116" text-anchor="middle">calm</text>
+        <text class="tick" x="120" y="116" text-anchor="middle">annoyed</text>
+        <text class="tick" x="180" y="116" text-anchor="middle">frustrated</text>
+        <text class="tick" x="240" y="116" text-anchor="middle">angry</text>
+        <line class="wire" x1="40" y1="128" x2="260" y2="128" marker-end="url(#ah2)"/>
+        <text class="lbl" x="150" y="145" text-anchor="middle">levels have an order</text>
+      </svg>
+      <p class="use">Use it for: severity, urgency, rubric grading, quality scores.</p>
+    </figure>
+    <figure class="prim">
+      <div class="ph"><span class="dot Choice"></span><h3>Choice</h3></div>
+      <div class="plain">One pick from a list you supply</div>
+      <p class="q">&ldquo;Which team owns this ticket?&rdquo;</p>
+      <svg class="dg" viewBox="0 0 300 150" role="img" aria-label="Choice output: a probability for each option, billing, technical, sales, account; technical wins at 0.96.">
+        <text class="tick" x="92" y="22" text-anchor="end">billing</text>
+        <rect class="choice dim" x="100" y="11" width="3" height="14" rx="1.5"/>
+        <text class="tick" x="92" y="48" text-anchor="end">technical</text>
+        <rect class="choice" x="100" y="37" width="144" height="14" rx="4"/>
+        <text class="val" x="250" y="48">0.96</text>
+        <text class="tick" x="92" y="74" text-anchor="end">sales</text>
+        <rect class="choice dim" x="100" y="63" width="4" height="14" rx="2"/>
+        <text class="tick" x="92" y="100" text-anchor="end">account</text>
+        <rect class="choice dim" x="100" y="89" width="3" height="14" rx="1.5"/>
+        <text class="lbl" x="150" y="136" text-anchor="middle">no order, just the best match</text>
+      </svg>
+      <p class="use">Use it for: routing, categorizing, picking A vs. B.</p>
+    </figure>
+  </div>
+</section>
+
+<!-- CHEAP -->
+<section class="s" id="cheap">
+  <div class="split flip">
+    <figure class="fig">
+      <svg class="dg" viewBox="0 0 400 372" role="img" aria-label="Cascade: 10,000 outputs all go to Jev; 9,500 confident verdicts are settled automatically; 500 uncertain go to an LLM judge, which settles 460; 40 go to a person.">
+        <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+        <rect class="box" x="100" y="8" width="200" height="52" rx="10"/>
+        <text class="t" x="200" y="30" text-anchor="middle">10,000 outputs</text>
+        <text class="s" x="200" y="48" text-anchor="middle">tonight&#8217;s answers to check</text>
+        <line class="wire" x1="200" y1="60" x2="200" y2="103" marker-end="url(#ah3)"/>
+        <text class="lbl" x="212" y="86">every one</text>
+        <rect class="box hl" x="100" y="106" width="200" height="52" rx="10"/>
+        <text class="t" x="200" y="128" text-anchor="middle">Jev grades them</text>
+        <text class="s" x="200" y="146" text-anchor="middle">fast, fractions of a cent</text>
+        <path class="wire" d="M200 158 V180 M100 180 H300"/>
+        <line class="wire" x1="100" y1="180" x2="100" y2="211" marker-end="url(#ah3)"/>
+        <line class="wire" x1="300" y1="180" x2="300" y2="211" marker-end="url(#ah3)"/>
+        <text class="lbl" x="108" y="200">confident</text>
+        <text class="lbl" x="308" y="200">unsure</text>
+        <rect class="box" x="10" y="214" width="180" height="52" rx="10"/>
+        <text class="t" x="100" y="236" text-anchor="middle">9,500 settled</text>
+        <text class="s" x="100" y="254" text-anchor="middle">pass or fail, no wait</text>
+        <rect class="box" x="210" y="214" width="180" height="52" rx="10"/>
+        <text class="t" x="300" y="236" text-anchor="middle">500 to an LLM judge</text>
+        <text class="s" x="300" y="254" text-anchor="middle">reasons and explains</text>
+        <line class="wire" x1="300" y1="266" x2="300" y2="309" marker-end="url(#ah3)"/>
+        <text class="lbl" x="290" y="285" text-anchor="end">460 settled there</text>
+        <text class="lbl" x="290" y="301" text-anchor="end">40 still unclear</text>
+        <rect class="box" x="210" y="312" width="180" height="52" rx="10"/>
+        <text class="t" x="300" y="334" text-anchor="middle">40 to a person</text>
+        <text class="s" x="300" y="352" text-anchor="middle">the truly hard cases</text>
+      </svg>
+      <figcaption>Illustrative numbers. The slower, costlier steps only see what Jev couldn&rsquo;t settle.</figcaption>
+    </figure>
+    <div>
+      <p class="kicker">Why it matters</p>
+      <h2>Cheap enough to check everything</h2>
+      <p>Today most teams check a small sample of AI outputs, claims or tickets, because a large model reading every one costs too much and takes too long. Jev flips that. It grades all of them, settles the clear-cut cases on the spot, and hands only the uncertain ones up the chain.</p>
+      <p>That&rsquo;s the pattern all three guides keep coming back to: Jev for the high-volume, closed questions; an LLM when someone needs the reasoning; a person when the decision really matters.</p>
+      <p class="callout"><strong>Honest caveat.</strong> Jev is in early access. Speed and cost figures come from vendor and partner tests, and TypeSafe doesn&rsquo;t claim its probabilities are calibrated, so test thresholds on your own data before trusting them.</p>
+    </div>
+  </div>
+</section>
+
+<!-- VERSIONS -->
+<section class="s" id="versions">
+  <div class="split">
+    <div>
+      <p class="kicker">The three versions</p>
+      <h2>Same brief, built in sequence</h2>
+      <p>The three guides weren&rsquo;t written in isolation. Each model worked from what came before, which is why some parts look alike and others don&rsquo;t.</p>
+      <p><strong>Claude Fable</strong> wrote the first draft: 100 one-line ideas across 17 industries. It then expanded every card with a &ldquo;how it works&rdquo; paragraph and a worked example.</p>
+      <p><strong>Codex Astra</strong> kept the first draft&rsquo;s look (its stylesheet is the same) but wrote a new set of 100: five per industry across 20 industries, each marked as fictional.</p>
+      <p><strong>Grok</strong> took Codex Astra&rsquo;s intro, industry list and first three cases word for word, then wrote 97 shorter cases of its own in a lighter, JavaScript-built page.</p>
+    </div>
+    <figure class="fig">
+      <svg class="dg" viewBox="0 0 400 330" role="img" aria-label="Lineage: Claude Fable's draft 1 was expanded into Claude Fable's final version; Codex Astra's r2 reused draft 1's styling; Grok reused Codex Astra's intro, industry list and first three cases.">
+        <defs><marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+        <rect class="box" x="110" y="8" width="180" height="58" rx="10"/>
+        <text class="t" x="200" y="32" text-anchor="middle">Claude Fable &#183; draft 1</text>
+        <text class="s" x="200" y="52" text-anchor="middle">100 one-line ideas</text>
+        <line class="wire" x1="168" y1="66" x2="104" y2="147" marker-end="url(#ah4)"/>
+        <line class="wire" x1="232" y1="66" x2="296" y2="147" marker-end="url(#ah4)"/>
+        <text class="lbl" x="122" y="104" text-anchor="end">expanded</text>
+        <text class="lbl" x="278" y="104">styling reused</text>
+        <rect class="box hl" x="8" y="150" width="184" height="58" rx="10"/>
+        <text class="t" x="100" y="174" text-anchor="middle">Claude Fable &#183; final</text>
+        <text class="s" x="100" y="194" text-anchor="middle">+ how it works, examples</text>
+        <rect class="box hl" x="208" y="150" width="184" height="58" rx="10"/>
+        <text class="t" x="300" y="174" text-anchor="middle">Codex Astra &#183; r2</text>
+        <text class="s" x="300" y="194" text-anchor="middle">new 100, 20 industries</text>
+        <line class="wire" x1="300" y1="208" x2="300" y2="261" marker-end="url(#ah4)"/>
+        <text class="lbl" x="290" y="230" text-anchor="end">intro + industry list</text>
+        <text class="lbl" x="290" y="246" text-anchor="end">+ first 3 cases reused</text>
+        <rect class="box hl" x="208" y="264" width="184" height="58" rx="10"/>
+        <text class="t" x="300" y="288" text-anchor="middle">Grok</text>
+        <text class="s" x="300" y="308" text-anchor="middle">97 new, shorter cases</text>
+      </svg>
+      <figcaption>Highlighted boxes are the three versions on this site. Arrows show what each one carried forward.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- NUMBERS -->
+<section class="s" id="numbers">
+  <p class="kicker">By the numbers</p>
+  <h2>How the three compare</h2>
+  <p>Counted directly from each page. The writing quality is for you to judge; these are the things that can be measured.</p>
+
+  <div class="chart" id="mix">
+    <h3>Which kind of question each guide leans on</h3>
+    <p class="sub">Number of use cases tagged with each question type, out of 100</p>
+    <div class="legend" aria-hidden="true"><span><i class="dot Noul"></i>Noul (yes/no)</span><span><i class="dot Score"></i>Score (rating)</span><span><i class="dot Choice"></i>Choice (pick one)</span></div>
+    <div class="row"><div class="name">Claude Fable</div><div class="bar" role="img" aria-label="Claude Fable: Noul 34, Score 21, Choice 45"><div class="seg Noul" style="flex:34" tabindex="0" data-tip="Claude Fable &middot; Noul: 34 of 100"><span>34</span></div><div class="seg Score" style="flex:21" tabindex="0" data-tip="Claude Fable &middot; Score: 21 of 100"><span>21</span></div><div class="seg Choice" style="flex:45" tabindex="0" data-tip="Claude Fable &middot; Choice: 45 of 100"><span>45</span></div></div></div>
+<div class="row"><div class="name">Codex Astra</div><div class="bar" role="img" aria-label="Codex Astra: Noul 24, Score 14, Choice 62"><div class="seg Noul" style="flex:24" tabindex="0" data-tip="Codex Astra &middot; Noul: 24 of 100"><span>24</span></div><div class="seg Score" style="flex:14" tabindex="0" data-tip="Codex Astra &middot; Score: 14 of 100"><span>14</span></div><div class="seg Choice" style="flex:62" tabindex="0" data-tip="Codex Astra &middot; Choice: 62 of 100"><span>62</span></div></div></div>
+<div class="row"><div class="name">Grok</div><div class="bar" role="img" aria-label="Grok: Noul 26, Score 29, Choice 45"><div class="seg Noul" style="flex:26" tabindex="0" data-tip="Grok &middot; Noul: 26 of 100"><span>26</span></div><div class="seg Score" style="flex:29" tabindex="0" data-tip="Grok &middot; Score: 29 of 100"><span>29</span></div><div class="seg Choice" style="flex:45" tabindex="0" data-tip="Grok &middot; Choice: 45 of 100"><span>45</span></div></div></div>
+    <p class="note">Claude Fable is counted by each card&rsquo;s main question; 25 of its cards combine two or three types. Exact counts are in the table below.</p>
+    <div class="tip" id="tip" role="tooltip"></div>
+  </div>
+
+  <div class="tablewrap">
+    <table>
+      <caption class="sr-only" style="position:absolute;left:-9999px">Feature comparison of the three versions</caption>
+      <thead><tr><th scope="col">What we checked</th><th scope="col">Claude Fable</th><th scope="col">Codex Astra</th><th scope="col">Grok</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Use cases / worked examples</th><td>100 / 100</td><td>100 / 100</td><td>100 / 100</td></tr>
+        <tr><th scope="row">Industries</th><td>17</td><td>20</td><td>20</td></tr>
+        <tr><th scope="row">Average words per use case</th><td>78</td><td>115</td><td>57</td></tr>
+        <tr><th scope="row">Question mix (Noul / Score / Choice)</th><td>34 / 21 / 45</td><td>24 / 14 / 62</td><td>26 / 29 / 45</td></tr>
+        <tr><th scope="row">Cards combining question types</th><td>25</td><td>0</td><td>0</td></tr>
+        <tr><th scope="row">Dark mode</th><td class="y">Yes</td><td class="y">Yes</td><td class="n">No</td></tr>
+        <tr><th scope="row">Content readable without JavaScript</th><td class="y">Yes</td><td class="y">Yes</td><td class="n">No</td></tr>
+        <tr><th scope="row">Search covers example text</th><td class="y">Yes</td><td class="y">Yes</td><td class="n">No</td></tr>
+        <tr><th scope="row">Filter by question type</th><td class="y">One at a time</td><td class="y">One at a time</td><td class="y">Several at once</td></tr>
+        <tr><th scope="row">Filter by industry</th><td class="p">Jump links</td><td class="p">Jump links</td><td class="y">Clickable chips</td></tr>
+        <tr><th scope="row">Screen-reader extras (skip link, live count, labels)</th><td class="p">Some</td><td class="y">Yes</td><td class="n">No</td></tr>
+        <tr><th scope="row">Print-friendly</th><td class="y">Yes</td><td class="y">Yes, opens all examples</td><td class="n">No</td></tr>
+        <tr><th scope="row">Link straight to one card</th><td class="y">Yes</td><td class="y">Yes</td><td class="n">No</td></tr>
+        <tr><th scope="row">Facts about Jev itself</th><td>Speed, price and limits, with sources</td><td>Links to TypeSafe docs</td><td>None beyond the intro</td></tr>
+        <tr><th scope="row">Page size</th><td>114 KB</td><td>173 KB</td><td>69 KB</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- SAME CASE -->
+<section class="s" id="same">
+  <p class="kicker">Same job, three answers</p>
+  <h2>Pick a job and compare the takes</h2>
+  <p>All three guides covered these four jobs. Reading the same case side by side is the quickest way to feel the difference in depth and style.</p>
+  <div class="tabs" role="tablist" aria-label="Pick a job">
+<button type="button" role="tab" id="tab-case-claims" aria-controls="case-claims" aria-selected="true">Insurance claim intake</button>
+<button type="button" role="tab" id="tab-case-returns" aria-controls="case-returns" aria-selected="false">Product returns</button>
+<button type="button" role="tab" id="tab-case-phishing" aria-controls="case-phishing" aria-selected="false">Phishing reports</button>
+<button type="button" role="tab" id="tab-case-rfi" aria-controls="case-rfi" aria-selected="false">Construction RFIs</button>
+</div>
+<div class="case" id="case-claims" role="tabpanel" aria-labelledby="tab-case-claims">
+<article class="take"><div class="who"><b>Claude Fable</b><a href="/claude-fable/#uc-18">#18 in full &rarr;</a></div><h3>First-notice-of-loss claim typing</h3><div class="tags"><span class="ptag"><i class="dot Choice"></i>Choice</span></div><p class="sum">Collision, glass, theft, water damage, or liability.</p><p class="exp">FNOL arrives by phone transcript, web form, or email. Jev picks the claim type and a second Choice for the coverage line. The claim is created in the right system with the right fields before an adjuster touches it.</p><dl><dt>Input</dt><dd>“Tree came down on my garage roof during last night’s storm, water is getting in.”</dd><dt>Ask</dt><dd>Choice [collision, glass, theft, water-damage, wind-hail, liability, fire]</dd><dt>Jev returns</dt><dd>wind-hail (0.88)</dd><dt>Next</dt><dd>Homeowners claim opened; catastrophe-event flag checked against the storm date.</dd></dl><div class="wc">81 words</div></article><article class="take"><div class="who"><b>Codex Astra</b><a href="/codex-astra/#example-6">#6 in full &rarr;</a></div><h3>Claims intake</h3><div class="tags"><span class="ptag"><i class="dot Choice"></i>Choice</span></div><p class="sum">Classify claim narratives into collision, theft, water damage, or other covered-event categories.</p><p class="exp">Claims intake can classify a narrative into a covered-event category before an adjuster reviews policy terms. Separating collision, theft, water damage, and other events helps select the right questions and supporting-evidence checklist.</p><dl><dt>Input</dt><dd>Fictional claim narrative: ‘A pipe under the kitchen sink failed overnight and water damaged the cabinet and floor.’ The intake record includes the reported date and room.</dd><dt>Ask</dt><dd>Which claim event category best matches the narrative? Choose one: collision, theft, water damage, other covered event, unclear.</dd><dt>Jev returns</dt><dd>Choice: water damage (illustrative)</dd><dt>Next</dt><dd>Start the water-damage intake checklist and have an adjuster confirm coverage, timing, and the reported property evidence.</dd></dl><div class="wc">112 words</div></article><article class="take"><div class="who"><b>Grok</b><a href="/grok/">#6 in full &rarr;</a></div><h3>Claim intake</h3><div class="tags"><span class="ptag"><i class="dot Choice"></i>Choice</span></div><p class="sum">Route new claims to auto, property, liability, or health teams.</p><p class="exp">Intake can classify the claim type from the initial description so the correct specialist and checklist are assigned immediately.</p><dl><dt>Input</dt><dd>Fictional claim note: ‘Water damage from a burst pipe in the basement affecting drywall and flooring.’</dd><dt>Ask</dt><dd>Which claim category best matches? Choose one: auto, property, liability, health, other/unclear.</dd><dt>Jev returns</dt><dd>Choice: property (illustrative)</dd><dt>Next</dt><dd>Open the property water-damage checklist and assign to a property claims adjuster.</dd></dl><div class="wc">72 words</div></article>
+</div>
+<div class="case" id="case-returns" role="tabpanel" aria-labelledby="tab-case-returns">
+<article class="take"><div class="who"><b>Claude Fable</b><a href="/claude-fable/#uc-26">#26 in full &rarr;</a></div><h3>Return-reason normalization</h3><div class="tags"><span class="ptag"><i class="dot Choice"></i>Choice</span></div><p class="sum">Map free-text return notes to a fixed reason list.</p><p class="exp">Customers write “didn’t fit,” “runs small,” “too tight in the shoulders,” which are all the same thing to merchandising. Jev maps the free text to the fixed reason list so return analytics are consistent per SKU. Sizing complaints above a rate threshold auto-flag the product page for a size-guide update.</p><dl><dt>Input</dt><dd>“The medium was more like a small, couldn’t get it over my head.”</dd><dt>Ask</dt><dd>Choice [size-small, size-large, quality, not-as-described, changed-mind, damaged, wrong-item]</dd><dt>Jev returns</dt><dd>size-small (0.95)</dd><dt>Next</dt><dd>SKU sizing counter incremented; fit note suggested for the product page.</dd></dl><div class="wc">93 words</div></article><article class="take"><div class="who"><b>Codex Astra</b><a href="/codex-astra/#example-22">#22 in full &rarr;</a></div><h3>Returns desk</h3><div class="tags"><span class="ptag"><i class="dot Choice"></i>Choice</span></div><p class="sum">Classify return explanations as fit, damage, wrong item, quality, or changed mind.</p><p class="exp">A returns desk can classify the customer’s stated reason before selecting the appropriate inspection or refund workflow. Separating fit, damage, wrong item, quality, and changed mind creates consistent handling across return requests.</p><dl><dt>Input</dt><dd>Fictional return note: ‘The jacket arrived in the ordered color, but the sleeves are too short even after checking the size chart.’ No damage is reported.</dd><dt>Ask</dt><dd>Which return reason best matches this note? Choose one: fit, damage, wrong item, quality, changed mind, other/unclear.</dd><dt>Jev returns</dt><dd>Choice: fit (illustrative)</dd><dt>Next</dt><dd>Apply the fit-return workflow and have returns staff check eligibility, condition, and the order record.</dd></dl><div class="wc">107 words</div></article><article class="take"><div class="who"><b>Grok</b><a href="/grok/">#22 in full &rarr;</a></div><h3>Return reason</h3><div class="tags"><span class="ptag"><i class="dot Choice"></i>Choice</span></div><p class="sum">Classify return requests as defective, wrong item, size/fit, or changed mind.</p><p class="exp">Returns processing can apply the correct refund or exchange workflow.</p><dl><dt>Input</dt><dd>Fictional request: ‘The shirt arrived with a stain that wasn’t mentioned.’</dd><dt>Ask</dt><dd>Which return reason? Choose one: defective, wrong item, size/fit, changed mind, other/unclear.</dd><dt>Jev returns</dt><dd>Choice: defective (illustrative)</dd><dt>Next</dt><dd>Approve full refund and generate a return label under the defective policy.</dd></dl><div class="wc">59 words</div></article>
+</div>
+<div class="case" id="case-phishing" role="tabpanel" aria-labelledby="tab-case-phishing">
+<article class="take"><div class="who"><b>Claude Fable</b><a href="/claude-fable/#uc-97">#97 in full &rarr;</a></div><h3>Phishing detection</h3><div class="tags"><span class="ptag"><i class="dot Noul"></i>Noul</span></div><p class="sum">Check email text at inbox volume.</p><p class="exp">Reported and inbound emails are scored with “this is a phishing attempt” using the message text and a header summary. It supplements the email gateway rather than replacing it: user-reported emails get an instant verdict back, and confirmed phish are pulled from every mailbox.</p><dl><dt>Input</dt><dd>“Your mailbox is 98% full. Verify your password within 24 hours to avoid suspension: [link]”</dd><dt>Ask</dt><dd>Noul “phishing”</dd><dt>Jev returns</dt><dd>0.97</dd><dt>Next</dt><dd>Message quarantined across the tenant; reporter thanked.</dd></dl><div class="wc">75 words</div></article><article class="take"><div class="who"><b>Codex Astra</b><a href="/codex-astra/#example-51">#51 in full &rarr;</a></div><h3>Phishing desk</h3><div class="tags"><span class="ptag"><i class="dot Choice"></i>Choice</span></div><p class="sum">Classify reported messages against predefined phishing indicators for analyst review.</p><p class="exp">An analyst receives a reported email with sender, subject, body excerpt, link text, attachment names, and a short reporting reason. Jev classifies the message against a fixed indicator taxonomy, helping the phishing desk prioritize analyst review while keeping the final disposition with a qualified investigator.</p><dl><dt>Input</dt><dd>Fictional report PH-204 says a message from billing-example.test asks for an urgent password reset, uses a mismatched link domain, and includes no approved campaign reference.</dd><dt>Ask</dt><dd>Does this reported message fit a phishing indicator category? Choice list: credential theft; malware delivery; impersonation; benign or unclear.</dd><dt>Jev returns</dt><dd>Choice: credential theft</dd><dt>Next</dt><dd>Send the category and supplied evidence to the phishing analyst, who verifies headers, links, and reporting context before any containment action.</dd></dl><div class="wc">125 words</div></article><article class="take"><div class="who"><b>Grok</b><a href="/grok/">#55 in full &rarr;</a></div><h3>Phishing report</h3><div class="tags"><span class="ptag"><i class="dot Choice"></i>Choice</span></div><p class="sum">Classify reported emails as phishing, spam, legitimate, or suspicious.</p><p class="exp">Security awareness teams can route reports appropriately.</p><dl><dt>Input</dt><dd>Fictional report: ‘Email asking for password reset with link to non-company domain.’</dd><dt>Ask</dt><dd>Which classification? Choose one: phishing, spam, legitimate, suspicious, other/unclear.</dd><dt>Jev returns</dt><dd>Choice: phishing (illustrative)</dd><dt>Next</dt><dd>Add indicators to block list and notify the reporting user.</dd></dl><div class="wc">50 words</div></article>
+</div>
+<div class="case" id="case-rfi" role="tabpanel" aria-labelledby="tab-case-rfi">
+<article class="take"><div class="who"><b>Claude Fable</b><a href="/claude-fable/#uc-96">#96 in full &rarr;</a></div><h3>Construction RFIs</h3><div class="tags"><span class="ptag"><i class="dot Choice"></i>Choice</span><span class="ptag"><i class="dot Noul"></i>Noul</span></div><p class="sum">Structural, MEP, or architectural.</p><p class="exp">Requests for information are routed to the right discipline on the design team. Jev picks the discipline and a Noul flags “schedule-critical.” The right engineer sees it the same day instead of after a project manager’s triage.</p><dl><dt>Input</dt><dd>“Beam B-12 conflicts with the 10-inch duct on level 3; need resolution before the pour on Monday.”</dd><dt>Ask</dt><dd>Choice [structural, MEP, architectural, civil]; Noul “schedule-critical”</dd><dt>Jev returns</dt><dd>structural (0.68), MEP (0.30); 0.95</dd><dt>Next</dt><dd>Sent to structural with MEP copied; flagged urgent.</dd></dl><div class="wc">78 words</div></article><article class="take"><div class="who"><b>Codex Astra</b><a href="/codex-astra/#example-76">#76 in full &rarr;</a></div><h3>Project management</h3><div class="tags"><span class="ptag"><i class="dot Choice"></i>Choice</span></div><p class="sum">Route requests for information to structural, architectural, mechanical, or electrical reviewers.</p><p class="exp">A project coordinator can send each request for information to the discipline that owns the answer, preserving a short audit trail of the question, drawing reference, and requested response date. This reduces forwarding loops while leaving technical interpretation with qualified reviewers.</p><dl><dt>Input</dt><dd>Fictional Harborline Clinic expansion RFI-014 cites drawing A-203, asks whether a wall assembly meets the partition detail, and attaches the RFI text plus discipline responsibility matrix.</dd><dt>Ask</dt><dd>Which reviewer should receive this RFI? Choices: structural; architectural; mechanical; electrical.</dd><dt>Jev returns</dt><dd>Choice: architectural</dd><dt>Next</dt><dd>Assign the RFI to the selected discipline queue, retain the drawing reference, and have the designated reviewer answer the technical question.</dd></dl><div class="wc">114 words</div></article><article class="take"><div class="who"><b>Grok</b><a href="/grok/">#77 in full &rarr;</a></div><h3>RFI classification</h3><div class="tags"><span class="ptag"><i class="dot Choice"></i>Choice</span></div><p class="sum">Classify requests for information as design, specification, or coordination issue.</p><p class="exp">Project teams can route RFIs to the correct discipline.</p><dl><dt>Input</dt><dd>Fictional RFI: ‘Conflict between structural drawing and mechanical equipment location.’</dd><dt>Ask</dt><dd>Which type? Choose one: design clarification, specification, coordination, other/unclear.</dd><dt>Jev returns</dt><dd>Choice: coordination (illustrative)</dd><dt>Next</dt><dd>Route to the coordination meeting for resolution.</dd></dl><div class="wc">48 words</div></article>
+</div>
+</section>
+
+<section class="s" id="side">
+  <p class="kicker">See them whole</p>
+  <h2>Browse all three side by side</h2>
+  <p>Open the three full guides in columns and scroll each one. On a phone, switch between them with the tabs at the top.</p>
+  <div class="cta">
+    <a class="btn primary" href="/side-by-side/">Open side-by-side view &rarr;</a>
+    <a class="btn" href="/claude-fable/">Claude Fable</a>
+    <a class="btn" href="/codex-astra/">Codex Astra</a>
+    <a class="btn" href="/grok/">Grok</a>
+  </div>
+</section>
+
+<section class="s" id="share">
+  <p class="kicker">Your turn</p>
+  <h2>Got a use case? Share it</h2>
+  <p>I like these examples, and I hope you do too. If you have more, share them, and let&rsquo;s help each other out. Thank you!</p>
+  <div class="cta">
+    <a class="btn primary" href="https://github.com/roshanis/jev-pilled/issues/new?title=Use%20case%3A%20&amp;labels=use-case">Share a use case &rarr;</a>
+    <a class="btn" href="https://github.com/roshanis/jev-pilled">See the project on GitHub</a>
+  </div>
+</section>
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong>About this comparison.</strong> I put this page together with Claude&rsquo;s help, and Claude also made one of the three guides. The counts and feature checks are mechanical and anyone can reproduce them from the pages; the short descriptions are judgment calls, so open each version and decide for yourself. The three guides are shown as each model produced them, with only a navigation bar added at the top.</p>
+    <p>Sources on Jev: <a href="https://docs.typesafe.ai/introduction">TypeSafe introduction</a> &middot; <a href="https://docs.typesafe.ai/confidence">TypeSafe confidence guidance</a> &middot; <a href="https://beam.ai/agentic-insights/llm-as-a-judge-jev">Beam: LLM-as-a-judge vs. Jev</a> &middot; <a href="https://composio.dev/blog/typesafe-jev-guide-and-best-practical-usecases">Composio: TypeSafe Jev guide</a> &middot; <a href="https://sebastianraschka.com/blog/2026/jev-classification-generalization.html">Sebastian Raschka: It&rsquo;s Easy to Dismiss Jev as Just a Classifier</a>. All examples across the three guides are illustrative.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // tabs for "same job, three answers" (without JS, every case shows)
+  var tabs=[].slice.call(document.querySelectorAll('.tabs [role="tab"]'));
+  var panels=[].slice.call(document.querySelectorAll('.case'));
+  function show(id){
+    tabs.forEach(function(t){var on=t.getAttribute('aria-controls')===id;t.setAttribute('aria-selected',String(on));t.tabIndex=on?0:-1;});
+    panels.forEach(function(p){p.hidden=p.id!==id;});
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){show(t.getAttribute('aria-controls'));});
+    t.addEventListener('keydown',function(e){
+      var d=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0; if(!d)return;
+      var n=tabs[(i+d+tabs.length)%tabs.length]; n.focus(); show(n.getAttribute('aria-controls'));
+    });
+  });
+  if(tabs.length) show(tabs[0].getAttribute('aria-controls'));
+
+  // chart tooltip
+  var chart=document.getElementById('mix'), tip=document.getElementById('tip');
+  [].slice.call(chart.querySelectorAll('.seg')).forEach(function(s){
+    function on(){
+      var r=s.getBoundingClientRect(), c=chart.getBoundingClientRect();
+      tip.textContent=s.getAttribute('data-tip');
+      tip.style.left=(r.left-c.left+r.width/2)+'px'; tip.style.top=(r.top-c.top)+'px';
+      tip.classList.add('on');
+    }
+    s.addEventListener('mouseenter',on); s.addEventListener('focus',on);
+    s.addEventListener('mouseleave',function(){tip.classList.remove('on');});
+    s.addEventListener('blur',function(){tip.classList.remove('on');});
+  });
+})();
+</script>
+</body>
+</html>
