@@ -254,6 +254,7 @@ function render(questions, results) {
   list.replaceChildren();
   let allAgree = 0;
   let compared = 0;
+  const splits = [];
 
   for (const [name, q] of Object.entries(questions)) {
     const bySide = Object.fromEntries(SIDES.map(([side]) => [side, results[side].answers?.[name]]));
@@ -266,6 +267,7 @@ function render(questions, results) {
     if (ag) {
       compared++;
       if (ag.cls === "agree") allAgree++;
+      else splits.push(`${name.replace(/_/g, " ")} (${ag.odd ? ag.text : ag.text.toLowerCase()})`);
       head.append(el("span", `pill ${ag.cls}`, ag.text));
     }
     card.append(head);
@@ -285,21 +287,7 @@ function render(questions, results) {
 
   const ok = SIDES.filter(([side]) => !results[side].error);
   markLeaders(ok, results);
-  const summary = $("#summary");
-  summary.replaceChildren();
-  if (compared) {
-    summary.append(
-      el("b", null, `${ok.length === 3 ? "All three" : "They"} agree on ${allAgree} of ${compared} question${compared === 1 ? "" : "s"}.`),
-    );
-  }
-  const jev = results.jev;
-  const others = ok.filter(([side]) => side !== "jev");
-  if (!jev.error && others.length) {
-    const speed = others.map(([side, label]) => ratioText(results[side].latencyMs / jev.latencyMs, label, "faster", "slower"));
-    const cost = others.map(([side, label]) => ratioText(results[side].costUsd / jev.costUsd, label, "cheaper", "more expensive"));
-    summary.append(` Jev was ${speed.join(" and ")}, and ${cost.join(" and ")}.`);
-  }
-  summary.hidden = summary.childNodes.length === 0;
+  renderTldr(ok, results, { allAgree, compared, splits });
 
   const box = $("#reasoning");
   box.replaceChildren();
@@ -313,12 +301,37 @@ function render(questions, results) {
   $("#reasoningBox").hidden = box.childElementCount === 0;
 }
 
-// "3.2× faster than Claude" when ratio > 1, "2.0× slower than Claude" otherwise.
-function ratioText(ratio, label, better, worse) {
-  if (!Number.isFinite(ratio) || ratio <= 0) return `not comparable with ${label}`;
-  if (ratio >= 1) return `${ratio >= 10 ? Math.round(ratio).toLocaleString() : ratio.toFixed(1)}× ${better} than ${label}`;
-  const inv = 1 / ratio;
-  return `${inv >= 10 ? Math.round(inv).toLocaleString() : inv.toFixed(1)}× ${worse} than ${label}`;
+// A plain-words recap built from the results: agreement, speed, cost, failures.
+function renderTldr(ok, results, { allAgree, compared, splits }) {
+  const lines = [];
+  if (compared) {
+    const who = ok.length === 3 ? "All three models" : "The models that answered";
+    if (allAgree === compared) {
+      lines.push(`${who} gave the same answer to ${compared === 1 ? "the question" : `all ${compared} questions`}.`);
+    } else {
+      lines.push(`${who} agreed on ${allAgree} of ${compared} questions and split on ${listText(splits)}.`);
+    }
+  }
+  if (ok.length >= 2) {
+    const ranked = (key, fmt) => {
+      const sorted = [...ok].sort((a, b) => (results[a[0]][key] ?? Infinity) - (results[b[0]][key] ?? Infinity));
+      const [[lead, leadLabel], ...rest] = sorted;
+      return `${leadLabel} at ${fmt(results[lead][key])} (${rest.map(([s, l]) => `${l} ${fmt(results[s][key])}`).join(", ")})`;
+    };
+    lines.push(`Fastest: ${ranked("latencyMs", fmtMs)}.`);
+    lines.push(`Cheapest: ${ranked("costUsd", fmtUsd)}.`);
+  }
+  for (const [side, label] of SIDES) {
+    if (results[side].error) lines.push(`${label} failed: ${results[side].error}`);
+  }
+  const box = $("#tldr");
+  box.querySelector("ul").replaceChildren(...lines.map((t) => el("li", null, t)));
+  box.hidden = lines.length === 0;
+}
+
+// "a", "a and b", "a, b and c".
+function listText(items) {
+  return items.length < 2 ? items.join("") : `${items.slice(0, -1).join(", ")} and ${items.at(-1)}`;
 }
 
 // Adds "Fastest" and "Cheapest" badges to the leading side cards.

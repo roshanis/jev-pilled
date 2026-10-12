@@ -136,9 +136,13 @@ details.more > summary:hover { color: var(--text); }
 .results.loading #answers, .results.loading .results-bar, .results.loading #reasoningBox { opacity: .35; }
 @keyframes shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
 
-.results-bar { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin: 20px 0 0; }
-.summary { margin: 0; font-size: 1rem; flex: 1 1 420px; }
-.summary b { font-weight: 700; }
+.results { scroll-margin-top: 72px; }
+.tldr { padding: 16px 20px; margin-bottom: 16px; border-left: 4px solid var(--text); }
+.tldr h2 { margin: 0 0 6px; font-size: .8rem; font-weight: 800; letter-spacing: .08em; color: var(--muted); }
+.tldr ul { margin: 0; padding-left: 1.1em; display: grid; gap: 4px; font-size: 1rem; }
+.results.loading .tldr { opacity: .35; }
+
+.results-bar { display: flex; justify-content: flex-end; align-items: center; gap: 16px; flex-wrap: wrap; margin: 20px 0 0; }
 .toggle { display: inline-flex; align-items: center; gap: 8px; font-size: .9rem; color: var(--muted); cursor: pointer; white-space: nowrap; }
 .toggle input { width: auto; margin: 0; accent-color: var(--text); }
 

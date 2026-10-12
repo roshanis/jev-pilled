@@ -63,6 +63,10 @@
   </section>
 
   <section id="results" class="results" hidden aria-live="polite">
+    <div id="tldr" class="card tldr" hidden>
+      <h2>TL;DR</h2>
+      <ul></ul>
+    </div>
     <div class="scoreboard">
       <article class="side-card" data-side="openai">
         <header><h2>OpenAI</h2><button class="listen" data-side="openai" hidden>&#9654; Listen</button></header>
@@ -85,7 +89,6 @@
     </div>
 
     <div class="results-bar">
-      <p id="summary" class="summary" hidden></p>
       <label class="toggle"><input type="checkbox" id="showProbs"> Show probabilities</label>
     </div>
     <div id="answers"></div>
