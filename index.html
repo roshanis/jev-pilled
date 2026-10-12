@@ -16,6 +16,7 @@
     <a class="brand" href="/">Jev-pilled</a>
     <nav aria-label="Sections">
       <a href="#what">What&rsquo;s Jev</a>
+      <a href="#voice">Voice agent</a>
       <a href="#live">Live example</a>
       <a href="#examples">100 use cases</a>
     </nav>
@@ -37,6 +38,21 @@
       <li><b>Three kinds of question</b><span>Yes/no, a rating on your scale, or one pick from your list.</span></li>
       <li><b>Not for writing</b><span>No summaries or explanations. Your code decides what to do with the answer.</span></li>
     </ul>
+  </section>
+
+  <section id="voice" class="voice">
+    <h2>Why speed matters: a voice agent</h2>
+    <p class="lede">Someone calls an airline&rsquo;s AI phone agent. Before the agent can say anything useful, it has to know what the caller wants: a new flight, a refund, a lost bag, or a human. Every moment spent working that out is silence on the line.</p>
+    <div class="turns" aria-label="Silence after the caller stops talking">
+      <div class="turn"><span class="turn-who">Big chat model</span><span class="turn-track"><span class="turn-gap slow"></span><span class="turn-note">often a second or more of silence</span></span></div>
+      <div class="turn"><span class="turn-who">Jev</span><span class="turn-track"><span class="turn-gap fast" data-side="jev"></span><span class="turn-note">about a fifth of a second</span></span></div>
+    </div>
+    <ol class="steps">
+      <li><b>Listen.</b> Speech-to-text streams the caller&rsquo;s words, rambling and all.</li>
+      <li><b>Decide.</b> Jev reads the transcript and picks the intent, like <i>rebook flight</i>, with how sure it is.</li>
+      <li><b>Act.</b> If it&rsquo;s sure, the agent jumps straight into rebooking. If not, it asks one short question or hands off to a bigger model or a person.</li>
+    </ol>
+    <p class="sys-note">Try it below with the <b>Airline voice call</b> example.</p>
   </section>
 
   <section id="live" class="live">

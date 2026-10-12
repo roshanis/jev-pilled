@@ -1,6 +1,38 @@
 // Example tasks to load into the page. Each uses TypeSafe's question schema.
 export const PRESETS = [
   {
+    id: "voice-agent",
+    label: "Airline voice call",
+    state:
+      "hi yeah um, hi, so I'm at the airport, Denver, and my flight to Chicago just got canceled, like the board literally just flipped to canceled, no reason or anything, " +
+      "and I've been standing in this line for twenty minutes and it's not moving, there's like a hundred people, " +
+      "and I have my daughter's recital tonight at seven so I really really need to get on something today, I honestly don't care which flight, any time this afternoon, " +
+      "oh and I already checked a bag so I have no idea where that's going now, but mostly I just need to get there, sorry, can you help?",
+    questions: {
+      intent: {
+        type: "choice",
+        instructions: "What does the caller need first?",
+        criteria: {
+          rebook_flight: "Get on another flight",
+          refund: "Money back for the trip",
+          baggage: "Lost or delayed bag",
+          seat_change: null,
+          speak_to_agent: "Explicitly asks for a human",
+          other: null,
+        },
+      },
+      urgency: {
+        type: "score",
+        instructions: "How soon does the caller need this resolved?",
+        criteria: ["Can wait days", "Today", "Within a few hours", "Right now"],
+      },
+      mentions_bag: {
+        type: "noul",
+        instructions: "Does the caller also mention a checked bag that will need handling?",
+      },
+    },
+  },
+  {
     id: "support-ticket",
     label: "Support ticket triage",
     state:
