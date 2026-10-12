@@ -98,7 +98,6 @@ details.more[open] > summary::before { transform: rotate(90deg); }
 details.more > summary:hover { color: var(--text); }
 .controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 10px; }
 .go { display: flex; gap: 12px; align-items: stretch; margin-top: 12px; }
-.go input { flex: 0 1 200px; }
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 20px; border-radius: 10px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--text); font: inherit; font-weight: 600; cursor: pointer; }
 .btn.primary { background: var(--text); color: var(--bg); border-color: var(--text); }
 .btn.primary:hover { opacity: .9; }
@@ -217,7 +216,6 @@ footer p { margin: 0; max-width: 72ch; }
   .turn-note { white-space: normal; }
   .controls { grid-template-columns: 1fr; }
   .go { flex-direction: column; align-items: stretch; }
-  .go input { flex: none; }
   .answers, .answers tbody, .answers tr, .answers th, .answers td { display: block; width: auto; }
   .answers thead { display: block; }
   .answers thead tr { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }

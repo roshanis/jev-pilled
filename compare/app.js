@@ -38,13 +38,6 @@ async function init() {
     banner.hidden = false;
   }
 
-  $("#passcode").hidden = !config.passcodeRequired;
-  try {
-    $("#passcode").value = sessionStorage.getItem("comparePasscode") || "";
-  } catch {
-    /* storage unavailable */
-  }
-
   const tabs = $("#presetTabs");
   for (const p of config.presets) {
     const b = el("button", null, p.label);
@@ -119,13 +112,6 @@ async function run() {
     return;
   }
 
-  const passcode = $("#passcode").value;
-  try {
-    sessionStorage.setItem("comparePasscode", passcode);
-  } catch {
-    /* storage unavailable */
-  }
-
   const results = $("#results");
   const firstRun = results.hidden;
   btn.disabled = true;
@@ -137,7 +123,7 @@ async function run() {
   try {
     const res = await fetch("/api/compare", {
       method: "POST",
-      headers: { "Content-Type": "application/json", "X-Compare-Passcode": passcode },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         state: readState($("#state").value),
         questions,
@@ -374,7 +360,7 @@ async function listen(btn) {
   try {
     const res = await fetch("/api/speak", {
       method: "POST",
-      headers: { "Content-Type": "application/json", "X-Compare-Passcode": $("#passcode").value },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ side, text: speechText(side) }),
     });
     if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || `HTTP ${res.status}`);

@@ -5,6 +5,6 @@ export default async function handler(req, res) {
     res.setHeader("Allow", "POST");
     return res.status(405).json({ error: "Use POST" });
   }
-  const { status, body } = await compare(req.body, req.headers["x-compare-passcode"]);
+  const { status, body } = await compare(req.body);
   res.status(status).json(body);
 }
