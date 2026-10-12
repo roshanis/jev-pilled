@@ -2,7 +2,7 @@ import OpenAI from "openai";
 import { OPENAI_MODELS, costUsd } from "./pricing.js";
 import { SYSTEM, buildOutputSchema, buildPrompt, toJevShape } from "./prompt.js";
 
-export const DEFAULT_OPENAI_MODEL = process.env.OPENAI_MODEL || "gpt-6.1-sol";
+export const DEFAULT_OPENAI_MODEL = process.env.OPENAI_MODEL || "gpt-6-luna";
 
 let client;
 function getClient() {

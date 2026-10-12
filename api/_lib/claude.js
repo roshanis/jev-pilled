@@ -2,7 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { CLAUDE_MODELS, costUsd } from "./pricing.js";
 import { SYSTEM, buildOutputSchema, buildPrompt, toJevShape } from "./prompt.js";
 
-export const DEFAULT_CLAUDE_MODEL = process.env.CLAUDE_MODEL || "claude-opus-5-5";
+export const DEFAULT_CLAUDE_MODEL = process.env.CLAUDE_MODEL || "claude-haiku-5-5";
 
 let client;
 function getClient() {
