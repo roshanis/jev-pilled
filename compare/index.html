@@ -24,78 +24,55 @@
 
 <main id="main" class="wrap">
   <section class="hero">
-    <h1>One question, three models.</h1>
-    <p class="lede">Pick a task and run it. OpenAI, Claude and Jev each answer the same questions, side by side.</p>
+    <h1>OpenAI vs Claude vs Jev</h1>
+    <p class="lede">Pick an example or paste your own text, then press Run.</p>
     <div id="banner" class="banner" role="status" hidden></div>
   </section>
 
   <section class="card composer" aria-label="Task">
-    <div id="presetTabs" class="tabs" role="tablist" aria-label="Example tasks"></div>
-
-    <label class="field">
-      <span class="field-label">Input</span>
-      <textarea id="state" rows="5" spellcheck="false"></textarea>
-    </label>
-    <p class="asks"><span class="field-label">Asks</span> <span id="questionSummary"></span></p>
+    <div id="presetTabs" class="tabs" role="tablist" aria-label="Examples"></div>
+    <textarea id="state" rows="4" spellcheck="false" aria-label="Text to analyze"></textarea>
+    <div class="go">
+      <input id="passcode" type="password" autocomplete="off" placeholder="Passcode" aria-label="Passcode" hidden>
+      <button id="run" class="btn primary run"><span class="spinner" aria-hidden="true"></span><span class="run-label">Run</span></button>
+    </div>
+    <p id="formError" class="error" role="alert"></p>
 
     <details class="more">
-      <summary>Edit questions</summary>
-      <p class="hint">Each question is <b>choice</b> (pick one option), <b>score</b> (a level on a scale) or <b>noul</b> (yes/no).</p>
-      <textarea id="questions" rows="12" spellcheck="false" class="mono" aria-label="Questions JSON"></textarea>
-    </details>
-    <details class="more">
-      <summary>Models and effort</summary>
+      <summary>Advanced</summary>
       <div class="controls">
         <label class="field"><span class="field-label">OpenAI</span><select id="openaiModel"></select></label>
         <label class="field"><span class="field-label">Claude</span><select id="model"></select></label>
         <label class="field"><span class="field-label">Effort</span><select id="effort"></select></label>
       </div>
-    </details>
-
-    <div class="go">
-      <label id="passcodeRow" class="field" hidden>
-        <span class="field-label">Passcode</span>
-        <input id="passcode" type="password" autocomplete="off">
+      <label class="field questions-field">
+        <span class="field-label">Questions (JSON)</span>
+        <textarea id="questions" rows="10" spellcheck="false" class="mono"></textarea>
       </label>
-      <button id="run" class="btn primary run"><span class="spinner" aria-hidden="true"></span><span class="run-label">Run all three</span></button>
-    </div>
-    <p id="formError" class="error" role="alert"></p>
+      <p class="hint">Each question is <b>choice</b> (pick one option), <b>score</b> (a level on a scale) or <b>noul</b> (yes/no).</p>
+    </details>
   </section>
 
   <section id="results" class="results" hidden aria-live="polite">
-    <div id="tldr" class="card tldr" hidden>
+    <div id="tldr" class="tldr" hidden>
       <h2>TL;DR</h2>
       <ul></ul>
     </div>
-    <div class="scoreboard">
-      <article class="side-card" data-side="openai">
-        <header><h2>OpenAI</h2><button class="listen" data-side="openai" hidden>&#9654; Listen</button></header>
-        <p class="stat-line"></p>
-        <div class="badges"></div>
-        <p class="side-error error"></p>
-      </article>
-      <article class="side-card" data-side="claude">
-        <header><h2>Claude</h2><button class="listen" data-side="claude" hidden>&#9654; Listen</button></header>
-        <p class="stat-line"></p>
-        <div class="badges"></div>
-        <p class="side-error error"></p>
-      </article>
-      <article class="side-card" data-side="jev">
-        <header><h2>Jev</h2><button class="listen" data-side="jev" hidden>&#9654; Listen</button></header>
-        <p class="stat-line"></p>
-        <div class="badges"></div>
-        <p class="side-error error"></p>
-      </article>
-    </div>
 
-    <div class="results-bar">
-      <label class="toggle"><input type="checkbox" id="showProbs"> Show probabilities</label>
-    </div>
-    <div id="answers"></div>
+    <table class="answers">
+      <thead>
+        <tr>
+          <td></td>
+          <th scope="col" class="side-head" data-side="openai"><span class="name">OpenAI</span> <span class="stat-line"></span> <button class="listen" data-side="openai" hidden>&#9654; Listen</button><span class="side-error error"></span></th>
+          <th scope="col" class="side-head" data-side="claude"><span class="name">Claude</span> <span class="stat-line"></span> <button class="listen" data-side="claude" hidden>&#9654; Listen</button><span class="side-error error"></span></th>
+          <th scope="col" class="side-head" data-side="jev"><span class="name">Jev</span> <span class="stat-line"></span> <button class="listen" data-side="jev" hidden>&#9654; Listen</button><span class="side-error error"></span></th>
+        </tr>
+      </thead>
+      <tbody id="answers"></tbody>
+    </table>
 
     <details id="reasoningBox" class="more reasoning" hidden>
       <summary>Why OpenAI and Claude answered this way</summary>
-      <p class="hint">Jev returns only decisions and probabilities, so it has no explanation to show.</p>
       <div id="reasoning" class="reasoning-grid"></div>
     </details>
   </section>
