@@ -476,48 +476,6 @@ footer p{max-width:70ch}
   </div>
 </section>
 
-<!-- NUMBERS -->
-<section class="s" id="numbers">
-  <p class="kicker">By the numbers</p>
-  <h2>How the three compare</h2>
-  <p>Counted directly from each page. The writing quality is for you to judge; these are the things that can be measured.</p>
-
-  <div class="chart" id="mix">
-    <h3>Which kind of question each guide leans on</h3>
-    <p class="sub">Number of use cases tagged with each question type, out of 100</p>
-    <div class="legend" aria-hidden="true"><span><i class="dot Noul"></i>Noul (yes/no)</span><span><i class="dot Score"></i>Score (rating)</span><span><i class="dot Choice"></i>Choice (pick one)</span></div>
-    <div class="row"><div class="name">Claude Fable</div><div class="bar" role="img" aria-label="Claude Fable: Noul 34, Score 21, Choice 45"><div class="seg Noul" style="flex:34" tabindex="0" data-tip="Claude Fable &middot; Noul: 34 of 100"><span>34</span></div><div class="seg Score" style="flex:21" tabindex="0" data-tip="Claude Fable &middot; Score: 21 of 100"><span>21</span></div><div class="seg Choice" style="flex:45" tabindex="0" data-tip="Claude Fable &middot; Choice: 45 of 100"><span>45</span></div></div></div>
-<div class="row"><div class="name">Codex Astra</div><div class="bar" role="img" aria-label="Codex Astra: Noul 24, Score 14, Choice 62"><div class="seg Noul" style="flex:24" tabindex="0" data-tip="Codex Astra &middot; Noul: 24 of 100"><span>24</span></div><div class="seg Score" style="flex:14" tabindex="0" data-tip="Codex Astra &middot; Score: 14 of 100"><span>14</span></div><div class="seg Choice" style="flex:62" tabindex="0" data-tip="Codex Astra &middot; Choice: 62 of 100"><span>62</span></div></div></div>
-<div class="row"><div class="name">Grok</div><div class="bar" role="img" aria-label="Grok: Noul 26, Score 29, Choice 45"><div class="seg Noul" style="flex:26" tabindex="0" data-tip="Grok &middot; Noul: 26 of 100"><span>26</span></div><div class="seg Score" style="flex:29" tabindex="0" data-tip="Grok &middot; Score: 29 of 100"><span>29</span></div><div class="seg Choice" style="flex:45" tabindex="0" data-tip="Grok &middot; Choice: 45 of 100"><span>45</span></div></div></div>
-    <p class="note">Claude Fable is counted by each card&rsquo;s main question; 25 of its cards combine two or three types. Exact counts are in the table below.</p>
-    <div class="tip" id="tip" role="tooltip"></div>
-  </div>
-
-  <div class="tablewrap">
-    <table>
-      <caption class="sr-only" style="position:absolute;left:-9999px">Feature comparison of the three versions</caption>
-      <thead><tr><th scope="col">What we checked</th><th scope="col">Claude Fable</th><th scope="col">Codex Astra</th><th scope="col">Grok</th></tr></thead>
-      <tbody>
-        <tr><th scope="row">Use cases / worked examples</th><td>100 / 100</td><td>100 / 100</td><td>100 / 100</td></tr>
-        <tr><th scope="row">Industries</th><td>17</td><td>20</td><td>20</td></tr>
-        <tr><th scope="row">Average words per use case</th><td>78</td><td>115</td><td>57</td></tr>
-        <tr><th scope="row">Question mix (Noul / Score / Choice)</th><td>34 / 21 / 45</td><td>24 / 14 / 62</td><td>26 / 29 / 45</td></tr>
-        <tr><th scope="row">Cards combining question types</th><td>25</td><td>0</td><td>0</td></tr>
-        <tr><th scope="row">Dark mode</th><td class="y">Yes</td><td class="y">Yes</td><td class="n">No</td></tr>
-        <tr><th scope="row">Content readable without JavaScript</th><td class="y">Yes</td><td class="y">Yes</td><td class="n">No</td></tr>
-        <tr><th scope="row">Search covers example text</th><td class="y">Yes</td><td class="y">Yes</td><td class="n">No</td></tr>
-        <tr><th scope="row">Filter by question type</th><td class="y">One at a time</td><td class="y">One at a time</td><td class="y">Several at once</td></tr>
-        <tr><th scope="row">Filter by industry</th><td class="p">Jump links</td><td class="p">Jump links</td><td class="y">Clickable chips</td></tr>
-        <tr><th scope="row">Screen-reader extras (skip link, live count, labels)</th><td class="p">Some</td><td class="y">Yes</td><td class="n">No</td></tr>
-        <tr><th scope="row">Print-friendly</th><td class="y">Yes</td><td class="y">Yes, opens all examples</td><td class="n">No</td></tr>
-        <tr><th scope="row">Link straight to one card</th><td class="y">Yes</td><td class="y">Yes</td><td class="n">No</td></tr>
-        <tr><th scope="row">Facts about Jev itself</th><td>Speed, price and limits, with sources</td><td>Links to TypeSafe docs</td><td>None beyond the intro</td></tr>
-        <tr><th scope="row">Page size</th><td>114 KB</td><td>173 KB</td><td>69 KB</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
 <!-- SAME CASE -->
 <section class="s" id="same">
   <p class="kicker">Same job, three answers</p>
@@ -591,20 +549,6 @@ footer p{max-width:70ch}
     });
   });
   if(tabs.length) show(tabs[0].getAttribute('aria-controls'));
-
-  // chart tooltip
-  var chart=document.getElementById('mix'), tip=document.getElementById('tip');
-  [].slice.call(chart.querySelectorAll('.seg')).forEach(function(s){
-    function on(){
-      var r=s.getBoundingClientRect(), c=chart.getBoundingClientRect();
-      tip.textContent=s.getAttribute('data-tip');
-      tip.style.left=(r.left-c.left+r.width/2)+'px'; tip.style.top=(r.top-c.top)+'px';
-      tip.classList.add('on');
-    }
-    s.addEventListener('mouseenter',on); s.addEventListener('focus',on);
-    s.addEventListener('mouseleave',function(){tip.classList.remove('on');});
-    s.addEventListener('blur',function(){tip.classList.remove('on');});
-  });
 })();
 </script>
 </body>
