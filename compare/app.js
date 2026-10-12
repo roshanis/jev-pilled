@@ -367,4 +367,31 @@ async function listen(btn) {
   }
 }
 
+// Fade and slide sections in as they scroll into view. Without JS, or with
+// reduced motion, everything just shows.
+function revealOnScroll() {
+  if (!("IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const groups = [".sys", ".facts li", ".sys-note", ".live > *", ".composer", ".pilled > h2", ".pilled > .lede", ".example-card", ".more-links"];
+  const items = [];
+  for (const sel of groups) {
+    document.querySelectorAll(sel).forEach((node, i) => {
+      node.classList.add("reveal");
+      node.style.transitionDelay = `${Math.min(i, 4) * 80}ms`;
+      items.push(node);
+    });
+  }
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        e.target.classList.add("in");
+        io.unobserve(e.target);
+      }
+    },
+    { rootMargin: "0px 0px -8% 0px" },
+  );
+  items.forEach((n) => io.observe(n));
+}
+
+revealOnScroll();
 init();
