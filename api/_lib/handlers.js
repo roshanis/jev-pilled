@@ -16,7 +16,6 @@ const isMock = () => process.env.MOCK === "1";
 export function configPayload() {
   return {
     mock: isMock(),
-    passcodeRequired: Boolean(process.env.COMPARE_PASSCODE),
     keys: {
       openai: Boolean(process.env.OPENAI_API_KEY),
       anthropic: Boolean(process.env.ANTHROPIC_API_KEY),
@@ -42,19 +41,8 @@ async function settle(fn) {
   }
 }
 
-function passcodeError(passcode) {
-  const required = process.env.COMPARE_PASSCODE;
-  if (required && passcode !== required) {
-    return { status: 401, body: { error: "Wrong or missing passcode" } };
-  }
-  return null;
-}
-
 // Returns { status, body }.
-export async function compare(reqBody, passcode) {
-  const denied = passcodeError(passcode);
-  if (denied) return denied;
-
+export async function compare(reqBody) {
   const {
     state,
     questions,
@@ -83,9 +71,7 @@ export async function compare(reqBody, passcode) {
 }
 
 // Returns { status, body } where body is an MP3 Buffer on success.
-export async function speech(reqBody, passcode) {
-  const denied = passcodeError(passcode);
-  if (denied) return denied;
+export async function speech(reqBody) {
   try {
     return { status: 200, body: await speak(reqBody || {}), contentType: "audio/mpeg" };
   } catch (err) {

@@ -10,12 +10,12 @@ app.use(express.json({ limit: "1mb" }));
 
 app.get("/api/config", (_req, res) => res.json(configPayload()));
 app.post("/api/compare", async (req, res) => {
-  const { status, body } = await compare(req.body, req.get("x-compare-passcode"));
+  const { status, body } = await compare(req.body);
   res.status(status).json(body);
 });
 
 app.post("/api/speak", async (req, res) => {
-  const { status, body, contentType } = await speech(req.body, req.get("x-compare-passcode"));
+  const { status, body, contentType } = await speech(req.body);
   if (contentType) return res.status(status).type(contentType).send(body);
   res.status(status).json(body);
 });
