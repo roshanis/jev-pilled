@@ -395,7 +395,7 @@ async function listen(btn) {
 // reduced motion, everything just shows.
 function revealOnScroll() {
   if (!("IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  const groups = [".sys", ".facts li", ".sys-note", ".live > *", ".composer", ".pilled > h2", ".pilled > .lede", ".example-card", ".more-links"];
+  const groups = [".sys", ".facts li", ".sys-note", ".voice > h2", ".voice > .lede", ".turns", ".steps li", ".live > *", ".composer", ".pilled > h2", ".pilled > .lede", ".example-card", ".more-links"];
   const items = [];
   for (const sel of groups) {
     document.querySelectorAll(sel).forEach((node, i) => {

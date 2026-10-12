@@ -9,7 +9,7 @@ test("every preset is a valid question set", () => {
 });
 
 test("schema lists every option and level", () => {
-  const { questions } = PRESETS[0];
+  const { questions } = PRESETS.find((x) => x.id === "support-ticket");
   const schema = buildOutputSchema(questions);
   const a = schema.properties.answers.properties;
   assert.deepEqual(a.department.properties.probabilities.required, ["billing", "technical", "account", "other"]);
@@ -18,7 +18,7 @@ test("schema lists every option and level", () => {
 });
 
 test("Claude output is converted to Jev's answer shape", () => {
-  const { questions } = PRESETS[0];
+  const { questions } = PRESETS.find((x) => x.id === "support-ticket");
   const out = toJevShape(questions, {
     department: { probabilities: { billing: 6, technical: 3, account: 1, other: 0 } },
     urgency: { probabilities: { 0: 0, 1: 0.2, 2: 0.6, 3: 0.2 } },
