@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<title>OpenAI vs Claude vs Jev · Jev-pilled</title>
-<meta name="description" content="Send the same task to OpenAI, Claude and Jev and compare their answers, confidence, speed and cost side by side.">
+<title>Jev-pilled</title>
+<meta name="description" content="What Jev is, a live OpenAI vs Claude vs Jev comparison, and 100 use cases for System 1 models.">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/compare/style.css">
 </head>
@@ -15,17 +15,28 @@
   <div class="wrap">
     <a class="brand" href="/">Jev-pilled</a>
     <nav aria-label="Sections">
-      <a href="/" aria-current="page">Live comparison</a>
-      <a href="#examples">100 examples</a>
-      <a href="/more/">What is Jev</a>
+      <a href="#what">What&rsquo;s Jev</a>
+      <a href="#live">Live example</a>
+      <a href="#examples">100 use cases</a>
     </nav>
   </div>
 </header>
 
 <main id="main" class="wrap">
-  <section class="hero">
-    <h1>OpenAI vs Claude vs Jev</h1>
-    <p class="lede">Pick an example or paste your own text, then press Run.</p>
+  <section id="what" class="hero">
+    <h1>What&rsquo;s Jev?</h1>
+    <p class="lede">Most AI models write. Jev, from TypeSafe AI, decides. Give it some text and a question with a fixed set of answers, and it picks one and tells you how sure it is. It&rsquo;s a System 1 model: a quick gut call, not a long chain of reasoning.</p>
+    <ul class="facts">
+      <li><b>Fast</b><span>About a fifth of a second per call.</span></li>
+      <li><b>Cheap</b><span>About $0.04 per million input tokens, so you can check everything, not a sample.</span></li>
+      <li><b>Three kinds of question</b><span>Yes/no, a rating on your scale, or one pick from your list.</span></li>
+      <li><b>Not for writing</b><span>No summaries or explanations. Your code decides what to do with the answer.</span></li>
+    </ul>
+  </section>
+
+  <section id="live" class="live">
+    <h2>Live example</h2>
+    <p class="lede">The same text and questions go to OpenAI, Claude and Jev. Pick an example or paste your own, then press Run.</p>
     <div id="banner" class="banner" role="status" hidden></div>
   </section>
 
@@ -79,14 +90,14 @@
   </section>
 
   <section id="examples" class="pilled">
-    <h2>Want to be AI-pilled? Here&rsquo;s more.</h2>
-    <p class="lede">I asked Claude, Codex and Grok the same thing: give me 100 places Jev could be used, with an example for every one. Here is what each came back with.</p>
+    <h2>100 use cases</h2>
+    <p class="lede">Where can Jev, or any System 1 model, be used? I asked Claude, Codex and Grok each for 100 places, with an example for every one.</p>
     <div class="examples">
       <a class="example-card" href="/claude-fable/"><b>Claude Fable</b><span>Deep and specific: 17 industries, concrete thresholds and next steps.</span><em>100 examples &rarr;</em></a>
       <a class="example-card" href="/codex-astra/"><b>Codex Astra</b><span>Broad and careful: 20 industries, five cases in each.</span><em>100 examples &rarr;</em></a>
       <a class="example-card" href="/grok/"><b>Grok</b><span>Compact and scannable: short cases with filters.</span><em>100 examples &rarr;</em></a>
     </div>
-    <p class="more-links"><a href="/side-by-side/">Browse all 300 side by side</a> &middot; <a href="/more/">What Jev is and why it&rsquo;s cheap enough to check everything</a></p>
+    <p class="more-links"><a href="/side-by-side/">Browse all 300 side by side</a> &middot; <a href="/more/">The longer explainer</a></p>
   </section>
 </main>
 
