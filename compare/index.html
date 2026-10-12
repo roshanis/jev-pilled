@@ -1,97 +1,133 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>OpenAI vs Claude vs Jev · Jev-pilled</title>
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="style.css" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>OpenAI vs Claude vs Jev · Jev-pilled</title>
+<meta name="description" content="Send the same task to OpenAI, Claude and Jev and compare their answers, confidence, speed and cost side by side.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <a class="home" href="/">&larr; Jev-pilled</a>
-    <h1>OpenAI <span class="vs">vs</span> Claude <span class="vs">vs</span> Jev</h1>
-    <p class="sub">Same state, same typed questions. Compare answers, calibration, speed and cost.</p>
-    <div id="banner" class="banner" hidden></div>
-  </header>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/">Jev-pilled</a>
+    <nav aria-label="Sections">
+      <a href="/">Home</a>
+      <a href="/side-by-side/">Side by side</a>
+      <a href="/compare/" aria-current="page">Live comparison</a>
+    </nav>
+  </div>
+</header>
 
-  <main>
-    <section class="panel input">
-      <div class="row">
-        <label>Example
-          <select id="preset"></select>
-        </label>
-        <label>OpenAI model
-          <select id="openaiModel"></select>
-        </label>
-        <label>Claude model
-          <select id="model"></select>
-        </label>
-        <label>Effort
-          <select id="effort"></select>
-        </label>
-      </div>
+<main id="main" class="wrap">
+  <section class="hero">
+    <p class="eyebrow">Live comparison</p>
+    <h1>One question, three models.</h1>
+    <p class="lede">Send the same input and the same typed questions to two general-purpose LLMs and to Jev, a model built only for decisions. See where they agree, how confident each one is, and what each answer costs.</p>
+    <div class="legend-row" aria-label="Models compared">
+      <span class="who-chip" data-side="openai"><i></i>OpenAI</span>
+      <span class="who-chip" data-side="claude"><i></i>Claude</span>
+      <span class="who-chip" data-side="jev"><i></i>Jev</span>
+    </div>
+    <div id="banner" class="banner" role="status" hidden></div>
+  </section>
 
-      <label>State <span class="hint">text, or JSON for structured input</span>
-        <textarea id="state" rows="6" spellcheck="false"></textarea>
+  <section class="card composer" aria-labelledby="taskTitle">
+    <div class="composer-head">
+      <h2 id="taskTitle">The task</h2>
+      <div id="presetTabs" class="tabs" role="tablist" aria-label="Example tasks"></div>
+    </div>
+
+    <div class="io">
+      <label class="field">
+        <span class="field-label">Input <span class="hint">text, or JSON for structured input</span></span>
+        <textarea id="state" rows="9" spellcheck="false"></textarea>
       </label>
-
-      <label>Questions <span class="hint">TypeSafe System One schema: choice, score or noul</span>
-        <textarea id="questions" rows="14" spellcheck="false" class="mono"></textarea>
+      <label class="field">
+        <span class="field-label">Questions <span class="hint">choice, score or yes/no (Noul)</span></span>
+        <textarea id="questions" rows="9" spellcheck="false" class="mono"></textarea>
       </label>
+    </div>
 
-      <label id="passcodeRow" hidden>Passcode <span class="hint">this deployment is protected</span>
-        <input id="passcode" type="password" autocomplete="off" />
+    <div class="controls">
+      <label class="field small">
+        <span class="field-label">OpenAI model</span>
+        <select id="openaiModel"></select>
       </label>
+      <label class="field small">
+        <span class="field-label">Claude model</span>
+        <select id="model"></select>
+      </label>
+      <label class="field small">
+        <span class="field-label">Effort</span>
+        <select id="effort"></select>
+      </label>
+      <label id="passcodeRow" class="field small" hidden>
+        <span class="field-label">Passcode</span>
+        <input id="passcode" type="password" autocomplete="off">
+      </label>
+      <button id="run" class="btn primary run"><span class="spinner" aria-hidden="true"></span><span class="run-label">Run all three</span></button>
+    </div>
+    <p id="formError" class="error" role="alert"></p>
+  </section>
 
-      <div class="actions">
-        <button id="run">Run all three</button>
-        <span id="formError" class="error"></span>
-      </div>
+  <section id="results" class="results" hidden aria-live="polite">
+    <div class="scoreboard">
+      <article class="side-card" data-side="openai">
+        <header><h2>OpenAI</h2><button class="listen" data-side="openai" hidden>&#9654; Listen</button></header>
+        <p class="model-name"></p>
+        <dl class="metrics">
+          <div><dt>Latency</dt><dd class="latency">–</dd></div>
+          <div><dt>Tokens</dt><dd class="tokens">–</dd></div>
+          <div><dt>Cost</dt><dd class="cost">–</dd></div>
+        </dl>
+        <div class="badges"></div>
+        <p class="side-error error"></p>
+      </article>
+      <article class="side-card" data-side="claude">
+        <header><h2>Claude</h2><button class="listen" data-side="claude" hidden>&#9654; Listen</button></header>
+        <p class="model-name"></p>
+        <dl class="metrics">
+          <div><dt>Latency</dt><dd class="latency">–</dd></div>
+          <div><dt>Tokens</dt><dd class="tokens">–</dd></div>
+          <div><dt>Cost</dt><dd class="cost">–</dd></div>
+        </dl>
+        <div class="badges"></div>
+        <p class="side-error error"></p>
+      </article>
+      <article class="side-card" data-side="jev">
+        <header><h2>Jev</h2><button class="listen" data-side="jev" hidden>&#9654; Listen</button></header>
+        <p class="model-name"></p>
+        <dl class="metrics">
+          <div><dt>Latency</dt><dd class="latency">–</dd></div>
+          <div><dt>Tokens</dt><dd class="tokens">–</dd></div>
+          <div><dt>Cost</dt><dd class="cost">–</dd></div>
+        </dl>
+        <div class="badges"></div>
+        <p class="side-error error"></p>
+      </article>
+    </div>
+
+    <p id="summary" class="callout" hidden></p>
+    <div id="answers"></div>
+
+    <section id="reasoningBox" class="reasoning" hidden>
+      <h2>How the LLMs explained themselves</h2>
+      <p class="muted">Jev returns only decisions and probabilities, so it has no explanation to show.</p>
+      <div id="reasoning" class="reasoning-grid"></div>
     </section>
+  </section>
+</main>
 
-    <section id="results" class="results" hidden>
-      <div class="stats">
-        <div class="stat-col" data-side="openai">
-          <button class="listen" data-side="openai" hidden>&#9654; Listen</button>
-          <h2>OpenAI <span class="model-name"></span></h2>
-          <dl>
-            <div><dt>Latency</dt><dd class="latency">–</dd></div>
-            <div><dt>Tokens in / out</dt><dd class="tokens">–</dd></div>
-            <div><dt>Cost</dt><dd class="cost">–</dd></div>
-          </dl>
-          <p class="side-error error"></p>
-        </div>
-        <div class="stat-col" data-side="claude">
-          <button class="listen" data-side="claude" hidden>&#9654; Listen</button>
-          <h2>Claude <span class="model-name"></span></h2>
-          <dl>
-            <div><dt>Latency</dt><dd class="latency">–</dd></div>
-            <div><dt>Tokens in / out</dt><dd class="tokens">–</dd></div>
-            <div><dt>Cost</dt><dd class="cost">–</dd></div>
-          </dl>
-          <p class="side-error error"></p>
-        </div>
-        <div class="stat-col" data-side="jev">
-          <button class="listen" data-side="jev" hidden>&#9654; Listen</button>
-          <h2>Jev <span class="model-name"></span></h2>
-          <dl>
-            <div><dt>Latency</dt><dd class="latency">–</dd></div>
-            <div><dt>Tokens in / out</dt><dd class="tokens">–</dd></div>
-            <div><dt>Cost</dt><dd class="cost">–</dd></div>
-          </dl>
-          <p class="side-error error"></p>
-        </div>
-      </div>
-      <p id="summary" class="summary"></p>
-      <div id="answers"></div>
-      <details id="reasoningBox" class="panel">
-        <summary>OpenAI's and Claude's reasoning</summary>
-        <div id="reasoning"></div>
-      </details>
-    </section>
-  </main>
+<footer>
+  <div class="wrap">
+    <p>Jev is TypeSafe AI's decision model. Every answer here comes from a live API call; cost is estimated from each provider's list price per token.</p>
+  </div>
+</footer>
 
-  <script src="app.js" type="module"></script>
+<script src="app.js" type="module"></script>
 </body>
 </html>

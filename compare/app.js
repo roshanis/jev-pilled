@@ -7,7 +7,9 @@ const el = (tag, cls, text) => {
 };
 const pct = (p) => `${Math.round(p * 100)}%`;
 const fmtUsd = (v) =>
-  v == null ? "–" : v === 0 ? "$0" : v < 0.0001 ? `$${v.toExponential(2)}` : `$${v.toFixed(v < 0.01 ? 5 : 4)}`;
+  v == null ? "–" : v === 0 ? "$0" : `$${v.toLocaleString("en-US", { maximumSignificantDigits: 2, maximumFractionDigits: 10 })}`;
+
+const fmtMs = (ms) => (ms >= 1000 ? `${(ms / 1000).toFixed(ms >= 10000 ? 0 : 1)} s` : `${ms} ms`);
 
 const SIDES = [
   ["openai", "OpenAI"],
@@ -43,10 +45,15 @@ async function init() {
     /* storage unavailable */
   }
 
-  const preset = $("#preset");
-  for (const p of config.presets) preset.append(new Option(p.label, p.id));
-  preset.append(new Option("Custom", "custom"));
-  preset.addEventListener("change", () => loadPreset(preset.value));
+  const tabs = $("#presetTabs");
+  for (const p of config.presets) {
+    const b = el("button", null, p.label);
+    b.type = "button";
+    b.setAttribute("role", "tab");
+    b.dataset.id = p.id;
+    b.addEventListener("click", () => loadPreset(p.id));
+    tabs.append(b);
+  }
 
   for (const m of config.openaiModels) {
     $("#openaiModel").append(new Option(m.label, m.id, false, m.id === config.defaultOpenaiModel));
@@ -63,6 +70,7 @@ async function init() {
 function loadPreset(id) {
   const p = config.presets.find((x) => x.id === id);
   if (!p) return;
+  for (const b of $("#presetTabs").children) b.setAttribute("aria-selected", String(b.dataset.id === id));
   $("#state").value = typeof p.state === "string" ? p.state : JSON.stringify(p.state, null, 2);
   $("#questions").value = JSON.stringify(p.questions, null, 2);
 }
@@ -99,8 +107,14 @@ async function run() {
     /* storage unavailable */
   }
 
+  const results = $("#results");
+  const firstRun = results.hidden;
   btn.disabled = true;
-  btn.textContent = "Running…";
+  btn.classList.add("loading");
+  $(".run-label", btn).textContent = "Running…";
+  results.hidden = false;
+  results.classList.add("loading");
+  if (firstRun) results.scrollIntoView({ behavior: "smooth", block: "start" });
   try {
     const res = await fetch("/api/compare", {
       method: "POST",
@@ -118,17 +132,22 @@ async function run() {
     render(questions, data);
   } catch (e) {
     formError.textContent = e.message;
+    if (firstRun) results.hidden = true;
   } finally {
     btn.disabled = false;
-    btn.textContent = "Run all three";
+    btn.classList.remove("loading");
+    $(".run-label", btn).textContent = "Run all three";
+    results.classList.remove("loading");
   }
 }
 
 function renderStats(side, r) {
-  const col = $(`.stat-col[data-side="${side}"]`);
-  $(".model-name", col).textContent = r.model ? `· ${r.model}` : "";
-  $(".latency", col).textContent = r.latencyMs != null ? `${r.latencyMs.toLocaleString()} ms` : "–";
-  $(".tokens", col).textContent = r.usage ? `${r.usage.input_tokens} / ${r.usage.output_tokens}` : "–";
+  const col = $(`.side-card[data-side="${side}"]`);
+  $(".model-name", col).textContent = r.model || "";
+  $(".latency", col).textContent = r.latencyMs != null ? fmtMs(r.latencyMs) : "–";
+  $(".tokens", col).textContent = r.usage ? `${r.usage.input_tokens}/${r.usage.output_tokens}` : "–";
+  $(".tokens", col).title = r.usage ? `${r.usage.input_tokens} input, ${r.usage.output_tokens} output tokens` : "";
+  $(".badges", col).replaceChildren();
   $(".cost", col).textContent = fmtUsd(r.costUsd);
   $(".side-error", col).textContent = r.error || "";
 }
@@ -156,20 +175,20 @@ function renderAnswer(q, a) {
     return box;
   }
   if (a.type === "noul") {
-    const v = el("div", "verdict", a.noul >= 0.5 ? "Yes " : "No ");
-    v.append(el("small", null, `p(yes) = ${a.noul.toFixed(3)}`));
-    box.append(v, bars({ yes: a.noul, no: 1 - a.noul }, null, a.noul >= 0.5 ? "yes" : "no"));
+    box.append(el("div", "verdict", a.noul >= 0.5 ? "Yes" : "No"));
+    box.append(el("div", "verdict-sub", `${pct(a.noul)} chance of yes`));
+    box.append(bars({ yes: a.noul, no: 1 - a.noul }, null, a.noul >= 0.5 ? "yes" : "no"));
   } else if (a.type === "choice") {
-    const v = el("div", "verdict", `${a.choice} `);
-    if (a.confidence != null) v.append(el("small", null, `confidence ${pct(a.confidence)}`));
-    box.append(v, bars(a.probabilities || { [a.choice]: 1 }, null, a.choice));
+    box.append(el("div", "verdict", a.choice.replace(/_/g, " ")));
+    box.append(el("div", "verdict-sub", a.confidence != null ? `${pct(a.confidence)} confident` : "\u00a0"));
+    box.append(bars(a.probabilities || { [a.choice]: 1 }, null, a.choice));
   } else if (a.type === "score") {
     const legend = a.legend || Object.fromEntries(q.criteria.map((c, i) => [String(i), String(c)]));
     const nearest = String(Math.round(a.score));
-    const v = el("div", "verdict", `${a.score.toFixed(2)} `);
-    v.append(el("small", null, `≈ ${legend[nearest] ?? nearest}${a.confidence != null ? ` · confidence ${pct(a.confidence)}` : ""}`));
+    box.append(el("div", "verdict", legend[nearest] ?? nearest));
+    box.append(el("div", "verdict-sub", `score ${a.score.toFixed(2)} of ${q.criteria.length - 1}${a.confidence != null ? ` · ${pct(a.confidence)} confident` : ""}`));
     const labels = Object.fromEntries(Object.entries(legend).map(([k, d]) => [k, `${k} · ${d}`]));
-    box.append(v, bars(a.probabilities || {}, labels, nearest));
+    box.append(bars(a.probabilities || {}, labels, nearest));
   }
   return box;
 }
@@ -191,7 +210,7 @@ function agreement(q, answersBySide) {
   if (sizes.length === 1) return { cls: "agree", text: present.length === 3 ? "All agree" : "Agree" };
   if (present.length === 3 && sizes.length === 2) {
     const odd = sizes.find((g) => g.length === 1)[0];
-    return { cls: "partial", text: `${LABEL[odd]} differs` };
+    return { cls: "partial", text: `${LABEL[odd]} differs`, odd };
   }
   return { cls: "disagree", text: present.length === 3 ? "All differ" : "Disagree" };
 }
@@ -216,9 +235,9 @@ function render(questions, results) {
     const bySide = Object.fromEntries(SIDES.map(([side]) => [side, results[side].answers?.[name]]));
     const card = el("article", "q-card");
     const head = el("div", "q-head");
-    const h = el("h3", null, name);
-    h.append(el("span", "type", q.type));
-    head.append(h);
+    const title = el("div", "q-title");
+    title.append(el("h3", null, name.replace(/_/g, " ")), el("span", "type", q.type === "noul" ? "yes / no" : q.type));
+    head.append(title);
     const ag = agreement(q, bySide);
     if (ag) {
       compared++;
@@ -230,10 +249,10 @@ function render(questions, results) {
 
     const sides = el("div", "q-sides");
     for (const [side, label] of SIDES) {
-      const s = el("div", "side");
+      const s = el("div", "side" + (ag?.odd === side ? " odd" : ""));
       s.dataset.side = side;
       s.append(el("h4", null, label));
-      s.append(results[side].error ? el("p", "na", "Request failed, see error above") : renderAnswer(q, bySide[side]));
+      s.append(results[side].error ? el("p", "na", "No answer: the request failed (see above).") : renderAnswer(q, bySide[side]));
       sides.append(s);
     }
     card.append(sides);
@@ -241,31 +260,50 @@ function render(questions, results) {
   }
 
   const ok = SIDES.filter(([side]) => !results[side].error);
-  const parts = [];
+  markLeaders(ok, results);
+  const summary = $("#summary");
+  summary.replaceChildren();
   if (compared) {
-    parts.push(`${ok.length === 3 ? "All three" : "Both"} agree on ${allAgree} of ${compared} question${compared === 1 ? "" : "s"}.`);
+    summary.append(
+      el("b", null, `${ok.length === 3 ? "All three" : "They"} agree on ${allAgree} of ${compared} question${compared === 1 ? "" : "s"}.`),
+    );
   }
   const jev = results.jev;
-  const others = SIDES.filter(([side]) => side !== "jev" && !results[side].error);
-  if (jev.latencyMs && others.length) {
-    parts.push(`Jev was ${others.map(([side, label]) => `${(results[side].latencyMs / jev.latencyMs).toFixed(1)}× faster than ${label}`).join(" and ")}.`);
+  const others = ok.filter(([side]) => side !== "jev");
+  if (!jev.error && others.length) {
+    const speed = others.map(([side, label]) => ratioText(results[side].latencyMs / jev.latencyMs, label, "faster", "slower"));
+    const cost = others.map(([side, label]) => ratioText(results[side].costUsd / jev.costUsd, label, "cheaper", "more expensive"));
+    summary.append(` Jev was ${speed.join(" and ")}, and ${cost.join(" and ")}.`);
   }
-  if (jev.costUsd && others.length) {
-    parts.push(`Cost vs Jev: ${others.map(([side, label]) => `${label} ${Math.round(results[side].costUsd / jev.costUsd).toLocaleString()}×`).join(", ")}.`);
-  }
-  $("#summary").textContent = parts.join(" ");
+  summary.hidden = summary.childNodes.length === 0;
 
   const box = $("#reasoning");
   box.replaceChildren();
   for (const [side, label] of SIDES) {
     if (!results[side].reasoning) continue;
-    const p = el("p");
-    p.dataset.side = side;
-    p.className = "side";
-    p.append(el("b", null, `${label}: `), results[side].reasoning);
-    box.append(p);
+    const card = el("article", "reason");
+    card.dataset.side = side;
+    card.append(el("h3", null, label), el("p", null, results[side].reasoning));
+    box.append(card);
   }
   $("#reasoningBox").hidden = box.childElementCount === 0;
+}
+
+// "3.2× faster than Claude" when ratio > 1, "2.0× slower than Claude" otherwise.
+function ratioText(ratio, label, better, worse) {
+  if (!Number.isFinite(ratio) || ratio <= 0) return `not comparable with ${label}`;
+  if (ratio >= 1) return `${ratio >= 10 ? Math.round(ratio).toLocaleString() : ratio.toFixed(1)}× ${better} than ${label}`;
+  const inv = 1 / ratio;
+  return `${inv >= 10 ? Math.round(inv).toLocaleString() : inv.toFixed(1)}× ${worse} than ${label}`;
+}
+
+// Adds "Fastest" and "Cheapest" badges to the leading side cards.
+function markLeaders(ok, results) {
+  if (ok.length < 2) return;
+  const best = (key) => ok.reduce((a, b) => ((results[b[0]][key] ?? Infinity) < (results[a[0]][key] ?? Infinity) ? b : a))[0];
+  for (const [key, text] of [["latencyMs", "Fastest"], ["costUsd", "Cheapest"]]) {
+    $(`.side-card[data-side="${best(key)}"] .badges`).append(el("span", "badge", text));
+  }
 }
 
 // A short spoken summary of one side's answers.
@@ -309,7 +347,7 @@ async function listen(btn) {
   stopAudio();
   if (wasPlaying || !lastRun) return;
 
-  const errBox = $(`.stat-col[data-side="${side}"] .side-error`);
+  const errBox = $(`.side-card[data-side="${side}"] .side-error`);
   errBox.textContent = "";
   btn.disabled = true;
   btn.textContent = "Loading…";
