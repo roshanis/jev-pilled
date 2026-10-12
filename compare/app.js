@@ -63,6 +63,9 @@ async function init() {
 
   for (const b of document.querySelectorAll(".listen")) b.addEventListener("click", () => listen(b));
 
+  $("#questions").addEventListener("input", summarizeQuestions);
+  $("#showProbs").addEventListener("change", (e) => $("#results").classList.toggle("show-probs", e.target.checked));
+
   loadPreset(config.presets[0].id);
   $("#run").addEventListener("click", run);
 }
@@ -73,6 +76,7 @@ function loadPreset(id) {
   for (const b of $("#presetTabs").children) b.setAttribute("aria-selected", String(b.dataset.id === id));
   $("#state").value = typeof p.state === "string" ? p.state : JSON.stringify(p.state, null, 2);
   $("#questions").value = JSON.stringify(p.questions, null, 2);
+  summarizeQuestions();
 }
 
 function readState(raw) {
@@ -143,17 +147,37 @@ async function run() {
 
 function renderStats(side, r) {
   const col = $(`.side-card[data-side="${side}"]`);
-  $(".model-name", col).textContent = r.model || "";
-  $(".latency", col).textContent = r.latencyMs != null ? fmtMs(r.latencyMs) : "–";
-  $(".tokens", col).textContent = r.usage ? `${r.usage.input_tokens}/${r.usage.output_tokens}` : "–";
-  $(".tokens", col).title = r.usage ? `${r.usage.input_tokens} input, ${r.usage.output_tokens} output tokens` : "";
+  const line = $(".stat-line", col);
+  line.textContent = r.error ? "" : `${fmtMs(r.latencyMs)} · ${fmtUsd(r.costUsd)}`;
+  line.title = r.error
+    ? ""
+    : `${r.model}: ${r.usage?.input_tokens ?? "?"} input and ${r.usage?.output_tokens ?? "?"} output tokens`;
   $(".badges", col).replaceChildren();
-  $(".cost", col).textContent = fmtUsd(r.costUsd);
   $(".side-error", col).textContent = r.error || "";
 }
 
+// One line under the input listing what the questions ask, e.g. "department · urgency (1–4) · refund requested?".
+function summarizeQuestions() {
+  const out = $("#questionSummary");
+  try {
+    const qs = JSON.parse($("#questions").value);
+    out.textContent = Object.entries(qs)
+      .map(([name, q]) => {
+        const label = name.replace(/_/g, " ");
+        if (q.type === "noul") return `${label}?`;
+        if (q.type === "score") return `${label} (scale of ${q.criteria?.length ?? "?"})`;
+        return `${label} (${Object.keys(q.criteria || {}).length} options)`;
+      })
+      .join(" · ");
+    out.classList.remove("bad");
+  } catch {
+    out.textContent = "questions are not valid JSON";
+    out.classList.add("bad");
+  }
+}
+
 function bars(probabilities, labels, top) {
-  const wrap = el("div");
+  const wrap = el("div", "bars");
   for (const [key, p] of Object.entries(probabilities)) {
     const row = el("div", "bar" + (key === top ? " top" : ""));
     const lbl = el("span", "lbl", labels?.[key] ?? key);

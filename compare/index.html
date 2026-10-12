@@ -24,48 +24,36 @@
 
 <main id="main" class="wrap">
   <section class="hero">
-    <p class="eyebrow">Live comparison</p>
     <h1>One question, three models.</h1>
-    <p class="lede">Send the same input and the same typed questions to two general-purpose LLMs and to Jev, a model built only for decisions. See where they agree, how confident each one is, and what each answer costs.</p>
-    <div class="legend-row" aria-label="Models compared">
-      <span class="who-chip" data-side="openai"><i></i>OpenAI</span>
-      <span class="who-chip" data-side="claude"><i></i>Claude</span>
-      <span class="who-chip" data-side="jev"><i></i>Jev</span>
-    </div>
+    <p class="lede">Pick a task and run it. OpenAI, Claude and Jev each answer the same questions, side by side.</p>
     <div id="banner" class="banner" role="status" hidden></div>
   </section>
 
-  <section class="card composer" aria-labelledby="taskTitle">
-    <div class="composer-head">
-      <h2 id="taskTitle">The task</h2>
-      <div id="presetTabs" class="tabs" role="tablist" aria-label="Example tasks"></div>
-    </div>
+  <section class="card composer" aria-label="Task">
+    <div id="presetTabs" class="tabs" role="tablist" aria-label="Example tasks"></div>
 
-    <div class="io">
-      <label class="field">
-        <span class="field-label">Input <span class="hint">text, or JSON for structured input</span></span>
-        <textarea id="state" rows="9" spellcheck="false"></textarea>
-      </label>
-      <label class="field">
-        <span class="field-label">Questions <span class="hint">choice, score or yes/no (Noul)</span></span>
-        <textarea id="questions" rows="9" spellcheck="false" class="mono"></textarea>
-      </label>
-    </div>
+    <label class="field">
+      <span class="field-label">Input</span>
+      <textarea id="state" rows="5" spellcheck="false"></textarea>
+    </label>
+    <p class="asks"><span class="field-label">Asks</span> <span id="questionSummary"></span></p>
 
-    <div class="controls">
-      <label class="field small">
-        <span class="field-label">OpenAI model</span>
-        <select id="openaiModel"></select>
-      </label>
-      <label class="field small">
-        <span class="field-label">Claude model</span>
-        <select id="model"></select>
-      </label>
-      <label class="field small">
-        <span class="field-label">Effort</span>
-        <select id="effort"></select>
-      </label>
-      <label id="passcodeRow" class="field small" hidden>
+    <details class="more">
+      <summary>Edit questions</summary>
+      <p class="hint">Each question is <b>choice</b> (pick one option), <b>score</b> (a level on a scale) or <b>noul</b> (yes/no).</p>
+      <textarea id="questions" rows="12" spellcheck="false" class="mono" aria-label="Questions JSON"></textarea>
+    </details>
+    <details class="more">
+      <summary>Models and effort</summary>
+      <div class="controls">
+        <label class="field"><span class="field-label">OpenAI</span><select id="openaiModel"></select></label>
+        <label class="field"><span class="field-label">Claude</span><select id="model"></select></label>
+        <label class="field"><span class="field-label">Effort</span><select id="effort"></select></label>
+      </div>
+    </details>
+
+    <div class="go">
+      <label id="passcodeRow" class="field" hidden>
         <span class="field-label">Passcode</span>
         <input id="passcode" type="password" autocomplete="off">
       </label>
@@ -78,47 +66,35 @@
     <div class="scoreboard">
       <article class="side-card" data-side="openai">
         <header><h2>OpenAI</h2><button class="listen" data-side="openai" hidden>&#9654; Listen</button></header>
-        <p class="model-name"></p>
-        <dl class="metrics">
-          <div><dt>Latency</dt><dd class="latency">–</dd></div>
-          <div><dt>Tokens</dt><dd class="tokens">–</dd></div>
-          <div><dt>Cost</dt><dd class="cost">–</dd></div>
-        </dl>
+        <p class="stat-line"></p>
         <div class="badges"></div>
         <p class="side-error error"></p>
       </article>
       <article class="side-card" data-side="claude">
         <header><h2>Claude</h2><button class="listen" data-side="claude" hidden>&#9654; Listen</button></header>
-        <p class="model-name"></p>
-        <dl class="metrics">
-          <div><dt>Latency</dt><dd class="latency">–</dd></div>
-          <div><dt>Tokens</dt><dd class="tokens">–</dd></div>
-          <div><dt>Cost</dt><dd class="cost">–</dd></div>
-        </dl>
+        <p class="stat-line"></p>
         <div class="badges"></div>
         <p class="side-error error"></p>
       </article>
       <article class="side-card" data-side="jev">
         <header><h2>Jev</h2><button class="listen" data-side="jev" hidden>&#9654; Listen</button></header>
-        <p class="model-name"></p>
-        <dl class="metrics">
-          <div><dt>Latency</dt><dd class="latency">–</dd></div>
-          <div><dt>Tokens</dt><dd class="tokens">–</dd></div>
-          <div><dt>Cost</dt><dd class="cost">–</dd></div>
-        </dl>
+        <p class="stat-line"></p>
         <div class="badges"></div>
         <p class="side-error error"></p>
       </article>
     </div>
 
-    <p id="summary" class="callout" hidden></p>
+    <div class="results-bar">
+      <p id="summary" class="summary" hidden></p>
+      <label class="toggle"><input type="checkbox" id="showProbs"> Show probabilities</label>
+    </div>
     <div id="answers"></div>
 
-    <section id="reasoningBox" class="reasoning" hidden>
-      <h2>How the LLMs explained themselves</h2>
-      <p class="muted">Jev returns only decisions and probabilities, so it has no explanation to show.</p>
+    <details id="reasoningBox" class="more reasoning" hidden>
+      <summary>Why OpenAI and Claude answered this way</summary>
+      <p class="hint">Jev returns only decisions and probabilities, so it has no explanation to show.</p>
       <div id="reasoning" class="reasoning-grid"></div>
-    </section>
+    </details>
   </section>
 </main>
 
