@@ -148,6 +148,14 @@ td.odd { background: var(--warn-soft); }
 .live { margin: 40px 0 16px; scroll-margin-top: 72px; }
 .live h2 { font-size: clamp(1.5rem, 3.2vw, 2rem); letter-spacing: -.01em; margin: 0 0 8px; }
 #what { scroll-margin-top: 72px; }
+.systems { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 22px; }
+.sys { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+.sys:first-child { border-color: var(--jev); box-shadow: inset 4px 0 0 var(--jev); }
+.sys-tag { font-size: .72rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.sys:first-child .sys-tag { color: var(--jev); }
+.sys .q { margin: 6px 0 2px; font-size: 1.1rem; font-weight: 700; }
+.sys .a { margin: 0; color: var(--muted); font-size: .95rem; }
+.sys-note { margin: 12px 0 0; font-size: .95rem; }
 
 /* AI-pilled: links to the 100-example pages */
 .pilled { margin-top: 56px; scroll-margin-top: 72px; }
@@ -175,7 +183,7 @@ footer p { margin: 0; max-width: 72ch; }
 }
 @media (max-width: 720px) {
   .examples { grid-template-columns: 1fr; }
-  .facts { grid-template-columns: 1fr; }
+  .facts, .systems { grid-template-columns: 1fr; }
   .controls { grid-template-columns: 1fr; }
   .go { flex-direction: column; align-items: stretch; }
   .go input { flex: none; }
