@@ -19,7 +19,7 @@ The three guides are kept as each model produced them; only a small navigation b
 
 ## OpenAI vs Claude vs Jev live comparison (`/compare/`)
 
-Jev doesn't write text: you give it a **state** (text or JSON) and typed questions (`choice`, `score`, `noul`), and it returns calibrated probabilities. The compare page sends the same state and questions to Jev unchanged, and to OpenAI and Claude as the same structured-output request asking for a probability per option. Their answers are converted into Jev's response shape, so each question shows all three answers with probability bars, a tag saying whether they agree (or which one differs), and latency, tokens and cost per side. Four example tasks are built in (ticket triage, review sentiment, an LLM guardrail, smart-home intent routing), and you can edit the questions JSON freely.
+Jev doesn't write text: you give it a **state** (text or JSON) and typed questions (`choice`, `score`, `noul`), and it returns calibrated probabilities. The compare page sends the same state and questions to Jev unchanged, and to OpenAI and Claude as the same structured-output request asking for a probability per option. Their answers are converted into Jev's response shape, so the page shows a TL;DR (where they agreed, which was fastest and cheapest) and one table with each model's answer and confidence per question, with disagreements highlighted. Four example tasks are built in (ticket triage, review sentiment, an LLM guardrail, smart-home intent routing); the models, effort and questions JSON are under **Advanced**.
 
 The page calls three serverless routes, `api/config.js`, `api/compare.js` and `api/speak.js`; shared logic lives in `api/_lib/`.
 

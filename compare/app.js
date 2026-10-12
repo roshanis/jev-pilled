@@ -38,7 +38,7 @@ async function init() {
     banner.hidden = false;
   }
 
-  $("#passcodeRow").hidden = !config.passcodeRequired;
+  $("#passcode").hidden = !config.passcodeRequired;
   try {
     $("#passcode").value = sessionStorage.getItem("comparePasscode") || "";
   } catch {
@@ -63,8 +63,6 @@ async function init() {
 
   for (const b of document.querySelectorAll(".listen")) b.addEventListener("click", () => listen(b));
 
-  $("#questions").addEventListener("input", summarizeQuestions);
-  $("#showProbs").addEventListener("change", (e) => $("#results").classList.toggle("show-probs", e.target.checked));
 
   loadPreset(config.presets[0].id);
   $("#run").addEventListener("click", run);
@@ -76,7 +74,6 @@ function loadPreset(id) {
   for (const b of $("#presetTabs").children) b.setAttribute("aria-selected", String(b.dataset.id === id));
   $("#state").value = typeof p.state === "string" ? p.state : JSON.stringify(p.state, null, 2);
   $("#questions").value = JSON.stringify(p.questions, null, 2);
-  summarizeQuestions();
 }
 
 function readState(raw) {
@@ -140,81 +137,28 @@ async function run() {
   } finally {
     btn.disabled = false;
     btn.classList.remove("loading");
-    $(".run-label", btn).textContent = "Run all three";
+    $(".run-label", btn).textContent = "Run";
     results.classList.remove("loading");
   }
 }
 
 function renderStats(side, r) {
-  const col = $(`.side-card[data-side="${side}"]`);
-  const line = $(".stat-line", col);
+  const head = $(`.side-head[data-side="${side}"]`);
+  const line = $(".stat-line", head);
   line.textContent = r.error ? "" : `${fmtMs(r.latencyMs)} · ${fmtUsd(r.costUsd)}`;
   line.title = r.error
     ? ""
     : `${r.model}: ${r.usage?.input_tokens ?? "?"} input and ${r.usage?.output_tokens ?? "?"} output tokens`;
-  $(".badges", col).replaceChildren();
-  $(".side-error", col).textContent = r.error || "";
+  $(".side-error", head).textContent = r.error ? "Failed" : "";
 }
 
-// One line under the input listing what the questions ask, e.g. "department · urgency (1–4) · refund requested?".
-function summarizeQuestions() {
-  const out = $("#questionSummary");
-  try {
-    const qs = JSON.parse($("#questions").value);
-    out.textContent = Object.entries(qs)
-      .map(([name, q]) => {
-        const label = name.replace(/_/g, " ");
-        if (q.type === "noul") return `${label}?`;
-        if (q.type === "score") return `${label} (scale of ${q.criteria?.length ?? "?"})`;
-        return `${label} (${Object.keys(q.criteria || {}).length} options)`;
-      })
-      .join(" · ");
-    out.classList.remove("bad");
-  } catch {
-    out.textContent = "questions are not valid JSON";
-    out.classList.add("bad");
-  }
-}
-
-function bars(probabilities, labels, top) {
-  const wrap = el("div", "bars");
-  for (const [key, p] of Object.entries(probabilities)) {
-    const row = el("div", "bar" + (key === top ? " top" : ""));
-    const lbl = el("span", "lbl", labels?.[key] ?? key);
-    lbl.title = labels?.[key] ?? key;
-    const track = el("span", "track");
-    const fill = el("span", "fill");
-    fill.style.width = pct(p);
-    track.append(fill);
-    row.append(lbl, track, el("span", "pct", pct(p)));
-    wrap.append(row);
-  }
-  return wrap;
-}
-
-function renderAnswer(q, a) {
-  const box = el("div");
-  if (!a) {
-    box.append(el("p", "na", "No answer"));
-    return box;
-  }
-  if (a.type === "noul") {
-    box.append(el("div", "verdict", a.noul >= 0.5 ? "Yes" : "No"));
-    box.append(el("div", "verdict-sub", `${pct(a.noul)} chance of yes`));
-    box.append(bars({ yes: a.noul, no: 1 - a.noul }, null, a.noul >= 0.5 ? "yes" : "no"));
-  } else if (a.type === "choice") {
-    box.append(el("div", "verdict", a.choice.replace(/_/g, " ")));
-    box.append(el("div", "verdict-sub", a.confidence != null ? `${pct(a.confidence)} confident` : "\u00a0"));
-    box.append(bars(a.probabilities || { [a.choice]: 1 }, null, a.choice));
-  } else if (a.type === "score") {
-    const legend = a.legend || Object.fromEntries(q.criteria.map((c, i) => [String(i), String(c)]));
-    const nearest = String(Math.round(a.score));
-    box.append(el("div", "verdict", legend[nearest] ?? nearest));
-    box.append(el("div", "verdict-sub", `score ${a.score.toFixed(2)} of ${q.criteria.length - 1}${a.confidence != null ? ` · ${pct(a.confidence)} confident` : ""}`));
-    const labels = Object.fromEntries(Object.entries(legend).map(([k, d]) => [k, `${k} · ${d}`]));
-    box.append(bars(a.probabilities || {}, labels, nearest));
-  }
-  return box;
+// The headline answer and how sure the model was, e.g. ["account", 0.76].
+function answerText(q, a) {
+  if (a.type === "noul") return [a.noul >= 0.5 ? "Yes" : "No", Math.max(a.noul, 1 - a.noul)];
+  if (a.type === "choice") return [a.choice.replace(/_/g, " "), a.confidence ?? a.probabilities?.[a.choice]];
+  const legend = a.legend || Object.fromEntries(q.criteria.map((c, i) => [String(i), String(c)]));
+  const nearest = String(Math.round(a.score));
+  return [legend[nearest] ?? nearest, a.confidence];
 }
 
 // The headline answer used to decide whether sides agree.
@@ -224,7 +168,7 @@ function verdictKey(q, a) {
   return String(Math.round(a.score));
 }
 
-// Returns { cls, text } for the agreement pill, or null with fewer than two answers.
+// Returns { cls, text, odd } describing agreement, or null with fewer than two answers.
 function agreement(q, answersBySide) {
   const present = Object.entries(answersBySide).filter(([, a]) => a);
   if (present.length < 2) return null;
@@ -250,43 +194,45 @@ function render(questions, results) {
     $(`.listen[data-side="${side}"]`).hidden = !config.keys.elevenlabs || Boolean(r.error);
   }
 
-  const list = $("#answers");
-  list.replaceChildren();
+  const body = $("#answers");
+  body.replaceChildren();
   let allAgree = 0;
   let compared = 0;
   const splits = [];
 
   for (const [name, q] of Object.entries(questions)) {
+    const label = name.replace(/_/g, " ");
     const bySide = Object.fromEntries(SIDES.map(([side]) => [side, results[side].answers?.[name]]));
-    const card = el("article", "q-card");
-    const head = el("div", "q-head");
-    const title = el("div", "q-title");
-    title.append(el("h3", null, name.replace(/_/g, " ")), el("span", "type", q.type === "noul" ? "yes / no" : q.type));
-    head.append(title);
     const ag = agreement(q, bySide);
     if (ag) {
       compared++;
       if (ag.cls === "agree") allAgree++;
-      else splits.push(`${name.replace(/_/g, " ")} (${ag.odd ? ag.text : ag.text.toLowerCase()})`);
-      head.append(el("span", `pill ${ag.cls}`, ag.text));
+      else splits.push(`${label} (${ag.odd ? ag.text : ag.text.toLowerCase()})`);
     }
-    card.append(head);
-    card.append(el("p", "q-instr", typeof q.instructions === "string" ? q.instructions : JSON.stringify(q.instructions)));
 
-    const sides = el("div", "q-sides");
-    for (const [side, label] of SIDES) {
-      const s = el("div", "side" + (ag?.odd === side ? " odd" : ""));
-      s.dataset.side = side;
-      s.append(el("h4", null, label));
-      s.append(results[side].error ? el("p", "na", "No answer: the request failed (see above).") : renderAnswer(q, bySide[side]));
-      sides.append(s);
+    const row = el("tr", ag && ag.cls !== "agree" ? "split" : null);
+    const th = el("th", null, label);
+    th.scope = "row";
+    if (typeof q.instructions === "string") th.title = q.instructions;
+    row.append(th);
+    for (const [side, sideLabel] of SIDES) {
+      const td = el("td", ag?.odd === side ? "odd" : null);
+      td.dataset.side = side;
+      td.dataset.label = sideLabel;
+      const a = bySide[side];
+      if (!a) {
+        td.append(el("span", "na", "–"));
+      } else {
+        const [text, conf] = answerText(q, a);
+        td.append(el("span", "verdict", text));
+        if (conf != null) td.append(el("span", "conf", pct(conf)));
+      }
+      row.append(td);
     }
-    card.append(sides);
-    list.append(card);
+    body.append(row);
   }
 
   const ok = SIDES.filter(([side]) => !results[side].error);
-  markLeaders(ok, results);
   renderTldr(ok, results, { allAgree, compared, splits });
 
   const box = $("#reasoning");
@@ -334,15 +280,6 @@ function listText(items) {
   return items.length < 2 ? items.join("") : `${items.slice(0, -1).join(", ")} and ${items.at(-1)}`;
 }
 
-// Adds "Fastest" and "Cheapest" badges to the leading side cards.
-function markLeaders(ok, results) {
-  if (ok.length < 2) return;
-  const best = (key) => ok.reduce((a, b) => ((results[b[0]][key] ?? Infinity) < (results[a[0]][key] ?? Infinity) ? b : a))[0];
-  for (const [key, text] of [["latencyMs", "Fastest"], ["costUsd", "Cheapest"]]) {
-    $(`.side-card[data-side="${best(key)}"] .badges`).append(el("span", "badge", text));
-  }
-}
-
 // A short spoken summary of one side's answers.
 function speechText(side) {
   const { questions } = lastRun;
@@ -384,7 +321,7 @@ async function listen(btn) {
   stopAudio();
   if (wasPlaying || !lastRun) return;
 
-  const errBox = $(`.side-card[data-side="${side}"] .side-error`);
+  const errBox = $(`.side-head[data-side="${side}"] .side-error`);
   errBox.textContent = "";
   btn.disabled = true;
   btn.textContent = "Loading…";
