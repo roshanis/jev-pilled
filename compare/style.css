@@ -60,7 +60,7 @@ a { color: var(--accent); }
 .hero { padding: 40px 0 20px; }
 .eyebrow { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; margin: 0 0 10px; }
 h1 { font-size: clamp(2rem, 4.6vw, 3rem); line-height: 1.08; letter-spacing: -.02em; margin: 0 0 14px; }
-.lede { font-size: 1.1rem; color: var(--muted); max-width: 64ch; margin: 0; }
+.lede { font-size: 1.1rem; color: var(--muted); margin: 0; }
 [data-side="openai"] { --side: var(--openai); --side-soft: var(--openai-soft); }
 [data-side="claude"] { --side: var(--claude); --side-soft: var(--claude-soft); }
 [data-side="jev"] { --side: var(--jev); --side-soft: var(--jev-soft); }
