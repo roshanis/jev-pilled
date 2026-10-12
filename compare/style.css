@@ -140,6 +140,15 @@ td.odd { background: var(--warn-soft); }
 .results.loading .tldr, .results.loading tbody, .results.loading #reasoningBox { opacity: .35; }
 @keyframes shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
 
+/* What's Jev facts and the live example heading */
+.facts { list-style: none; padding: 0; margin: 24px 0 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.facts li { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
+.facts b { font-size: 1rem; }
+.facts span { color: var(--muted); font-size: .92rem; }
+.live { margin: 40px 0 16px; scroll-margin-top: 72px; }
+.live h2 { font-size: clamp(1.5rem, 3.2vw, 2rem); letter-spacing: -.01em; margin: 0 0 8px; }
+#what { scroll-margin-top: 72px; }
+
 /* AI-pilled: links to the 100-example pages */
 .pilled { margin-top: 56px; scroll-margin-top: 72px; }
 .pilled h2 { font-size: clamp(1.5rem, 3.2vw, 2rem); letter-spacing: -.01em; margin: 0 0 8px; }
@@ -166,6 +175,7 @@ footer p { margin: 0; max-width: 72ch; }
 }
 @media (max-width: 720px) {
   .examples { grid-template-columns: 1fr; }
+  .facts { grid-template-columns: 1fr; }
   .controls { grid-template-columns: 1fr; }
   .go { flex-direction: column; align-items: stretch; }
   .go input { flex: none; }
