@@ -119,6 +119,8 @@ details.more > summary:hover { color: var(--text); }
 .answers thead td { width: 22%; }
 .side-head { border-top: 3px solid var(--side); }
 .side-head .name { font-size: 1.05rem; font-weight: 700; color: var(--side); }
+.model-name { display: block; font-size: .85rem; font-weight: 600; color: var(--text); }
+.model-line { margin: 8px 0 0; font-size: .85rem; color: var(--muted); text-align: center; }
 .stat-line { display: block; font-size: .85rem; font-weight: 500; color: var(--muted); font-variant-numeric: tabular-nums; min-height: 1.3em; }
 .side-head .error { margin: 4px 0 0; display: block; }
 .listen {
@@ -138,6 +140,17 @@ td.odd { background: var(--warn-soft); }
 .results.loading .tldr, .results.loading tbody, .results.loading #reasoningBox { opacity: .35; }
 @keyframes shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
 
+/* AI-pilled: links to the 100-example pages */
+.pilled { margin-top: 56px; scroll-margin-top: 72px; }
+.pilled h2 { font-size: clamp(1.5rem, 3.2vw, 2rem); letter-spacing: -.01em; margin: 0 0 8px; }
+.examples { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
+.example-card { display: flex; flex-direction: column; gap: 6px; padding: 18px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; color: var(--text); text-decoration: none; transition: border-color .15s; }
+.example-card:hover { border-color: var(--line-strong); }
+.example-card b { font-size: 1.1rem; }
+.example-card span { color: var(--muted); font-size: .95rem; flex: 1; }
+.example-card em { font-style: normal; font-weight: 600; }
+.more-links { margin: 18px 0 0; color: var(--muted); }
+
 /* Reasoning */
 .reasoning { margin-top: 24px; }
 .reasoning-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -152,6 +165,7 @@ footer p { margin: 0; max-width: 72ch; }
   .reasoning-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 720px) {
+  .examples { grid-template-columns: 1fr; }
   .controls { grid-template-columns: 1fr; }
   .go { flex-direction: column; align-items: stretch; }
   .go input { flex: none; }

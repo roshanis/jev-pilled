@@ -8,16 +8,17 @@ example for each. This static site explains Jev with diagrams and compares the t
 
 | Path | What it is |
 |---|---|
-| `/` | Plain-language explainer, diagrams, scorecard, same-case comparison |
+| `/` | Live comparison: send the same task to OpenAI, Claude and Jev and see the three answers side by side, then links to the 100-example guides |
+| `/more/` | Plain-language explainer, diagrams, scorecard, same-case comparison |
 | `/claude-fable/` | Claude Fable's guide (100 cases, 17 industries) |
 | `/codex-astra/` | Codex Astra's guide (100 cases, 20 industries) |
 | `/grok/` | Grok's guide (100 cases, 20 industries) |
 | `/side-by-side/` | All three in scrollable columns |
-| `/compare/` | Live comparison: send the same task to OpenAI, Claude and Jev and see the three answers side by side |
+| `/compare/` | Old address of the live comparison; redirects to `/` |
 
 The three guides are kept as each model produced them; only a small navigation bar was added at the top.
 
-## OpenAI vs Claude vs Jev live comparison (`/compare/`)
+## OpenAI vs Claude vs Jev live comparison (`/`)
 
 Jev doesn't write text: you give it a **state** (text or JSON) and typed questions (`choice`, `score`, `noul`), and it returns calibrated probabilities. The compare page sends the same state and questions to Jev unchanged, and to OpenAI and Claude as the same structured-output request asking for a probability per option. Their answers are converted into Jev's response shape, so the page shows a TL;DR (where they agreed, which was fastest and cheapest) and one table with each model's answer and confidence per question, with disagreements highlighted. Four example tasks are built in (ticket triage, review sentiment, an LLM guardrail, smart-home intent routing); the models, effort and questions JSON are under **Advanced**.
 
@@ -39,7 +40,7 @@ Run it locally:
 ```bash
 npm install
 cp .env.example .env    # add your keys
-npm start               # http://localhost:3000/compare/
+npm start               # http://localhost:3000/
 ```
 
 `npm run mock` runs the page without keys, and `npm test` runs the unit tests.

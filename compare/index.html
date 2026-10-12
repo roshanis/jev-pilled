@@ -2,88 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light dark">
-<title>OpenAI vs Claude vs Jev · Jev-pilled</title>
-<meta name="description" content="Send the same task to OpenAI, Claude and Jev and compare their answers, confidence, speed and cost side by side.">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css">
+<title>Live comparison moved · Jev-pilled</title>
+<meta http-equiv="refresh" content="0; url=/">
+<link rel="canonical" href="/">
+<script>location.replace("/");</script>
 </head>
 <body>
-<a class="skip" href="#main">Skip to content</a>
-<header class="top">
-  <div class="wrap">
-    <a class="brand" href="/">Jev-pilled</a>
-    <nav aria-label="Sections">
-      <a href="/">Home</a>
-      <a href="/side-by-side/">Side by side</a>
-      <a href="/compare/" aria-current="page">Live comparison</a>
-    </nav>
-  </div>
-</header>
-
-<main id="main" class="wrap">
-  <section class="hero">
-    <h1>OpenAI vs Claude vs Jev</h1>
-    <p class="lede">Pick an example or paste your own text, then press Run.</p>
-    <div id="banner" class="banner" role="status" hidden></div>
-  </section>
-
-  <section class="card composer" aria-label="Task">
-    <div id="presetTabs" class="tabs" role="tablist" aria-label="Examples"></div>
-    <textarea id="state" rows="4" spellcheck="false" aria-label="Text to analyze"></textarea>
-    <div class="go">
-      <input id="passcode" type="password" autocomplete="off" placeholder="Passcode" aria-label="Passcode" hidden>
-      <button id="run" class="btn primary run"><span class="spinner" aria-hidden="true"></span><span class="run-label">Run</span></button>
-    </div>
-    <p id="formError" class="error" role="alert"></p>
-
-    <details class="more">
-      <summary>Advanced</summary>
-      <div class="controls">
-        <label class="field"><span class="field-label">OpenAI</span><select id="openaiModel"></select></label>
-        <label class="field"><span class="field-label">Claude</span><select id="model"></select></label>
-        <label class="field"><span class="field-label">Effort</span><select id="effort"></select></label>
-      </div>
-      <label class="field questions-field">
-        <span class="field-label">Questions (JSON)</span>
-        <textarea id="questions" rows="10" spellcheck="false" class="mono"></textarea>
-      </label>
-      <p class="hint">Each question is <b>choice</b> (pick one option), <b>score</b> (a level on a scale) or <b>noul</b> (yes/no).</p>
-    </details>
-  </section>
-
-  <section id="results" class="results" hidden aria-live="polite">
-    <div id="tldr" class="tldr" hidden>
-      <h2>TL;DR</h2>
-      <ul></ul>
-    </div>
-
-    <table class="answers">
-      <thead>
-        <tr>
-          <td></td>
-          <th scope="col" class="side-head" data-side="openai"><span class="name">OpenAI</span> <span class="stat-line"></span> <button class="listen" data-side="openai" hidden>&#9654; Listen</button><span class="side-error error"></span></th>
-          <th scope="col" class="side-head" data-side="claude"><span class="name">Claude</span> <span class="stat-line"></span> <button class="listen" data-side="claude" hidden>&#9654; Listen</button><span class="side-error error"></span></th>
-          <th scope="col" class="side-head" data-side="jev"><span class="name">Jev</span> <span class="stat-line"></span> <button class="listen" data-side="jev" hidden>&#9654; Listen</button><span class="side-error error"></span></th>
-        </tr>
-      </thead>
-      <tbody id="answers"></tbody>
-    </table>
-
-    <details id="reasoningBox" class="more reasoning" hidden>
-      <summary>Why OpenAI and Claude answered this way</summary>
-      <div id="reasoning" class="reasoning-grid"></div>
-    </details>
-  </section>
-</main>
-
-<footer>
-  <div class="wrap">
-    <p>Jev is TypeSafe AI's decision model. Every answer here comes from a live API call; cost is estimated from each provider's list price per token.</p>
-  </div>
-</footer>
-
-<script src="app.js" type="module"></script>
+<p>The live comparison is now on the <a href="/">home page</a>.</p>
 </body>
 </html>

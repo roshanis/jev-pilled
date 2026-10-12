@@ -61,11 +61,29 @@ async function init() {
   for (const m of config.models) $("#model").append(new Option(m.label, m.id, false, m.id === config.defaultModel));
   for (const e of config.efforts) $("#effort").append(new Option(e, e, false, e === "low"));
 
+  for (const id of ["#openaiModel", "#model"]) $(id).addEventListener("change", showModels);
+  showModels();
+
   for (const b of document.querySelectorAll(".listen")) b.addEventListener("click", () => listen(b));
 
 
   loadPreset(config.presets[0].id);
   $("#run").addEventListener("click", run);
+}
+
+const selectedLabel = (id) => $(id).selectedOptions[0]?.textContent ?? $(id).value;
+
+// Names the models that will answer, under the Run button and in the table header.
+function showModels() {
+  const names = { openai: selectedLabel("#openaiModel"), claude: selectedLabel("#model"), jev: "Jev (jev-latest)" };
+  $("#modelLine").textContent = `Compares ${names.openai}, ${names.claude} and ${names.jev}. Change models under Advanced.`;
+  for (const [side] of SIDES) $(`.side-head[data-side="${side}"] .model-name`).textContent = names[side].replace(/^(Claude|Jev) /, "");
+}
+
+// The display name for a model id a provider reported, e.g. "claude-haiku-5-5" -> "Haiku 5.5".
+function modelLabel(id) {
+  const known = [...config.openaiModels, ...config.models].find((m) => id.startsWith(m.id));
+  return known ? known.label.replace(/^Claude /, "") + (id.endsWith("(mock)") ? " (mock)" : "") : id;
 }
 
 function loadPreset(id) {
@@ -144,6 +162,7 @@ async function run() {
 
 function renderStats(side, r) {
   const head = $(`.side-head[data-side="${side}"]`);
+  if (r.model) $(".model-name", head).textContent = modelLabel(r.model);
   const line = $(".stat-line", head);
   line.textContent = r.error ? "" : `${fmtMs(r.latencyMs)} · ${fmtUsd(r.costUsd)}`;
   line.title = r.error
@@ -309,6 +328,9 @@ function stopAudio() {
     URL.revokeObjectURL(audio.src);
     audio = null;
   }
+  for (const id of ["#openaiModel", "#model"]) $(id).addEventListener("change", showModels);
+  showModels();
+
   for (const b of document.querySelectorAll(".listen")) {
     b.classList.remove("playing");
     b.innerHTML = "&#9654; Listen";
