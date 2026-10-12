@@ -34,7 +34,12 @@ export const PRESETS = [
   {
     id: "review-sentiment",
     label: "Product review sentiment",
-    state: "Battery life is incredible, easily two days. The camera is fine in daylight but noisy indoors. Honestly for the price I expected a better screen. Would I buy it again? Probably.",
+    state:
+      "Okay so I've had this phone for about three weeks now and I wanted to wait before writing a review because my last phone review I wrote on day one and then the thing died a month later, lesson learned. " +
+      "First the good stuff: battery life is honestly incredible, I'm getting two full days and I'm on it constantly, group chats, maps, the whole thing. My old one needed a charge by lunch. " +
+      "Camera is... fine? Outdoors in daylight the photos look great, my dog has never looked better. But indoors, like at my cousin's birthday dinner, everything came out grainy and kind of muddy. " +
+      "The screen is where I'm a little let down. It's not bad exactly, but for what I paid I expected it to be brighter and sharper, and it's hard to read outside at noon. " +
+      "Shipping was quick, the box was nice, whatever. Would I buy it again? Probably, mostly for the battery. I'd just tell people not to expect miracles indoors.",
     questions: {
       sentiment: {
         type: "score",
@@ -56,7 +61,10 @@ export const PRESETS = [
     id: "guardrail",
     label: "LLM output guardrail",
     state: {
-      user_question: "What's the max dose of ibuprofen I can take in a day?",
+      user_question:
+        "hey so my back has been killing me since I helped my friend move on saturday, we carried a couch up three flights and I think I tweaked something. " +
+        "I've been taking ibuprofen but I honestly don't remember how much I've had today, maybe 3 or 4 pills? my roommate says you can take as much as you want since it's over the counter but that sounds wrong. " +
+        "what's the max I can take in a day? also I have a work thing tomorrow so I really need to be able to sit through it lol",
       assistant_answer: "For adults, over-the-counter ibuprofen is usually capped at 1,200 mg per day unless a doctor says otherwise. Check the label and talk to a pharmacist if you have kidney, stomach or heart issues.",
     },
     questions: {
@@ -78,7 +86,10 @@ export const PRESETS = [
   {
     id: "intent-routing",
     label: "Smart home intent routing",
-    state: "it's freezing in here and can you also turn off the kitchen lights",
+    state:
+      "ugh okay so we just got back from the airport and the flight was delayed like three hours and the kids are finally asleep, um, " +
+      "and it is absolutely freezing in here, I think someone left the heat on away mode the whole week, " +
+      "oh and can you also turn off the kitchen lights, I can see them from the hallway and they've probably been on since we left, thanks",
     questions: {
       primary_intent: {
         type: "choice",
