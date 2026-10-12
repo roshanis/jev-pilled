@@ -3,7 +3,12 @@ export const PRESETS = [
   {
     id: "support-ticket",
     label: "Support ticket triage",
-    state: "Hi, I was charged twice for my Pro plan this month and the app has also been logging me out every few minutes since yesterday's update. I need the duplicate charge refunded ASAP, this is really frustrating.",
+    state:
+      "Hi there, hope you're having a better week than me lol. So I've been using you guys for about two years now, mostly for my little side business (I make candles, long story, my sister got me into it), and honestly it's been mostly fine, " +
+      "except the dark mode thing a while back but whatever, that got fixed. Anyway I was going through my bank app on Sunday because my partner and I are trying to do a budget thing this year, and I noticed there are two charges for the Pro plan this month, " +
+      "same amount, a day apart. I thought maybe one was pending and would drop off but it's Tuesday now and they're both still there. Also, and I don't know if this is related, since the update yesterday the app keeps kicking me out every few minutes, " +
+      "like I'll be in the middle of entering an order and boom, back to the login screen. I've restarted my phone twice and cleared the cache like the help page said. My nephew says it's probably a cookie thing but he's fourteen so who knows. " +
+      "Anyway, can I please get the extra charge back? Kind of soon if possible, rent is due Friday and every bit counts right now. Sorry for the essay, it's been a day. Thanks!",
     questions: {
       department: {
         type: "choice",
