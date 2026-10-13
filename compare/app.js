@@ -409,6 +409,7 @@ function revealOnScroll() {
 }
 
 themeToggle();
+compareBalloon();
 revealOnScroll();
 init();
 
@@ -429,4 +430,17 @@ function themeToggle() {
     }
     label();
   });
+}
+
+// Shows the "compare Jev" balloon only while the live example and its results are off screen.
+function compareBalloon() {
+  const balloon = $("#compareBalloon");
+  if (!balloon || !("IntersectionObserver" in window)) return;
+  const targets = ["#live", ".composer", "#results"].map((s) => $(s)).filter(Boolean);
+  const visible = new Set();
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) e.isIntersecting ? visible.add(e.target) : visible.delete(e.target);
+    balloon.hidden = visible.size > 0;
+  });
+  targets.forEach((t) => io.observe(t));
 }
