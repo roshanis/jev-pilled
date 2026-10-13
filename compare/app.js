@@ -196,7 +196,6 @@ function render(questions, results) {
     const r = results[side] || { error: "No result" };
     results[side] = r;
     renderStats(side, r);
-    $(`.listen[data-side="${side}"]`).hidden = !config.keys.elevenlabs || Boolean(r.error);
   }
 
   const body = $("#answers");
