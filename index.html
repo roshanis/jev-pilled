@@ -23,8 +23,8 @@
     <a class="brand" href="/">Jev-pilled</a>
     <nav aria-label="Sections">
       <a href="#what">What&rsquo;s Jev</a>
-      <a href="#voice">Voice agent</a>
       <a href="#live">Live example</a>
+      <a href="#voice">Voice agent</a>
       <a href="#examples">100 use cases</a>
     </nav>
     <button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark mode">
@@ -50,36 +50,6 @@
       <li><b>Three kinds of question</b><span>Yes/no, a rating on your scale, or one pick from your list.</span></li>
       <li><b>Not for writing</b><span>No summaries or explanations. Your code decides what to do with the answer.</span></li>
     </ul>
-  </section>
-
-  <section id="voice" class="voice">
-    <h2>Why speed matters: a voice agent</h2>
-    <p class="lede">Someone calls an airline&rsquo;s AI phone agent. Before the agent can say anything useful, it has to know what the caller wants: a new flight, a refund, a lost bag, or a human. Every moment spent working that out is silence on the line.</p>
-    <figure class="flow" aria-label="The call flow: the caller's audio becomes a transcript, Jev picks the intent in about a fifth of a second, then the agent either rebooks right away or asks one short question.">
-      <div class="flow-row">
-        <div class="node"><span class="node-tag">1 · Listen</span><b>Caller</b><span class="node-sub">&ldquo;&hellip;my flight got canceled, I really need to be in Chicago tonight&hellip;&rdquo;</span></div>
-        <div class="edge"><span>audio</span></div>
-        <div class="node"><span class="node-tag node-tag-empty" aria-hidden="true">&nbsp;</span><b>Speech-to-text</b><span class="node-sub">streams the words as they&rsquo;re said</span></div>
-        <div class="edge"><span>transcript</span></div>
-        <div class="node node-jev" data-side="jev"><span class="node-tag">2 · Decide</span><b>Jev</b><span class="node-sub"><code>intent: rebook_flight</code><code>urgency: right now</code></span><span class="node-time">about 0.2 s</span></div>
-        <div class="flow-branch">
-          <div class="flow-out">
-            <div class="edge"><span>sure</span></div>
-            <div class="node node-good"><span class="node-tag">3 · Act</span><b>Rebook now</b><span class="node-sub">&ldquo;I can get you on the 4:10 to O&rsquo;Hare.&rdquo;</span></div>
-          </div>
-          <div class="flow-out">
-            <div class="edge edge-muted"><span>not sure</span></div>
-            <div class="node"><span class="node-tag">3 · Act</span><b>Ask or hand off</b><span class="node-sub">one short question, or a bigger model or a person</span></div>
-          </div>
-        </div>
-      </div>
-      <figcaption>Jev only has to pick from a short list, so the decision is ready almost as soon as the caller stops talking.</figcaption>
-    </figure>
-    <div class="turns" aria-label="Silence after the caller stops talking">
-      <div class="turn"><span class="turn-who">Big chat model</span><span class="turn-track"><span class="turn-gap slow"></span><span class="turn-note">often a second or more of silence</span></span></div>
-      <div class="turn"><span class="turn-who">Jev</span><span class="turn-track"><span class="turn-gap fast" data-side="jev"></span><span class="turn-note">about a fifth of a second</span></span></div>
-    </div>
-    <p class="sys-note">Try it below with the <b>Airline voice call</b> example.</p>
   </section>
 
   <section id="live" class="live">
@@ -141,6 +111,36 @@
     </details>
   </section>
 
+  <section id="voice" class="voice">
+    <h2>Why speed matters: a voice agent</h2>
+    <p class="lede">Someone calls an airline&rsquo;s AI phone agent. Before the agent can say anything useful, it has to know what the caller wants: a new flight, a refund, a lost bag, or a human. Every moment spent working that out is silence on the line.</p>
+    <figure class="flow" aria-label="The call flow: the caller's audio becomes a transcript, Jev picks the intent in about a fifth of a second, then the agent either rebooks right away or asks one short question.">
+      <div class="flow-row">
+        <div class="node"><span class="node-tag">1 · Listen</span><b>Caller</b><span class="node-sub">&ldquo;&hellip;my flight got canceled, I really need to be in Chicago tonight&hellip;&rdquo;</span></div>
+        <div class="edge"><span>audio</span></div>
+        <div class="node"><span class="node-tag node-tag-empty" aria-hidden="true">&nbsp;</span><b>Speech-to-text</b><span class="node-sub">streams the words as they&rsquo;re said</span></div>
+        <div class="edge"><span>transcript</span></div>
+        <div class="node node-jev" data-side="jev"><span class="node-tag">2 · Decide</span><b>Jev</b><span class="node-sub"><code>intent: rebook_flight</code><code>urgency: right now</code></span><span class="node-time">about 0.2 s</span></div>
+        <div class="flow-branch">
+          <div class="flow-out">
+            <div class="edge"><span>sure</span></div>
+            <div class="node node-good"><span class="node-tag">3 · Act</span><b>Rebook now</b><span class="node-sub">&ldquo;I can get you on the 4:10 to O&rsquo;Hare.&rdquo;</span></div>
+          </div>
+          <div class="flow-out">
+            <div class="edge edge-muted"><span>not sure</span></div>
+            <div class="node"><span class="node-tag">3 · Act</span><b>Ask or hand off</b><span class="node-sub">one short question, or a bigger model or a person</span></div>
+          </div>
+        </div>
+      </div>
+      <figcaption>Jev only has to pick from a short list, so the decision is ready almost as soon as the caller stops talking.</figcaption>
+    </figure>
+    <div class="turns" aria-label="Silence after the caller stops talking">
+      <div class="turn"><span class="turn-who">Big chat model</span><span class="turn-track"><span class="turn-gap slow"></span><span class="turn-note">often a second or more of silence</span></span></div>
+      <div class="turn"><span class="turn-who">Jev</span><span class="turn-track"><span class="turn-gap fast" data-side="jev"></span><span class="turn-note">about a fifth of a second</span></span></div>
+    </div>
+    <p class="sys-note"><a href="#live">Try it in the live example</a> with the <b>Airline voice call</b> example.</p>
+  </section>
+
   <section id="examples" class="pilled">
     <h2>100 use cases</h2>
     <p class="lede">Where can Jev, or any System 1 model, be used? I asked Claude, Codex and Grok each for 100 places, with an example for every one.</p>
@@ -152,6 +152,8 @@
     <p class="more-links"><a href="/side-by-side/">Browse all 300 side by side</a> &middot; <a href="/more/">The longer explainer</a></p>
   </section>
 </main>
+
+<a id="compareBalloon" class="balloon" href="#live" hidden>Click here to compare Jev <span aria-hidden="true">&rarr;</span></a>
 
 <footer>
   <div class="wrap">
