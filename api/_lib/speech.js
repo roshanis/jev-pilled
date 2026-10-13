@@ -27,8 +27,13 @@ export async function speak({ text, side }) {
     },
   );
   if (!res.ok) {
+    // Keep the raw ElevenLabs error in the server log; visitors get a plain line.
     const detail = (await res.text()).slice(0, 300);
-    throw Object.assign(new Error(`ElevenLabs ${res.status}: ${detail}`), { status: 502 });
+    console.error(`ElevenLabs ${res.status}: ${detail}`);
+    if (res.status === 401 || res.status === 403) {
+      throw Object.assign(new Error("Voice playback isn't available right now."), { status: 503 });
+    }
+    throw Object.assign(new Error("Couldn't load the voice. Try again in a moment."), { status: 502 });
   }
   return Buffer.from(await res.arrayBuffer());
 }

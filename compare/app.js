@@ -363,14 +363,20 @@ async function listen(btn) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ side, text: speechText(side) }),
     });
-    if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || `HTTP ${res.status}`);
+    if (res.status === 503) {
+      // Voice is off (no key, or ElevenLabs rejected it): hide every Listen button.
+      config.keys.elevenlabs = false;
+      for (const b of document.querySelectorAll(".listen")) b.hidden = true;
+      throw new Error("Voice playback isn't available right now.");
+    }
+    if (!res.ok) throw new Error("Couldn't load the voice. Try again in a moment.");
     audio = new Audio(URL.createObjectURL(await res.blob()));
     audio.addEventListener("ended", stopAudio);
     await audio.play();
     btn.classList.add("playing");
     btn.innerHTML = "&#9632; Stop";
   } catch (e) {
-    errBox.textContent = `Voice: ${e.message}`;
+    errBox.textContent = e.message;
     btn.innerHTML = "&#9654; Listen";
   } finally {
     btn.disabled = false;
