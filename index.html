@@ -11,6 +11,9 @@
   // Apply a saved light/dark choice before the page paints.
   try { const t = localStorage.getItem("theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch {}
 </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
 <link rel="stylesheet" href="/compare/style.css">
 </head>
 <body>
@@ -33,7 +36,8 @@
 
 <main id="main" class="wrap">
   <section id="what" class="hero">
-    <h1>What&rsquo;s Jev?</h1>
+    <p class="eyebrow">TypeSafe AI &middot; System 1 model</p>
+    <h1>What&rsquo;s <em>Jev</em>?</h1>
     <p class="lede">Most AI models write. Jev, from TypeSafe AI, decides. Give it some text and a question with a fixed set of answers, and it picks one and tells you how sure it is. It&rsquo;s a System 1 model: a quick gut call, not a long chain of reasoning.</p>
     <div class="systems">
       <div class="sys"><span class="sys-tag">System 1</span><p class="q">&ldquo;What color is the sky?&rdquo;</p><p class="a">Blue. Instant, no thinking needed.</p></div>
