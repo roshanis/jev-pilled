@@ -242,10 +242,17 @@ function render(questions, results) {
   const box = $("#reasoning");
   box.replaceChildren();
   for (const [side, label] of SIDES) {
-    if (!results[side].reasoning) continue;
+    const r = results[side];
+    if (r.error) continue;
     const card = el("article", "reason");
     card.dataset.side = side;
-    card.append(el("h3", null, label), el("p", null, results[side].reasoning));
+    if (r.reasoning) {
+      card.append(el("h3", null, label), el("p", null, r.reasoning));
+    } else if (side === "jev") {
+      // Jev returns no reasoning, only typed answers, so show what it sent back.
+      const raw = { model: r.model, answers: r.answers, usage: r.usage };
+      card.append(el("h3", null, `${label} response`), el("pre", "raw", JSON.stringify(raw, (_k, v) => (typeof v === "number" && !Number.isInteger(v) ? Number(v.toFixed(3)) : v), 2)));
+    } else continue;
     box.append(card);
   }
   $("#reasoningBox").hidden = box.childElementCount === 0;

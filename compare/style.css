@@ -249,10 +249,11 @@ td.odd { background: var(--warn-soft); }
 
 /* Reasoning */
 .reasoning { margin-top: 24px; }
-.reasoning-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.reasoning-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
 .reason { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--side); border-radius: 12px; padding: 14px 16px; }
 .reason h3 { margin: 0 0 6px; font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; color: var(--side); }
 .reason p { margin: 0; white-space: pre-wrap; font-size: .95rem; }
+.reason .raw { margin: 0; max-height: 320px; overflow: auto; font: .78rem/1.5 var(--mono); white-space: pre; }
 
 /* Floating "compare Jev" balloon, shown while the live example is off screen. */
 .balloon { position: fixed; right: 20px; bottom: 20px; z-index: 30; display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px; border-radius: 999px; background: var(--accent); color: var(--bg); font-weight: 600; font-size: .95rem; text-decoration: none; box-shadow: 0 12px 28px -10px color-mix(in srgb, var(--accent) 80%, transparent); transition: transform .2s, opacity .2s; animation: balloon-in .35s cubic-bezier(.2, .7, .2, 1); }
