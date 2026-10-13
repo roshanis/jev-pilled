@@ -408,5 +408,25 @@ function revealOnScroll() {
   items.forEach((n) => io.observe(n));
 }
 
+themeToggle();
 revealOnScroll();
 init();
+
+// Light/dark toggle: starts from the saved choice or the system setting.
+function themeToggle() {
+  const btn = $("#themeToggle");
+  if (!btn) return;
+  const root = document.documentElement;
+  const current = () => root.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  const label = () => btn.setAttribute("aria-label", current() === "dark" ? "Switch to light mode" : "Switch to dark mode");
+  label();
+  btn.addEventListener("click", () => {
+    root.dataset.theme = current() === "dark" ? "light" : "dark";
+    try {
+      localStorage.setItem("theme", root.dataset.theme);
+    } catch {
+      /* storage unavailable */
+    }
+    label();
+  });
+}

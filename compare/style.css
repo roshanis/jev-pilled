@@ -16,6 +16,7 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
+    color-scheme: dark;
     --bg: #121211; --surface: #1a1a19; --surface-2: #232321; --text: #f0efec; --muted: #c3c2b7; --faint: #898781;
     --line: #2c2c2a; --line-strong: #4a4a46;
     --accent: #8fb6dd; --accent-soft: #1d2a38;
@@ -29,6 +30,21 @@
     --bad: #ec8a74; --bad-soft: #2e1c18;
   }
 }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #121211; --surface: #1a1a19; --surface-2: #232321; --text: #f0efec; --muted: #c3c2b7; --faint: #898781;
+  --line: #2c2c2a; --line-strong: #4a4a46;
+  --accent: #8fb6dd; --accent-soft: #1d2a38;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4);
+  --shadow-lg: 0 8px 24px -12px rgba(0, 0, 0, .6);
+  --openai: #c9d1cd; --openai-soft: #262a28;
+  --claude: #e58a66; --claude-soft: #2e221d;
+  --jev: #8fb6dd; --jev-soft: #1d2a38;
+  --good: #5cc490; --good-soft: #17271f;
+  --warn: #e8c060; --warn-soft: #2b2512;
+  --bad: #ec8a74; --bad-soft: #2e1c18;
+}
+:root[data-theme="light"] { color-scheme: light; }
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
@@ -55,6 +71,16 @@ a { color: var(--accent); }
 .top nav a { color: var(--muted); text-decoration: none; white-space: nowrap; }
 .top nav a:hover, .top nav a[aria-current] { color: var(--text); }
 .top nav a[aria-current] { font-weight: 600; }
+.theme-toggle { margin-left: auto; flex: none; display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--text); cursor: pointer; }
+.theme-toggle:hover { border-color: var(--line-strong); }
+.theme-toggle svg { width: 18px; height: 18px; }
+.theme-toggle .icon-sun { display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+:root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
+  :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
+}
 
 /* Hero */
 .hero { padding: 40px 0 20px; }
