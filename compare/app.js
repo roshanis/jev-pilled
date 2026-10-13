@@ -119,7 +119,6 @@ async function run() {
   $(".run-label", btn).textContent = "Running…";
   results.hidden = false;
   results.classList.add("loading");
-  if (firstRun) results.scrollIntoView({ behavior: "smooth", block: "start" });
   try {
     const res = await fetch("/api/compare", {
       method: "POST",
