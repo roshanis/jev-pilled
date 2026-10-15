@@ -13,7 +13,16 @@ function getClient() {
   return client;
 }
 
-export async function runClaude({ state, questions, model = DEFAULT_CLAUDE_MODEL, effort = "low" }) {
+function userContent(state, questions, image) {
+  const text = buildPrompt(state, questions, { image: Boolean(image) });
+  if (!image) return text;
+  return [
+    { type: "image", source: { type: "base64", media_type: image.mediaType, data: image.data } },
+    { type: "text", text },
+  ];
+}
+
+export async function runClaude({ state, questions, image, model = DEFAULT_CLAUDE_MODEL, effort = "low" }) {
   const info = CLAUDE_MODELS[model];
   if (!info) throw new Error(`Unknown Claude model: ${model}`);
 
@@ -25,7 +34,7 @@ export async function runClaude({ state, questions, model = DEFAULT_CLAUDE_MODEL
       effort,
       format: { type: "json_schema", schema: buildOutputSchema(questions) },
     },
-    messages: [{ role: "user", content: buildPrompt(state, questions) }],
+    messages: [{ role: "user", content: userContent(state, questions, image) }],
   };
 
   const started = performance.now();

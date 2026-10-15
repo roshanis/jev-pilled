@@ -71,10 +71,12 @@ export function buildOutputSchema(questions) {
   };
 }
 
-export function buildPrompt(state, questions) {
+export function buildPrompt(state, questions, { image = false } = {}) {
+  const hasText = state != null && state !== "";
   const parts = [
     "STATE:",
-    asText(state),
+    ...(image ? ["The attached image is the state." + (hasText ? " Notes that go with it:" : "")] : []),
+    ...(hasText || !image ? [asText(state)] : []),
     "",
     "QUESTIONS:",
     ...Object.entries(questions).map(([name, q]) => describeQuestion(name, q)),

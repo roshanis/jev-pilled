@@ -141,4 +141,97 @@ export const PRESETS = [
       },
     },
   },
+  // Image examples. Jev 1.14 reads images (experimental, under jev-preview);
+  // the state text becomes notes that go with the picture.
+  {
+    id: "receipt",
+    label: "Expense receipt",
+    image: "/compare/images/receipt.jpg",
+    state:
+      "Submitted by a sales rep as a client dinner. Policy: alcohol is never reimbursed, and any meal over $75 per person needs VP approval.",
+    questions: {
+      category: {
+        type: "choice",
+        instructions: "Which expense category fits this receipt?",
+        criteria: {
+          client_meal: "Meal with clients or prospects",
+          team_meal: "Meal with coworkers only",
+          travel: "Flights, hotels, taxis",
+          office_supplies: null,
+          other: null,
+        },
+      },
+      includes_alcohol: {
+        type: "noul",
+        instructions: "Does the receipt include any alcohol?",
+      },
+      needs_vp_approval: {
+        type: "noul",
+        instructions: "Under the policy in the notes, does this receipt need VP approval?",
+      },
+      legibility: {
+        type: "score",
+        instructions: "How easy is it to read the total and line items?",
+        criteria: ["Unreadable", "Hard to read", "Mostly readable", "Clear"],
+      },
+    },
+  },
+  {
+    id: "phishing",
+    label: "Phishing screenshot",
+    image: "/compare/images/phish.jpg",
+    state: "An employee forwarded this screenshot to security@ asking \"is this real?\"",
+    questions: {
+      is_phishing: {
+        type: "noul",
+        instructions: "Is this email a phishing attempt?",
+      },
+      tactic: {
+        type: "choice",
+        instructions: "What is the main trick the email uses?",
+        criteria: {
+          account_threat: "Threatens to suspend or close an account",
+          fake_invoice: "A bill or payment you didn't expect",
+          prize_or_refund: "Promises money or a prize",
+          none: "No trick; looks legitimate",
+        },
+      },
+      action: {
+        type: "choice",
+        instructions: "What should the security team do?",
+        criteria: {
+          block_and_warn: "Block the sender and warn everyone",
+          warn_only: "Reply to the employee only",
+          no_action: "It's safe",
+        },
+      },
+    },
+  },
+  {
+    id: "parking-sign",
+    label: "Parking sign",
+    image: "/compare/images/sign.jpg",
+    state: "It's Tuesday, 9:40 AM. I don't have a zone 7 permit and I'll be gone about 45 minutes.",
+    questions: {
+      can_park: {
+        type: "noul",
+        instructions: "Can the driver legally park here right now for their planned stay?",
+      },
+      reason: {
+        type: "choice",
+        instructions: "Which rule on the signs decides it?",
+        criteria: {
+          street_cleaning: null,
+          time_limit: "The 2 hour limit",
+          permit_only: "Permit holders only",
+          allowed: "No rule stops them",
+        },
+      },
+      risk: {
+        type: "score",
+        instructions: "What is likely to happen if they park anyway?",
+        criteria: ["Nothing", "Maybe a ticket", "Likely a ticket", "Likely towed"],
+      },
+    },
+  },
 ];

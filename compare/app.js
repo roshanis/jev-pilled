@@ -20,6 +20,10 @@ const LABEL = Object.fromEntries(SIDES);
 
 let config;
 let lastRun = null;
+// The image sent with the task: { format, data_base64, url, name } or null.
+let image = null;
+let imageLoad = 0;
+let imageReady = Promise.resolve();
 let audio = null;
 
 async function init() {
@@ -41,6 +45,7 @@ async function init() {
   const tabs = $("#presetTabs");
   for (const p of config.presets) {
     const b = el("button", null, p.label);
+    if (p.image) b.append(el("span", "tab-tag", "image"));
     b.type = "button";
     b.setAttribute("role", "tab");
     b.dataset.id = p.id;
@@ -60,6 +65,7 @@ async function init() {
   for (const b of document.querySelectorAll(".listen")) b.addEventListener("click", () => listen(b));
 
 
+  setupImageInput();
   loadPreset(config.presets[0].id);
   $("#run").addEventListener("click", run);
 }
@@ -68,7 +74,8 @@ const selectedLabel = (id) => $(id).selectedOptions[0]?.textContent ?? $(id).val
 
 // Names the models that will answer, under the Run button and in the table header.
 function showModels() {
-  const names = { openai: selectedLabel("#openaiModel"), claude: selectedLabel("#model"), jev: "Jev (jev-latest)" };
+  const jev = image ? `Jev (${config.jevImageModel}, images are experimental)` : "Jev (jev-latest)";
+  const names = { openai: selectedLabel("#openaiModel"), claude: selectedLabel("#model"), jev };
   $("#modelLine").textContent = `Compares ${names.openai}, ${names.claude} and ${names.jev}. Change models under Advanced.`;
   for (const [side] of SIDES) $(`.side-head[data-side="${side}"] .model-name`).textContent = names[side].replace(/^(Claude|Jev) /, "");
 }
@@ -85,6 +92,107 @@ function loadPreset(id) {
   for (const b of $("#presetTabs").children) b.setAttribute("aria-selected", String(b.dataset.id === id));
   $("#state").value = typeof p.state === "string" ? p.state : JSON.stringify(p.state, null, 2);
   $("#questions").value = JSON.stringify(p.questions, null, 2);
+  if (p.image) {
+    attachImage(() => fetch(p.image).then((r) => r.blob()), p.label);
+  } else {
+    clearImage();
+  }
+}
+
+// Image limits from Jev 1.14: PNG or JPEG, 256 to 1,568 pixels per side.
+const MAX_SIDE = 1568;
+const MIN_SIDE = 256;
+
+function setupImageInput() {
+  const input = $("#imageInput");
+  input.addEventListener("change", () => {
+    const file = input.files[0];
+    input.value = "";
+    if (file) attachImage(async () => file, file.name);
+  });
+  $("#imageRemove").addEventListener("click", () => {
+    clearImage();
+    $("#state").focus();
+  });
+
+  const composer = $(".composer");
+  composer.addEventListener("paste", (e) => {
+    const file = [...(e.clipboardData?.files || [])].find((f) => f.type.startsWith("image/"));
+    if (!file) return;
+    e.preventDefault();
+    attachImage(async () => file, "Pasted image");
+  });
+  composer.addEventListener("dragover", (e) => {
+    if (![...e.dataTransfer.types].includes("Files")) return;
+    e.preventDefault();
+    composer.classList.add("dragging");
+  });
+  composer.addEventListener("dragleave", (e) => {
+    if (!composer.contains(e.relatedTarget)) composer.classList.remove("dragging");
+  });
+  composer.addEventListener("drop", (e) => {
+    composer.classList.remove("dragging");
+    const file = [...e.dataTransfer.files].find((f) => f.type.startsWith("image/"));
+    if (!file) return;
+    e.preventDefault();
+    attachImage(async () => file, file.name);
+  });
+}
+
+// Loads an image, fits it inside Jev's size limits and re-encodes it as JPEG,
+// so all three models get the same picture in a small upload.
+function attachImage(getBlob, name) {
+  imageReady = loadImage(getBlob, name);
+  return imageReady;
+}
+
+async function loadImage(getBlob, name) {
+  const load = ++imageLoad;
+  $("#formError").textContent = "";
+  try {
+    const blob = await getBlob();
+    if (!blob.type.startsWith("image/")) throw new Error("That file isn't an image.");
+    const bitmap = await createImageBitmap(blob);
+    const long = Math.max(bitmap.width, bitmap.height);
+    const short = Math.min(bitmap.width, bitmap.height);
+    const scale = long > MAX_SIDE ? MAX_SIDE / long : short < MIN_SIDE ? Math.min(MIN_SIDE / short, MAX_SIDE / long) : 1;
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.round(bitmap.width * scale);
+    canvas.height = Math.round(bitmap.height * scale);
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#fff"; // JPEG has no transparency
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    bitmap.close?.();
+    const url = canvas.toDataURL("image/jpeg", 0.86);
+    if (load !== imageLoad) return;
+    image = { format: "jpg", data_base64: url.slice(url.indexOf(",") + 1), url, name };
+    showImage();
+  } catch (e) {
+    if (load !== imageLoad) return;
+    $("#formError").textContent = e.message?.startsWith("That file") ? e.message : "Couldn't read that image. Try a PNG or JPEG.";
+  }
+}
+
+function clearImage() {
+  imageLoad++;
+  image = null;
+  showImage();
+}
+
+function showImage() {
+  const box = $("#imageBox");
+  box.hidden = !image;
+  if (image) {
+    $("#imagePreview").src = image.url;
+    $("#imageName").textContent = image.name;
+  } else {
+    $("#imagePreview").removeAttribute("src");
+  }
+  $("#attachLabel").textContent = image ? "Change image" : "Add image";
+  $("#state").placeholder = image ? "Notes that go with the image (optional)" : "";
+  $("#state").setAttribute("aria-label", image ? "Notes that go with the image" : "Text to analyze");
+  showModels();
 }
 
 function readState(raw) {
@@ -112,6 +220,7 @@ async function run() {
     return;
   }
 
+  await imageReady; // an example's image may still be loading
   const results = $("#results");
   const firstRun = results.hidden;
   btn.disabled = true;
@@ -126,6 +235,7 @@ async function run() {
       body: JSON.stringify({
         state: readState($("#state").value),
         questions,
+        image: image ? { format: image.format, data_base64: image.data_base64 } : undefined,
         model: $("#model").value,
         openaiModel: $("#openaiModel").value,
         effort: $("#effort").value,

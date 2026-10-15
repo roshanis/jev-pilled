@@ -1,5 +1,6 @@
 import OpenAI from "openai";
 import { OPENAI_MODELS, costUsd } from "./pricing.js";
+import { dataUrl } from "./image.js";
 import { SYSTEM, buildOutputSchema, buildPrompt, toJevShape } from "./prompt.js";
 
 export const DEFAULT_OPENAI_MODEL = process.env.OPENAI_MODEL || "gpt-6-luna";
@@ -15,7 +16,7 @@ function getClient() {
 
 // Same prompt and schema Claude gets, through the Responses API with strict
 // structured output.
-export async function runOpenAI({ state, questions, openaiModel = DEFAULT_OPENAI_MODEL, effort = "low" }) {
+export async function runOpenAI({ state, questions, image, openaiModel = DEFAULT_OPENAI_MODEL, effort = "low" }) {
   const info = OPENAI_MODELS[openaiModel];
   if (!info) throw new Error(`Unknown OpenAI model: ${openaiModel}`);
 
@@ -23,7 +24,17 @@ export async function runOpenAI({ state, questions, openaiModel = DEFAULT_OPENAI
   const response = await getClient().responses.create({
     model: openaiModel,
     instructions: SYSTEM,
-    input: buildPrompt(state, questions),
+    input: image
+      ? [
+          {
+            role: "user",
+            content: [
+              { type: "input_image", image_url: dataUrl(image) },
+              { type: "input_text", text: buildPrompt(state, questions, { image: true }) },
+            ],
+          },
+        ]
+      : buildPrompt(state, questions),
     reasoning: { effort },
     max_output_tokens: 16000,
     text: {

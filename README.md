@@ -22,6 +22,8 @@ The three guides are kept as each model produced them; only a small navigation b
 
 Jev doesn't write text: you give it a **state** (text or JSON) and typed questions (`choice`, `score`, `noul`), and it returns calibrated probabilities. The compare page sends the same state and questions to Jev unchanged, and to OpenAI and Claude as the same structured-output request asking for a probability per option. Their answers are converted into Jev's response shape, so the page shows a TL;DR (where they agreed, which was fastest and cheapest) and one table with each model's answer and confidence per question, with disagreements highlighted. Four example tasks are built in (ticket triage, review sentiment, an LLM guardrail, smart-home intent routing); the models, effort and questions JSON are under **Advanced**.
 
+**Images.** Jev 1.14 added image input (experimental, opt-in), so a task can carry one picture. Three image examples are built in (an expense receipt, a phishing screenshot, a parking sign), and **Add image** takes your own PNG or JPEG (paste and drag-and-drop work too). The page fits it within Jev's 256 to 1,568 px limits and sends the same JPEG to all three: Jev gets it through the `assets` map with the `TypeSafe-Danger-Zone-Images: true` header on `jev-preview`, OpenAI as an `input_image`, and Claude as an `image` block. Any text in the box goes along as notes.
+
 The page calls three serverless routes, `api/config.js`, `api/compare.js` and `api/speak.js`; shared logic lives in `api/_lib/`.
 
 | Env var | Needed for |
@@ -32,6 +34,7 @@ The page calls three serverless routes, `api/config.js`, `api/compare.js` and `a
 | `ELEVENLABS_API_KEY` | optional; adds a **Listen** button to each side that reads that model's answers aloud through ElevenLabs, in a different voice per side (`ELEVENLABS_VOICE_OPENAI`, `ELEVENLABS_VOICE_CLAUDE`, `ELEVENLABS_VOICE_JEV` to change them) |
 | `OPENAI_MODEL` | optional default OpenAI model (`gpt-6-luna`; GPT-6.1 Sol is selectable on the page) |
 | `CLAUDE_MODEL` | optional default Claude model (`claude-haiku-5-5`; Opus 5.5 and Sonnet 5.5 are selectable on the page) |
+| `TYPESAFE_IMAGE_MODEL` | optional Jev model for image tasks (`jev-preview`, where Jev 1.14 ships) |
 | `MOCK=1` | optional; random placeholder answers, no API calls |
 
 Run it locally:
