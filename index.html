@@ -48,20 +48,33 @@
       <li><b>Fast</b><span>About a fifth of a second per call.</span></li>
       <li><b>Cheap</b><span>About $0.04 per million input tokens, so you can check everything, not a sample.</span></li>
       <li><b>Three kinds of question</b><span>Yes/no, a rating on your scale, or one pick from your list.</span></li>
+      <li><b>Now reads images</b><span>New in Jev 1.14 and still experimental: send a photo or screenshot and ask the same kinds of question about it.</span></li>
       <li><b>Not for writing</b><span>No summaries or explanations. Your code decides what to do with the answer.</span></li>
     </ul>
   </section>
 
   <section id="live" class="live">
     <h2>Live example</h2>
-    <p class="lede">Here are some rambling, real-world messages. See how fast Jev works through them. The same text and questions go to OpenAI, Claude and Jev. Pick an example or paste your own, then press Run.</p>
+    <p class="lede">Here are some rambling, real-world messages, and a few pictures. See how fast Jev works through them. The same text, image and questions go to OpenAI, Claude and Jev. Pick an example or paste your own, then press Run.</p>
     <div id="banner" class="banner" role="status" hidden></div>
   </section>
 
   <section class="card composer" aria-label="Task">
     <div id="presetTabs" class="tabs" role="tablist" aria-label="Examples"></div>
+    <figure id="imageBox" class="image-box" hidden>
+      <img id="imagePreview" alt="The image sent to all three models">
+      <figcaption>
+        <span id="imageName"></span>
+        <button id="imageRemove" class="btn link" type="button">Remove image</button>
+      </figcaption>
+    </figure>
     <textarea id="state" rows="6" spellcheck="false" aria-label="Text to analyze"></textarea>
     <div class="go">
+      <label class="btn attach" title="Add a PNG or JPEG. You can also paste or drop one here.">
+        <input id="imageInput" type="file" accept="image/png,image/jpeg" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 17-5-5-9 8"/></svg>
+        <span id="attachLabel">Add image</span>
+      </label>
       <button id="run" class="btn primary run"><span class="spinner" aria-hidden="true"></span><span class="run-label">Run</span></button>
     </div>
     <p id="modelLine" class="model-line"></p>

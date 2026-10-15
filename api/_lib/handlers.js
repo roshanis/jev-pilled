@@ -1,7 +1,8 @@
 // Request handling shared by the Vercel functions in api/ and the local
 // Express server in server.js.
 import { runClaude, DEFAULT_CLAUDE_MODEL } from "./claude.js";
-import { runJev } from "./jev.js";
+import { readImage } from "./image.js";
+import { JEV_IMAGE_MODEL, runJev } from "./jev.js";
 import { mockClaude, mockJev, mockOpenAI } from "./mock.js";
 import { runOpenAI, DEFAULT_OPENAI_MODEL } from "./openai.js";
 import { CLAUDE_MODELS, OPENAI_MODELS } from "./pricing.js";
@@ -28,6 +29,7 @@ export function configPayload() {
     openaiModels: Object.entries(OPENAI_MODELS).map(([id, m]) => ({ id, label: m.label })),
     efforts: EFFORTS,
     presets: PRESETS,
+    jevImageModel: JEV_IMAGE_MODEL,
   };
 }
 
@@ -50,9 +52,11 @@ export async function compare(reqBody) {
     openaiModel = DEFAULT_OPENAI_MODEL,
     effort = "low",
   } = reqBody || {};
+  let image;
   try {
-    if (state == null || state === "") throw new Error("state is required");
-    if (asText(state).length > MAX_STATE_CHARS) throw new Error(`state is limited to ${MAX_STATE_CHARS} characters`);
+    image = readImage(reqBody?.image);
+    if (!image && (state == null || state === "")) throw new Error("state is required");
+    if (state != null && asText(state).length > MAX_STATE_CHARS) throw new Error(`state is limited to ${MAX_STATE_CHARS} characters`);
     validateQuestions(questions);
     if (!CLAUDE_MODELS[model]) throw new Error(`unknown model ${model}`);
     if (!OPENAI_MODELS[openaiModel]) throw new Error(`unknown OpenAI model ${openaiModel}`);
@@ -61,7 +65,7 @@ export async function compare(reqBody) {
     return { status: 400, body: { error: err.message } };
   }
 
-  const input = { state, questions, model, openaiModel, effort };
+  const input = { state: state ?? "", questions, image, model, openaiModel, effort };
   const [openai, claude, jev] = await Promise.all([
     settle(() => (isMock() ? mockOpenAI(input) : runOpenAI(input))),
     settle(() => (isMock() ? mockClaude(input) : runClaude(input))),

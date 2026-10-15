@@ -29,25 +29,28 @@ function randomRaw(questions, rand) {
 }
 
 const tokens = (text) => Math.ceil(text.length / 4);
+// A rough stand-in for what an image adds to the prompt.
+const promptTokens = (state, questions, image) =>
+  tokens(buildPrompt(state, questions, { image: Boolean(image) })) + (image ? 1200 : 0);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-export async function mockJev({ state, questions }) {
-  const rand = seeded("jev" + JSON.stringify([state, questions]));
+export async function mockJev({ state, questions, image }) {
+  const rand = seeded("jev" + JSON.stringify([state, questions, image?.data.length]));
   const latencyMs = Math.round(60 + rand() * 120);
   await sleep(latencyMs);
-  const usage = { input_tokens: tokens(buildPrompt(state, questions)), output_tokens: 0 };
+  const usage = { input_tokens: promptTokens(state, questions, image), output_tokens: 0 };
   return {
-    provider: "jev", mock: true, model: "jev-1.13.0 (mock)",
+    provider: "jev", mock: true, model: image ? "jev-1.14.0 (mock)" : "jev-1.13.0 (mock)",
     answers: toJevShape(questions, randomRaw(questions, rand)),
     usage, costUsd: costUsd(usage, JEV_PRICE), latencyMs,
   };
 }
 
-export async function mockClaude({ state, questions, model }) {
-  const rand = seeded("claude" + JSON.stringify([state, questions, model]));
+export async function mockClaude({ state, questions, image, model }) {
+  const rand = seeded("claude" + JSON.stringify([state, questions, image?.data.length, model]));
   const latencyMs = Math.round(900 + rand() * 1800);
   await sleep(latencyMs);
-  const input = tokens(buildPrompt(state, questions)) + 180;
+  const input = promptTokens(state, questions, image) + 180;
   const usage = { input_tokens: input, output_tokens: 120 + Math.round(rand() * 200) };
   return {
     provider: "claude", mock: true, model: `${model} (mock)`,
@@ -57,11 +60,11 @@ export async function mockClaude({ state, questions, model }) {
   };
 }
 
-export async function mockOpenAI({ state, questions, openaiModel }) {
-  const rand = seeded("openai" + JSON.stringify([state, questions, openaiModel]));
+export async function mockOpenAI({ state, questions, image, openaiModel }) {
+  const rand = seeded("openai" + JSON.stringify([state, questions, image?.data.length, openaiModel]));
   const latencyMs = Math.round(700 + rand() * 1800);
   await sleep(latencyMs);
-  const usage = { input_tokens: tokens(buildPrompt(state, questions)) + 170, output_tokens: 110 + Math.round(rand() * 200) };
+  const usage = { input_tokens: promptTokens(state, questions, image) + 170, output_tokens: 110 + Math.round(rand() * 200) };
   return {
     provider: "openai", mock: true, model: `${openaiModel} (mock)`,
     answers: toJevShape(questions, randomRaw(questions, rand)),

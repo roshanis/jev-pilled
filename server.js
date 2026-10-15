@@ -6,7 +6,7 @@ import { compare, configPayload, speech } from "./api/_lib/handlers.js";
 
 const PORT = Number(process.env.PORT) || 3000;
 const app = express();
-app.use(express.json({ limit: "1mb" }));
+app.use(express.json({ limit: "5mb" }));
 
 app.get("/api/config", (_req, res) => res.json(configPayload()));
 app.post("/api/compare", async (req, res) => {
